@@ -81,7 +81,6 @@
 </template>
 
 <script setup>
-const route = useRoute()
 const { toMoney } = useMoney()
 const socketStore = useSocketStore()
 
@@ -108,8 +107,7 @@ const getData = async () => {
   try {
     loading.value = true
     const get = await useAPI('statistic/fast', { 
-      type: type.value,
-      secret: route.params._secret || null
+      type: type.value
     })
 
     data.value = get

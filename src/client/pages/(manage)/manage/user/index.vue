@@ -1,6 +1,6 @@
 <template>
   <UiContent title="User" sub="Quản lý tài khoản người dùng">
-    <UiFlex class="mb-4 gap-1">
+    <UiFlex class="gap-1">
       <USelectMenu v-model="page.size" :options="[5,10,20,50,100]"/>
       <UForm :state="page" @submit="page.current = 1, getList()">
         <UiFlex class="gap-1">
@@ -9,15 +9,17 @@
         </UiFlex>
       </UForm>
 
-      <UButton color="green" class="ml-auto" :loading="loading.exportExcel" @click="exportExcel">Xuất Excel</UButton>
+      <UButton color="green" icon="i-healthicons-excel-logo" class="ml-auto" :loading="loading.exportExcel" @click="exportExcel">Xuất Excel</UButton>
 
       <UDropdown :items="actionsReset()">
-        <UButton color="rose" icon="i-bx-reset" :loading="loading.reset">Đặt Lại</UButton>
+        <UButton color="orange" icon="i-bx-reset" :loading="loading.reset">Đặt Lại</UButton>
       </UDropdown>
+
+      <UButton color="rose" icon="i-mi-delete" :loading="loading.del" @click="modal.del = true">Xóa</UButton>
     </UiFlex>
     
     <!-- Table -->
-    <UCard :ui="{ body: { padding: 'p-0 sm:p-0' } }">
+    <UCard class="my-2" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
       <LoadingTable v-if="loading.load" />
 
       <UTable 
@@ -84,7 +86,7 @@
     </UCard>
 
     <!-- Pagination -->
-    <UiFlex justify="between" class="py-4">
+    <UiFlex justify="between">
       <USelectMenu v-model="selectedColumns" :options="columns" multiple placeholder="Chọn cột" />
       <UPagination v-model="page.current" :page-count="page.size" :total="page.total" :max="4" />
     </UiFlex>
@@ -117,9 +119,9 @@
           <SelectAuthType v-model="stateEditAuth.type" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-6">
+        <UiFlex justify="end"  class="gap-1">
           <UButton color="yellow" type="submit" :loading="loading.editAuth">Sửa</UButton>
-          <UButton color="gray" @click="modal.editAuth = false" :disabled="loading.editAuth" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.editAuth = false" :disabled="loading.editAuth">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -146,11 +148,11 @@
           <UTextarea v-model="stateEditCurrency.reason" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-6">
+        <UiFlex justify="end" class="gap-1">
           <UButton color="yellow" type="submit" :loading="loading.editCurrency">
             {{ stateEditCurrency.type == 'plus' ? 'Thêm' : 'Sửa' }}
           </UButton>
-          <UButton color="gray" @click="modal.editCurrency = false" :disabled="loading.editCurrency" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.editCurrency = false" :disabled="loading.editCurrency">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -174,9 +176,9 @@
           <UTextarea v-model="stateEditPay.reason" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-6">
-          <UButton color="yellow" type="submit" :loading="loading.editPay">Sửa tích nạp</UButton>
-          <UButton color="gray" @click="modal.editPay = false" :disabled="loading.editPay" class="ml-1">Đóng</UButton>
+        <UiFlex justify="end" class="gap-1">
+          <UButton color="yellow" type="submit" :loading="loading.editPay">Sửa</UButton>
+          <UButton color="gray" @click="modal.editPay = false" :disabled="loading.editPay">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -200,9 +202,9 @@
           <UTextarea v-model="stateEditSpend.reason" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-6">
-          <UButton color="yellow" type="submit" :loading="loading.editSpend">Sửa tiêu phí</UButton>
-          <UButton color="gray" @click="modal.editSpend = false" :disabled="loading.editSpend" class="ml-1">Đóng</UButton>
+        <UiFlex justify="end" class="gap-1">
+          <UButton color="yellow" type="submit" :loading="loading.editSpend">Sửa</UButton>
+          <UButton color="gray" @click="modal.editSpend = false" :disabled="loading.editSpend">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -218,9 +220,9 @@
           <UInput v-model="stateEditLogin.login.total" type="number" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-6">
-          <UButton color="yellow" type="submit" :loading="loading.editLogin">Sửa dữ liệu đăng nhập</UButton>
-          <UButton color="gray" @click="modal.editLogin = false" :disabled="loading.editLogin" class="ml-1">Đóng</UButton>
+        <UiFlex justify="end" class="gap-1">
+          <UButton color="yellow" type="submit" :loading="loading.editLogin">Sửa</UButton>
+          <UButton color="gray" @click="modal.editLogin = false" :disabled="loading.editLogin">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -228,6 +230,22 @@
     <!-- Modal Send Item-->
     <UModal v-model="modal.sendItem" preventClose :ui="{width: 'sm:max-w-[800px]'}">
       <ManageGameSend class="bg-card rounded-2xl p-4" :user="stateSendItem.user" @close="modal.sendItem = false" />
+    </UModal>
+
+    <!-- Modal Del-->
+    <UModal v-model="modal.del" preventClose>
+      <UiContent title="Xóa Tài Khoản" sub="Xóa các tài khoản không hoạt động" class="bg-card rounded-2xl p-4">
+        <UForm :state="stateDel" @submit="delAction" >
+          <UFormGroup label="Số ngày chưa đăng nhập" help="Các tài khoản đã từng nạp tiền sẽ không bị xóa">
+            <UInput v-model="stateDel.day" type="number" />
+          </UFormGroup>
+
+          <UiFlex justify="end" class="gap-1">
+            <UButton color="rose" type="submit" :loading="loading.del">Xác Nhận</UButton>
+            <UButton color="gray" @click="modal.del = false" :disabled="loading.del">Đóng</UButton>
+          </UiFlex>
+        </UForm>
+      </UiContent>
     </UModal>
   </UiContent>
 </template>
@@ -358,6 +376,10 @@ const stateSendItem = ref({
   user: null
 })
 
+const stateDel = ref({
+  day: 30
+})
+
 
 // Modal
 const modal = ref({
@@ -367,7 +389,8 @@ const modal = ref({
   editPay: false,
   editSpend: false,
   editLogin: false,
-  sendItem: false
+  sendItem: false,
+  del: false
 })
 
 watch(() => modal.value.editCurrency, (val) => !val && (stateEditCurrency.value = {
@@ -396,7 +419,8 @@ const loading = ref({
   editPay: false,
   editSpend: false,
   editLogin: false,
-  exportExcel: false
+  exportExcel: false,
+  del: false
 })
 
 // Type
@@ -575,6 +599,20 @@ const editLoginAction = async () => {
   }
   catch (e) {
     loading.value.editLogin = false
+  }
+}
+
+const delAction = async () => {
+  try {
+    loading.value.del = true
+    await useAPI('user/manage/del', JSON.parse(JSON.stringify(stateDel.value)))
+
+    loading.value.del = false
+    modal.value.del = false
+    getList()
+  }
+  catch (e) {
+    loading.value.del = false
   }
 }
 

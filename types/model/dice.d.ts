@@ -21,6 +21,7 @@ export interface IDBDiceHistory {
   updatedAt: Date
   user: Types.ObjectId
   dices: Array<number>
+  my: Array<number>
   coin: {
     play: number
     receive: number

@@ -2,7 +2,7 @@
   <div>
     <DataUserBox :fetch-id="user" v-model:user-data="userData">
       <template #more>
-        <UDropdown :items="actions()" v-if="!!userData && !route.params._secret">
+        <UDropdown :items="actions()" v-if="!!userData">
           <UButton color="gray" icon="i-bx-dots-horizontal-rounded" />
         </UDropdown>
       </template>
@@ -18,53 +18,53 @@
             <UButton size="md" class="mb-2" :class="{
               'bg-gray-1000' : !open,
               'color-blue-light bg-anim-light': !!open
-            }">
+            }" @click="select = item.slot">
               <UiText class="text-white">{{ item.label }}</UiText>
             </UButton>
           </template>
 
           <template #log>
-            <ManageUserLog :user="user" />
+            <ManageUserLog :user="user" v-if="select == 'log'" />
           </template>
 
           <template #statistical>
-            <DataUserStatistical :user="user" />
+            <DataUserStatistical :user="user" v-if="select == 'statistical'" />
           </template>
 
           <template #ip>
-            <ManageUserIp :user="user" />
+            <ManageUserIp :user="user" v-if="select == 'ip'" />
           </template>
 
           <template #payment>
-            <DataPaymentHistory :user="user" />
+            <DataPaymentHistory :user="user" v-if="select == 'payment'" />
           </template>
 
           <template #referral>
-            <DataUserReferral :user="user" />
+            <DataUserReferral :user="user" v-if="select == 'referral'" />
           </template>
 
           <template #shop>
-            <DataShopHistory :user="user" />
+            <DataShopHistory :user="user" v-if="select == 'shop'" />
           </template>
 
           <template #event>
-            <DataEventHistory :user="user" />
+            <DataEventHistory :user="user" v-if="select == 'event'" />
           </template>
 
           <template #giftcode>
-            <DataGiftcodeHistory :user="user" />
+            <DataGiftcodeHistory :user="user" v-if="select == 'giftcode'" />
           </template>
 
           <template #wheel>
-            <DataMinigameWheelHistory class="bg-gray" :user="user" />
+            <DataMinigameWheelHistory class="bg-gray" :user="user" v-if="select == 'wheel'" />
           </template>
 
           <template #dice>
-            <DataMinigameDiceHistory class="bg-gray" :user="user" />
+            <DataMinigameDiceHistory class="bg-gray" :user="user" v-if="select == 'dice'" />
           </template>
 
           <template #egg>
-            <DataMinigameEggHistory class="bg-gray" :user="user" />
+            <DataMinigameEggHistory class="bg-gray" :user="user" v-if="select == 'egg'" />
           </template>
         </UAccordion>
       </div>
@@ -211,9 +211,9 @@
 <script setup>
 const props = defineProps(['user'])
 
-const route = useRoute()
-
 const userData = ref(null)
+
+const select = ref(null)
 
 const menu = [
   { label: 'Dòng thời gian', slot: 'log' },

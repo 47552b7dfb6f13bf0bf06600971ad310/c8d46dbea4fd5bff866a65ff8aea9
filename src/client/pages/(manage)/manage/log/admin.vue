@@ -1,18 +1,21 @@
 <template>
   <UiContent title="Admin Log" sub="Lịch sử hành động của quản trị viên">
-    <UiFlex class="mb-4">
-      <USelectMenu v-model="page.size" :options="[5,10,20,50,100]" class="mr-1"/>
+    <UiFlex class="gap-1">
+      <USelectMenu v-model="page.size" :options="[5,10,20,50,100]"/>
 
-      <UForm :state="page" @submit="page.current = 1, getList()">
-        <UiFlex>
-          <UInput v-model="page.search.key" placeholder="Tìm kiếm..." icon="i-bx-search" size="sm" class="mr-1" />
+      <UForm :state="page" @submit="page.current = 1, getList()" class="mr-auto">
+        <UiFlex class="gap-1">
+          <UInput v-model="page.search.key" placeholder="Tìm kiếm..." icon="i-bx-search" size="sm"  />
           <USelectMenu v-model="page.search.by" :options="['USER', 'LOG']" />
         </UiFlex>
       </UForm>
+
+      <SelectDate time v-model="page.range.start" placeholder="Bắt đầu" size="sm" />
+      <SelectDate time v-model="page.range.end" placeholder="Kết thúc" size="sm" />
     </UiFlex>
     
     <!-- Table -->
-    <UCard :ui="{ body: { padding: 'p-0 sm:p-0' } }">
+    <UCard class="my-2" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
       <LoadingTable v-if="loading.load" />
 
       <UTable 
@@ -34,16 +37,16 @@
       </UTable>
     </UCard>
 
+    <!-- Pagination -->
+    <UiFlex justify="between">
+      <USelectMenu v-model="selectedColumns" :options="columns" multiple placeholder="Chọn cột" />
+      <UPagination v-model="page.current" :page-count="page.size" :total="page.total" :max="4" />
+    </UiFlex>
+
     <!--Modal User Info-->
     <UModal v-model="modal.user" :ui="{width: 'sm:max-w-[900px]'}">
       <ManageUserInfo :user="stateUser" />
     </UModal>
-
-    <!-- Pagination -->
-    <UiFlex justify="between" class="py-4">
-      <USelectMenu v-model="selectedColumns" :options="columns" multiple placeholder="Chọn cột" />
-      <UPagination v-model="page.current" :page-count="page.size" :total="page.total" :max="4" />
-    </UiFlex>
   </UiContent>
 </template>
 
@@ -81,6 +84,10 @@ const page = ref({
     key: null,
     by: 'USER'
   },
+  range: {
+    start: null,
+    end: null
+  },
   total: 0,
 })
 watch(() => page.value.size, () => getList())
@@ -88,6 +95,14 @@ watch(() => page.value.current, () => getList())
 watch(() => page.value.sort.column, () => getList())
 watch(() => page.value.sort.direction, () => getList())
 watch(() => page.value.search.key, (val) => !val && getList())
+watch(() => page.value.range.start, (val) => {
+  if(!!val && !!page.value.range.end) return (page.value.current != 1 ? page.value.current = 1 : getList())
+  if(!val && !page.value.range.end) return (page.value.current != 1 ? page.value.current = 1 : getList())
+})
+watch(() => page.value.range.end, (val) => {
+  if(!!val && !!page.value.range.start) return (page.value.current != 1 ? page.value.current = 1 : getList())
+  if(!val && !page.value.range.start) return (page.value.current != 1 ? page.value.current = 1 : getList())
+})
 
 // State
 const stateUser = ref(undefined)

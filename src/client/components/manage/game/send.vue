@@ -26,8 +26,8 @@
       <SelectItemList class="bg-gray" v-model="state.items" :types="['game_item']" />
     </UFormGroup>
 
-    <UiFlex justify="end">
-      <UButton color="yellow" type="submit" :loading="loading" class="mr-1">Gửi Ngay</UButton>
+    <UiFlex justify="end" class="gap-1">
+      <UButton color="yellow" type="submit" :loading="loading">Gửi Ngay</UButton>
       <UButton color="gray" @click="emits('close')">Đóng</UButton>
     </UiFlex>
   </UForm>

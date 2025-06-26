@@ -2,21 +2,12 @@ import type { IAuth, IDBUser } from "~~/types"
 
 export default defineEventHandler(async (event) => {
   try {
-    const { size, current, sort, user, secret } = await readBody(event)
+    const { size, current, sort, user } = await readBody(event)
     if(!size || !current) throw 'Dữ liệu phân trang sai'
     if(!sort.column || !sort.direction) throw 'Dữ liệu sắp xếp sai'
 
-    let auth : IAuth | null = null
-    let userCheck = null
-    if(!secret){
-      auth = await getAuth(event, false) as IAuth
-      userCheck = !!user ? user : auth._id
-    }
-    else {
-      const runtimeConfig = useRuntimeConfig()
-      if(secret != runtimeConfig.apiSecret) throw 'Khóa bí mật không đúng'
-      userCheck = user
-    }
+    const auth = await getAuth(event) as IAuth
+    const userCheck = (auth.type > 0 && !!user) ? user : auth._id
 
     const userData = await DB.User
     .findOne({ _id: !!user ? user : (auth as IAuth)._id })

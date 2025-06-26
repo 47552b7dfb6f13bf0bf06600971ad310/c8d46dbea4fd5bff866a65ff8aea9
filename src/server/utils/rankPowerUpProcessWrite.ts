@@ -1,4 +1,4 @@
-import type { IDBConfig, IDBGameRankPowerProcess } from '~~/types'
+import type { IDBConfig, IDBGameRankPowerUpProcess } from '~~/types'
 import axios from 'axios'
 
 export default async (server? : string) => {
@@ -15,7 +15,7 @@ export default async (server? : string) => {
     }
     if(!!server) match['server'] = server
 
-    const listProcess = await DB.GameRankPowerProcess.find(match).select('server') as Array<IDBGameRankPowerProcess>
+    const listProcess = await DB.GameRankPowerUpProcess.find(match).select('server') as Array<IDBGameRankPowerUpProcess>
     listProcess.forEach(async (processEvent) => {
       const post = {
         secret: config.game.secret,
@@ -29,7 +29,7 @@ export default async (server? : string) => {
       const res = send.data
       if(!res.error){
         const { list } = res.data
-        await DB.GameRankPower.insertMany(list.map((item : any) => ({
+        await DB.GameRankPowerUp.insertMany(list.map((item : any) => ({
           process: processEvent._id,
           server: processEvent.server,
           account: item.account,
@@ -38,7 +38,7 @@ export default async (server? : string) => {
           power: item.power
         })))
 
-        await DB.GameRankPowerProcessLog.create({
+        await DB.GameRankPowerUpProcessLog.create({
           process: processEvent._id,
           content: `Ghi dữ liệu lực chiến nhân vật`
         })

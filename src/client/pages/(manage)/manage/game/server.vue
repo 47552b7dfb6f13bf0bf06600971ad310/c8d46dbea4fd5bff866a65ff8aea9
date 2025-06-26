@@ -1,6 +1,6 @@
 <template>
-  <UiContent title="Server" sub="Thông tin máy chủ trò chơi">
-    <UiFlex class="mb-4 gap-1">
+  <UiContent title="Server" sub="Thông tin máy chủ trò chơi" class="max-w-[700px] mx-auto">
+    <UiFlex class="gap-1">
       <USelectMenu v-model="page.size" :options="[5,10,20,50,100]" size="sm"/>
 
       <SelectDate v-model="page.range.start" placeholder="Bắt đầu" size="sm" class="max-w-[140px]"/>
@@ -10,7 +10,7 @@
     </UiFlex>
     
     <!-- Table -->
-    <UCard :ui="{ body: { padding: 'p-0 sm:p-0' } }">
+    <UCard class="my-2" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
       <LoadingTable v-if="loading.load" />
 
       <UTable 
@@ -29,7 +29,7 @@
     </UCard>
 
     <!-- Pagination -->
-    <UiFlex justify="between" class="py-4">
+    <UiFlex justify="between">
       <USelectMenu v-model="selectedColumns" :options="columns" multiple placeholder="Chọn cột" />
       <UPagination v-model="page.current" :page-count="page.size" :total="page.total" :max="5" />
     </UiFlex>
@@ -45,10 +45,6 @@ const columns = [
   {
     key: 'time',
     label: 'Thời gian',
-    sortable: true
-  },{
-    key: 'login',
-    label: 'Đăng nhập',
     sortable: true
   },{
     key: 'spend',

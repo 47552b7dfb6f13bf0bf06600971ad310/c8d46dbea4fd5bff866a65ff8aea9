@@ -61,9 +61,14 @@
             <SelectPermission v-model="state.user.editLogin" />
           </UiFlex>
 
-          <UiFlex justify="between">
+          <UiFlex justify="between" class="mb-4">
             <UiText weight="semibold">Đặt lại thông số</UiText>
             <SelectPermission v-model="state.user.reset" />
+          </UiFlex>
+
+          <UiFlex justify="between">
+            <UiText weight="semibold">Xáo tài khoản</UiText>
+            <SelectPermission v-model="state.user.del" />
           </UiFlex>
         </UCard>
       </template>
@@ -280,7 +285,8 @@ const state = ref({
     editPay: [],
     editSpend: [],
     editLogin: [],
-    reset: []
+    reset: [],
+    del: [],
   },
   gate: {
     add: [],

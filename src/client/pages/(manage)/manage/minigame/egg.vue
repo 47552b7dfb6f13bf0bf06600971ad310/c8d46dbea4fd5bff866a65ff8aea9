@@ -104,8 +104,8 @@
       </template>
     </UAccordion>
 
-    <UiFlex justify="end">
-      <UButton color="yellow" @click="update" :loading="loading.update" class="mr-1">Cập nhật</UButton>
+    <UiFlex justify="end" class="gap-1">
+      <UButton color="yellow" @click="update" :loading="loading.update">Cập nhật</UButton>
     </UiFlex>
   </UiContent>
 </template>

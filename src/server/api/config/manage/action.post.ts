@@ -10,8 +10,6 @@ export default defineEventHandler(async (event) => {
     if(!type) throw 'Dữ liệu đầu vào không hợp lệ'
 
     if(type == 'reopen'){
-      await DB.UserLogin.deleteMany({})
-
       await DB.ShopHistory.deleteMany({})
       await DB.ShopPackHistory.deleteMany({})
 
@@ -30,8 +28,6 @@ export default defineEventHandler(async (event) => {
       
       await DB.LogUser.deleteMany({})
       await DB.LogAdminSendItem.deleteMany({})
-      await DB.LogUserIP.deleteMany({})
-      await DB.LogBlockIP.deleteMany({})
 
       await DB.SocketChat.deleteMany({})
       await DB.SocketOnline.deleteMany({})
@@ -40,6 +36,11 @@ export default defineEventHandler(async (event) => {
       await DB.Payment.deleteMany({ status: 2 })
       await DB.Payment.updateMany({ status: 1 }, { status: 0 })
 
+      await DB.GameRankProcessLog.deleteMany({})
+      await DB.GameRankPowerUpProcessLog.deleteMany({})
+      await DB.GameRankPowerUp.deleteMany({})
+
+      await DB.UserLogin.deleteMany({})
       await DB.User.updateMany({}, {
         'referral.count': 0,
         'referral.person': null,
@@ -71,11 +72,8 @@ export default defineEventHandler(async (event) => {
         'wheel.day': 0,
         'wheel.month': 0,
         'login.month': 0,
-        'login.total': 0,
-        'login.update': null,
-        'login.last_ip': null,
+        'login.total': 0
       })
-
       await DB.User.updateMany({ type: { $gt: 1 } }, { 'currency.coin': 100000000 })
 
       await logAdmin(event, 'Thao tác <b>Reopen</b>')

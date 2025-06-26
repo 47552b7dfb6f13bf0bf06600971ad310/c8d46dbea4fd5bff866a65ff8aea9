@@ -51,7 +51,7 @@
       </UiFlex>
 
       <UiFlex justify="between" class="mb-4">
-        <UiText size="sm">Đăng nhập</UiText>
+        <UiText size="sm">Điểm danh</UiText>
         <UToggle v-model="state.menu.event.login" />
       </UiFlex>
 

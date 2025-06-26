@@ -42,6 +42,11 @@ export default defineEventHandler(async (event) => {
     // Event Config
     const eventConfig = await DB.EventConfig.findOne({ type: eventData.type }) as IDBEventConfig
     if(!eventConfig) throw 'Kiểu sự kiện không hỗ trợ'
+    const nowDate = formatDate()
+    const startDate = formatDate(eventConfig.start)
+    const endDate = formatDate(eventConfig.end)
+    if(!!eventConfig.start && nowDate.timestamp < startDate.timestamp) throw 'Sự kiện này chưa bắt đầu'
+    if(!!eventConfig.end && nowDate.timestamp > endDate.timestamp) throw 'Sự kiện này đã kết thúc'
 
     // Check Active
     const active = await getEventActive(event, eventData, eventData.type)
@@ -105,13 +110,7 @@ export default defineEventHandler(async (event) => {
     })
 
     // Log User
-    const change : any = []
-    if(!!giftCurrency[`currency.coin`] && giftCurrency[`currency.coin`] > 0){
-      change.push(`${giftCurrency[`currency.coin`].toLocaleString('vi-VN')} xu`) 
-    }
-
     logUser(event, auth._id, `Nhận thưởng mốc <b>${eventData.need.toLocaleString('vi-VN')}</b> của sự kiện <b>${typeName[eventData.type]}</b> tại máy chủ <b>${server}</b> nhân vật <b>${role}</b>`)
-    if(change.length > 0) logUser(event, auth._id, `Nhận <b>${change.join(', ')}</b> từ mốc <b>${eventData.need.toLocaleString('vi-VN')}</b> của sự kiện <b>${typeName[eventData.type]}</b>`)
     IO.to(auth._id.toString()).emit('auth-update')
     
     return resp(event, { message: 'Nhận thưởng thành công' })

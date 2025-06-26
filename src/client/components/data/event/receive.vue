@@ -23,7 +23,7 @@
         </div>
       </UFormGroup>
 
-      <UiFlex justify="end" class="mt-4 gap-0.5">
+      <UiFlex justify="end" class="gap-1">
         <UButton color="yellow" @click="submit" :loading="loading" v-if="!!isActive">Nhận ngay</UButton>
         <UButton color="gray" :disabled="loading" @click="emit('close')">Đóng</UButton>
       </UiFlex>

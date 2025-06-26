@@ -34,7 +34,7 @@
 defineProps({
   rolling: Boolean,
   number: { type: Number, default: 0 },
-  size: { type: Number, default: 70 },
+  size: { type: Number, default: 100 },
 })
 
 const transform = {

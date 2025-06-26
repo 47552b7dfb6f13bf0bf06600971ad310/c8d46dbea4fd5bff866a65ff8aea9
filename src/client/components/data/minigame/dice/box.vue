@@ -1,8 +1,8 @@
 <template>
-  <UiFlex justify="center" class="p-4">
-    <DataMinigameDiceItem :rolling="rolling" :number="dices[0]" class="mx-4" />
-    <DataMinigameDiceItem :rolling="rolling" :number="dices[1]" class="mx-4" />
-    <DataMinigameDiceItem :rolling="rolling" :number="dices[2]" class="mx-4" />
+  <UiFlex justify="center" class="p-4 gap-0.5 md:gap-2">
+    <DataMinigameDiceItem :rolling="rolling" :number="dices[0]" />
+    <DataMinigameDiceItem :rolling="rolling" :number="dices[1]" />
+    <DataMinigameDiceItem :rolling="rolling" :number="dices[2]" />
   </UiFlex>
 </template>
 

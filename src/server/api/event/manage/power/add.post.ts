@@ -1,4 +1,4 @@
-import type { IAuth, IDBGameRankPowerProcess } from "~~/types"
+import type { IAuth, IDBGameRankPowerUpProcess } from "~~/types"
 
 export default defineEventHandler(async (event) => {
   try {
@@ -13,10 +13,10 @@ export default defineEventHandler(async (event) => {
     const endDate = formatDate(end)
     if(startDate.timestamp > endDate.timestamp) throw 'Thời gian bắt đầu không thể lớn hơn thời gian kết thúc'
 
-    const getByServer = await DB.GameRankPowerProcess.findOne({ server: server }).select('_id') as IDBGameRankPowerProcess
+    const getByServer = await DB.GameRankPowerUpProcess.findOne({ server: server }).select('_id') as IDBGameRankPowerUpProcess
     if(!!getByServer) throw 'Tiến trình cho máy chủ này đã tồn tại'
 
-    await DB.GameRankPowerProcess.create({
+    await DB.GameRankPowerUpProcess.create({
       ...body,
       start: startDate.dayjs.startOf('date')['$d'],
       end: endDate.dayjs.endOf('date')['$d'],

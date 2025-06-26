@@ -14,7 +14,11 @@ import { DBGiftcode, DBGiftcodeHistory } from './giftcode'
 import { DBDice, DBDiceHistory, DBDiceLuckyUser } from './dice'
 import { DBWheel, DBWheelHistory, DBWheelLuckyUser } from './wheel'
 import { DBEgg, DBEggHistory, DBEggUser } from './egg'
-import { DBGameRankPowerProcess, DBGameRankPowerProcessLog, DBGameRankPower } from './game'
+import { 
+  DBGameRankProcess, DBGameRankProcessLog,
+  DBGameRankPowerUpProcess, DBGameRankPowerUpProcessLog, DBGameRankPowerUp, 
+  DBGameMission, DBGameMissionHistory
+} from './game'
 import { DBLogAdmin, DBLogAdminSendItem, DBLogUser, DBLogUserIP, DBLogBlockIP } from './log'
 import { DBAdsFrom, DBAdsLanding } from './ads'
 import { DBAdminIP } from './ip'
@@ -67,9 +71,13 @@ export default (mongoose : Mongoose) : IGlobalDB => {
     EggUser: DBEggUser(mongoose),
     EggHistory: DBEggHistory(mongoose),
 
-    GameRankPowerProcess: DBGameRankPowerProcess(mongoose),
-    GameRankPowerProcessLog: DBGameRankPowerProcessLog(mongoose),
-    GameRankPower: DBGameRankPower(mongoose),
+    GameRankProcess: DBGameRankProcess(mongoose),
+    GameRankProcessLog: DBGameRankProcessLog(mongoose),
+    GameRankPowerUpProcess: DBGameRankPowerUpProcess(mongoose),
+    GameRankPowerUpProcessLog: DBGameRankPowerUpProcessLog(mongoose),
+    GameRankPowerUp: DBGameRankPowerUp(mongoose),
+    GameMission: DBGameMission(mongoose),
+    GameMissionHistory: DBGameMissionHistory(mongoose),
 
     LogAdmin: DBLogAdmin(mongoose),
     LogAdminSendItem: DBLogAdminSendItem(mongoose),

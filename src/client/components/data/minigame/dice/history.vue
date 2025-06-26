@@ -18,22 +18,28 @@
     <UTable v-model:sort="page.sort" :columns="columns" :rows="list">
       <template #dices-data="{ row }">
         <UiFlex>
-          <UiIcon :name="`i-bxs-dice-${i}`" class="min-h-10 min-w-10 rounded-full !text-white" v-for="i in row.dices" :key="i"/>
+          <UiIcon :name="`i-bxs-dice-${i}`" class="min-h-10 min-w-10 rounded-full !text-white" v-for="i in row.dices" :key="`dice-${i}-${row._id}`"/>
         </UiFlex>
       </template>
 
-      <template #status-data="{ row }">
-        <UBadge :color="row.receive > 0 ? 'primary' : 'gray'" variant="soft">
-          {{ row.receive > 0 ? 'Thắng' : 'Thua' }}
-        </UBadge>
+      <template #my-data="{ row }">
+        <UiFlex wrap v-if="!!row.my && row.my.length > 0">
+          <UiIcon :name="`i-bxs-dice-${i}`" class="min-h-10 min-w-10 rounded-full !text-white" v-for="i in row.my" :key="`my-${i}-${row._id}`"/>
+        </UiFlex>
+        <span v-else>...</span>
       </template>
 
       <template #play-data="{ row }">
-        <UiText weight="semibold" color="rose">-{{ toMoney(row.play) }}</UiText>
+        <UiText weight="semibold">{{ toMoney(row.play) }}</UiText>
       </template>
 
       <template #receive-data="{ row }">
-        <UiText weight="semibold" color="green">+{{ toMoney(row.receive + row.play) }}</UiText>
+        <UiText weight="semibold" color="rose" v-if="row.receive < 0">
+          - {{ toMoney(row.receive*-1) }}
+        </UiText>
+        <UiText weight="semibold" color="green" v-else>
+          + {{ toMoney(row.receive) }}
+        </UiText>
       </template>
 
       <template #createdAt-data="{ row }">
@@ -64,18 +70,18 @@ const list = ref([])
 
 const columns = [
   {
+    key: 'my',
+    label: 'Đặt',
+  },{
     key: 'dices',
     label: 'Kết quả',
-  },{
-    key: 'status',
-    label: 'Trạng thái',
   },{
     key: 'play',
     label: 'Cước',
     sortable: true
   },{
     key: 'receive',
-    label: 'Nhận',
+    label: 'Lãi / Lỗ',
     sortable: true
   },{
     key: 'createdAt',
@@ -97,7 +103,6 @@ const page = ref({
     end: null
   },
   user: props.user || null,
-  secret: route.params._secret
 })
 
 watch(() => props.reload, () => getList())

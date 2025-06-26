@@ -110,10 +110,7 @@ export default defineEventHandler(async (event) => {
     await DB.User.updateOne({ _id: auth._id }, { 'action.giftcode': false })
 
     // Log User
-    const change : any = []
-    if(!!giftCurrency[`currency.coin`] && giftCurrency[`currency.coin`] > 0) change.push(`${giftCurrency[`currency.coin`].toLocaleString('vi-VN')} xu`)
     logUser(event, auth._id, `Sử dụng giftcode <b>${giftcodeData.code}</b> tại máy chủ <b>${server}</b> nhân vật <b>${role}</b>`)
-    if(change.length > 0) logUser(event, auth._id, `Nhận <b>${change.join(', ')}</b> từ giftcode <b>${giftcodeData.code}</b>`)
     IO.to(auth._id.toString()).emit('auth-update')
     
     return resp(event, { message: 'Nhận thưởng thành công' })

@@ -1,6 +1,6 @@
 import type { Types } from 'mongoose'
 
-export interface IDBGameRankPowerProcess {
+export interface IDBGameRankPowerUpProcess {
   _id: Types.ObjectId
   createdAt: Date
   updatedAt: Date
@@ -20,12 +20,12 @@ export interface IDBGameRankPowerProcess {
   }>
 }
 
-export interface IDBGameRankPowerProcessLog {
+export interface IDBGameRankPowerUpProcessLog {
   process: Types.ObjectId
   content: string
 }
 
-export interface IDBGameRankPower {
+export interface IDBGameRankPowerUp {
   _id: Types.ObjectId
   createdAt: Date
   updatedAt: Date
@@ -36,4 +36,53 @@ export interface IDBGameRankPower {
   role_name: string
   role_id: string
   power: number
+}
+
+export interface IDBGameRankProcess {
+  _id: Types.ObjectId
+  createdAt: Date
+  updatedAt: Date
+
+  server: string
+  type: string
+  end: date
+  active: boolean
+  send: boolean
+  award: Array<{
+    rank: number
+    gift: Array<{
+      item: Types.ObjectId | IDBItem,
+      amount: number
+    }>
+  }>
+}
+
+export interface IDBGameRankProcessLog {
+  process: Types.ObjectId
+  content: string
+}
+
+export interface IDBGameMission {
+  _id: Types.ObjectId
+  createdAt: Date
+  updatedAt: Date
+
+  server: string
+  type: string
+  need: date
+  gift: Array<{
+    item: Types.ObjectId | IDBItem,
+    amount: number
+  }>
+}
+
+export interface IDBGameMissionHistory {
+  _id: Types.ObjectId
+  createdAt: Date
+  updatedAt: Date
+
+  mission: Types.ObjectId
+  user: Types.ObjectId
+  server: string
+  role: string
 }

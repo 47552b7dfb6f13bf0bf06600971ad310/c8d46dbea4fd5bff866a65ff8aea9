@@ -30,7 +30,10 @@
 <script setup>
 const configStore = useConfigStore()
 useSeoMeta({
-  title: () => `Tin tức - ${configStore.config.name}`,
+  title: () => `Tin Tức - ${configStore.config.name}`,
+  ogTitle: () => `Tin Tức - ${configStore.config.name}`,
+  description: () => `Các tin tức mới nhất và thông tin khuyến mãi`,
+  ogDescription: () => `Các tin tức mới nhất và thông tin khuyến mãi`,
 })
 
 const list = ref([])

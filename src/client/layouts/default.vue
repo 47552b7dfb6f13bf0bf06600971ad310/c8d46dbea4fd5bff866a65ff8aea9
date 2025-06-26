@@ -37,7 +37,7 @@
       </div>
     </UiFlex>
 
-    <LayoutPublicMenu class="lg:hidden" />
+    <LayoutPublicMenu class="sm:hidden" />
   </div>
 </template>
 

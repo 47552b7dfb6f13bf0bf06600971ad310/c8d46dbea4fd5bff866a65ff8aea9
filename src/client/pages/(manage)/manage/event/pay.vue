@@ -1,7 +1,7 @@
 <template>
   <UiContent title="Payment Event" sub="Quản lý mốc thưởng sự kiện nạp tiền">
-    <UiFlex class="mb-4">
-      <USelectMenu v-model="page.size" :options="[5,10,20,50,100]" class="mr-1"/>
+    <UiFlex class="gap-1">
+      <USelectMenu v-model="page.size" :options="[5,10,20,50,100]" />
 
       <USelectMenu 
         v-model="page.type" 
@@ -19,11 +19,12 @@
         </template>
       </USelectMenu>  
 
-      <UButton color="yellow" @click="modal.add = true">Thêm mốc</UButton>
+      <UButton color="yellow" icon="i-bx-plus" @click="modal.add = true">Thêm mốc</UButton>
+      <UButton color="green" icon="i-bx-cog" @click="openConfig" v-if="!!config">Cấu hình</UButton>
     </UiFlex>
     
     <!-- Table -->
-    <UCard :ui="{ body: { padding: 'p-0 sm:p-0' } }">
+    <UCard class="my-2" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
       <LoadingTable v-if="loading.load" />
 
       <UTable 
@@ -56,7 +57,7 @@
     </UCard>
 
     <!-- Pagination -->
-    <UiFlex justify="between" class="py-4">
+    <UiFlex justify="between">
       <USelectMenu v-model="selectedColumns" :options="columns" multiple placeholder="Chọn cột" />
       <UPagination v-model="page.current" :page-count="page.size" :total="page.total" :max="4" />
     </UiFlex>
@@ -72,9 +73,9 @@
           <SelectDisplay v-model="stateAdd.display" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-6">
+        <UiFlex justify="end" class="gap-1">
           <UButton color="yellow" type="submit" :loading="loading.add">Thêm</UButton>
-          <UButton color="gray" @click="modal.add = false" :disabled="loading.add" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.add = false" :disabled="loading.add">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -90,9 +91,9 @@
           <SelectDisplay v-model="stateEdit.display" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-6">
+        <UiFlex justify="end" class="gap-1">
           <UButton color="yellow" type="submit" :loading="loading.edit">Sửa</UButton>
-          <UButton color="gray" @click="modal.edit = false" :disabled="loading.edit" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.edit = false" :disabled="loading.edit">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -102,9 +103,27 @@
       <UForm :state="stateGift" @submit="giftAction" class="bg-card rounded-2xl p-4">
         <SelectItemList class="bg-gray" v-model="stateGift.gift" :types="['coin', 'wheel', 'game_item']" />
 
-        <UiFlex justify="end" class="mt-4">
+        <UiFlex justify="end" class="mt-2 gap-1">
           <UButton color="yellow" type="submit" :loading="loading.gift">Lưu</UButton>
-          <UButton color="gray" @click="modal.gift = false" :disabled="loading.gift" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.gift = false" :disabled="loading.gift">Đóng</UButton>
+        </UiFlex>
+      </UForm>
+    </UModal>
+
+    <!-- Modal Config -->
+    <UModal v-model="modal.config" preventClose>
+      <UForm :state="stateConfig" @submit="configAction" class="bg-card rounded-2xl p-4">
+        <UFormGroup label="Bắt đầu">
+          <SelectDate v-model="stateConfig.start" placeholder="Chọn ngày" />
+        </UFormGroup>
+
+        <UFormGroup label="Kết thúc">
+          <SelectDate v-model="stateConfig.end" placeholder="Chọn ngày" />
+        </UFormGroup>
+
+        <UiFlex justify="end" class="gap-1">
+          <UButton color="yellow" type="submit" :loading="loading.config">Lưu</UButton>
+          <UButton color="gray" @click="modal.config = false" :disabled="loading.config">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -116,6 +135,7 @@ const { toMoney } = useMoney()
 
 // List
 const list = ref([])
+const config = ref()
 
 // Columns
 const columns = [
@@ -173,12 +193,18 @@ const stateGift = ref({
   _id: null,
   gift: null
 })
+const stateConfig = ref({
+  _id: null,
+  start: null,
+  end: null,
+})
 
 // Modal
 const modal = ref({
   add: false,
   edit: false,
-  gift: false
+  gift: false,
+  config: false
 })
 
 watch(() => modal.value.add, (val) => !val && (stateAdd.value = {
@@ -193,7 +219,8 @@ const loading = ref({
   add: false,
   edit: false,
   gift: false,
-  del: false
+  del: false,
+  config: false
 })
 
 // Type
@@ -226,6 +253,14 @@ const actions = (row) => [
     click: () => delAction(row._id)
   }]
 ]
+
+const openConfig = () => {
+  const data = JSON.parse(JSON.stringify(config.value))
+  stateConfig.value._id = data._id
+  stateConfig.value.start = data.start
+  stateConfig.value.end = data.end
+  modal.value.config = true
+}
  
 // Fetch
 const getList = async () => {
@@ -236,6 +271,7 @@ const getList = async () => {
     loading.value.load = false
     list.value = data.list
     page.value.total = data.total
+    config.value = data.config
   }
   catch (e) {
     loading.value.load = false
@@ -294,6 +330,19 @@ const delAction = async (_id) => {
   }
   catch (e) {
     loading.value.del = false
+  }
+}
+
+const configAction = async () => {
+  try {
+    loading.value.config = true
+    const data = await useAPI('event/manage/config/edit', JSON.parse(JSON.stringify(stateConfig.value)))
+    config.value = data
+    loading.value.config = false
+    modal.value.config = false
+  }
+  catch (e) {
+    loading.value.config = false
   }
 }
 

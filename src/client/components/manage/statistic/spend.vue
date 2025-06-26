@@ -1,14 +1,14 @@
 <template>
   <div>
-    <UiFlex class="mb-2">
+    <UiFlex class="gap-1">
       <USelectMenu v-model="page.size" :options="[5,10,20,50,100]" size="sm" class="mr-auto"/>
     
-      <SelectDate v-model="page.range.start" placeholder="Bắt đầu" size="sm" class="ml-2 max-w-[140px]"/>
-      <SelectDate v-model="page.range.end" placeholder="Kết thúc" size="sm" class="ml-1 max-w-[140px]"/>
+      <SelectDate v-model="page.range.start" placeholder="Bắt đầu" size="sm" />
+      <SelectDate v-model="page.range.end" placeholder="Kết thúc" size="sm" />
     </UiFlex>
     
     <!-- Table -->
-    <UCard :ui="{ body: { padding: 'p-0 sm:p-0' } }">
+    <UCard class="my-2" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
       <LoadingTable v-if="loading.load" />
 
       <UTable 
@@ -27,7 +27,7 @@
     </UCard>
 
     <!-- Pagination -->
-    <UiFlex justify="between" class="py-4">
+    <UiFlex justify="between">
       <USelectMenu v-model="selectedColumns" :options="columns" multiple placeholder="Chọn cột" />
       <UPagination v-model="page.current" :page-count="page.size" :total="page.total" :max="5" />
     </UiFlex>
@@ -35,7 +35,6 @@
 </template>
 
 <script setup>
-const route = useRoute()
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])
 
@@ -68,8 +67,7 @@ const page = ref({
     start: null,
     end: null
   },
-  total: 0,
-  secret: route.params._secret || null
+  total: 0
 })
 watch(() => page.value.size, () => getList())
 watch(() => page.value.current, () => getList())

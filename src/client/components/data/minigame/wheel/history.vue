@@ -20,16 +20,12 @@
         <UBadge color="gray" variant="soft">{{ row.server ? `${row.server}` : '...' }}</UBadge>
       </template>
 
-      <template #item-data="{ row }">
+      <template #amount-data="{ row }">
         <DataItem :item="{
           name: row.item.item_name,
           image: row.item.item_image,
-          type: row.item.type
-        }" />
-      </template>
-
-      <template #amount-data="{ row }">
-        <UiText weight="semibold">{{ row.item.type == 'wheel_lose' ? '...' : toMoney(row.amount) }}</UiText>
+          type: row.item.type,
+        }" :amount="row.item.type == 'wheel_lose' ? null : row.amount" />
       </template>
 
       <template #createdAt-data="{ row }">
@@ -60,14 +56,11 @@ const list = ref([])
 
 const columns = [
   {
-    key: 'item',
-    label: 'Kết quả',
-  },{
     key: 'server',
     label: 'Máy chủ',
   },{
     key: 'amount',
-    label: 'Số lượng',
+    label: 'Kết quả',
     sortable: true
   },{
     key: 'createdAt',
@@ -88,8 +81,7 @@ const page = ref({
     start: null,
     end: null
   },
-  user: props.user || null,
-  secret: route.params._secret
+  user: props.user || null
 })
 
 watch(() => props.reload, () => getList())

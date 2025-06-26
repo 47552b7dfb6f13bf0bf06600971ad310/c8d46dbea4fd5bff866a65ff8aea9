@@ -1,17 +1,20 @@
 <template>
   <UiContent title="Payment" sub="Quản lý giao dịch nạp tiền">
-    <UiFlex class="mb-4">
-      <USelectMenu v-model="page.size" :options="[5,10,20,50,100]" class="mr-2"/>
-      <UForm :state="page" @submit="page.current = 1, getList()" class="mr-4">
-        <UiFlex>
-          <UInput v-model="page.search.key" placeholder="Tìm kiếm..." icon="i-bx-search" size="sm" class="mr-1" />
+    <UiFlex class="gap-1">
+      <USelectMenu v-model="page.size" :options="[5,10,20,50,100]" />
+      <UForm :state="page" @submit="page.current = 1, getList()" >
+        <UiFlex class="gap-1">
+          <UInput v-model="page.search.key" placeholder="Tìm kiếm..." icon="i-bx-search" size="sm" />
           <USelectMenu v-model="page.search.by" :options="['CODE', 'USER']" />
         </UiFlex>
       </UForm>
+
+      <SelectDate time v-model="page.range.start" placeholder="Bắt đầu" size="sm" class="ml-auto" />
+      <SelectDate time v-model="page.range.end" placeholder="Kết thúc" size="sm" />
     </UiFlex>
 
     <!-- Table -->
-    <UCard :ui="{ body: { padding: 'p-0 sm:p-0' } }">
+    <UCard class="my-2" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
       <LoadingTable v-if="loading.load" />
 
       <UTable 
@@ -70,7 +73,7 @@
     </UCard>
 
     <!-- Pagination -->
-    <UiFlex justify="between" class="py-4">
+    <UiFlex justify="between">
       <USelectMenu v-model="selectedColumns" :options="columns" multiple placeholder="Chọn cột" />
       <UPagination v-model="page.current" :page-count="page.size" :total="page.total" :max="4" />
     </UiFlex>
@@ -82,7 +85,13 @@
 
     <!-- Modal Payment View -->
     <UModal v-model="modal.payment">
-      <DataPaymentView :fetch-id="statePayment" />
+      <UiContent title="Giao Dịch" sub="Thông tin chi tiết giao dịch nạp Xu" class="bg-card p-4 rounded-2xl">
+        <template #more>
+          <UButton icon="i-bx-x" class="ml-auto" size="2xs" color="gray" square @click="modal.payment = false"></UButton>
+        </template>
+
+        <DataPaymentView :fetch-id="statePayment" :no-history="true" />
+      </UiContent>
     </UModal>
 
     <!-- Modal Success -->
@@ -96,9 +105,9 @@
           <UInput v-model="stateSuccess.money" type="number" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-6">
-          <UButton type="submit" :loading="loading.success">Duyệt</UButton>
-          <UButton color="gray" @click="modal.success = false" :disabled="loading.success" class="ml-1">Đóng</UButton>
+        <UiFlex justify="end" class="gap-1">
+          <UButton type="submit" :loading="loading.success" color="green">Duyệt</UButton>
+          <UButton color="gray" @click="modal.success = false" :disabled="loading.success">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -114,9 +123,9 @@
           <UTextarea v-model="stateRefuse.reason" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-6">
+        <UiFlex justify="end" class="gap-1">
           <UButton type="submit" :loading="loading.refuse" color="red">Từ chối</UButton>
-          <UButton color="gray" @click="modal.refuse = false" :disabled="loading.refuse" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.refuse = false" :disabled="loading.refuse">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -179,6 +188,10 @@ const page = ref({
     key: null,
     by: 'CODE'
   },
+  range: {
+    start: null,
+    end: null
+  },
   total: 0
 })
 watch(() => page.value.size, () => getList())
@@ -186,6 +199,14 @@ watch(() => page.value.current, () => getList())
 watch(() => page.value.sort.column, () => getList())
 watch(() => page.value.sort.direction, () => getList())
 watch(() => page.value.search.key, (val) => !val && getList())
+watch(() => page.value.range.start, (val) => {
+  if(!!val && !!page.value.range.end) return (page.value.current != 1 ? page.value.current = 1 : getList())
+  if(!val && !page.value.range.end) return (page.value.current != 1 ? page.value.current = 1 : getList())
+})
+watch(() => page.value.range.end, (val) => {
+  if(!!val && !!page.value.range.start) return (page.value.current != 1 ? page.value.current = 1 : getList())
+  if(!val && !page.value.range.start) return (page.value.current != 1 ? page.value.current = 1 : getList())
+})
 
 // State
 const stateSuccess = ref({

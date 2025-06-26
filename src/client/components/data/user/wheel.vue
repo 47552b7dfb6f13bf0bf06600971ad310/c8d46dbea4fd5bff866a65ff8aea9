@@ -1,6 +1,10 @@
 <template>
   <UButton class="color-blue-light bg-anim-light relative pr-10" :size="size" >
-    <span class="text-white">{{ authStore.profile.currency.wheel > 99999999 ? miniMoney(authStore.profile.currency.wheel) : toMoney(authStore.profile.currency.wheel) }}</span> 
+    <UiNumber :num="authStore.profile.currency.wheel">
+      <template #default="{ display }">
+        {{ display > 9999999 ? miniMoney(display) : toMoney(display) }}
+      </template>
+    </UiNumber>
     <UiIcon name="i-lucide-lab-wheel" size="6" class="absolute right-2"/>
   </UButton>
 </template>

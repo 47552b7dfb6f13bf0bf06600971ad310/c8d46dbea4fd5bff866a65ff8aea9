@@ -114,6 +114,7 @@ export const DBConfig = (mongoose : Mongoose) => {
         editSpend: { type: Array, default: [ 1, 3 ] },
         editLogin: { type: Array, default: [ 1, 3 ] },
         reset: { type: Array, default: [ 1, 3 ] },
+        del: { type: Array, default: [ 1, 3 ] },
       },
       gate: {
         add: { type: Array, default: [ 1, 3 ] },

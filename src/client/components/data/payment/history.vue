@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <UiFlex class="mb-2 gap-0.5">
+      <UiFlex class="gap-1">
         <USelectMenu v-model="page.size" :options="[5,10,20,50,100]" />
 
         <UForm @submit="page.current = 1, getList()" class="max-w-[9rem] mr-auto">
@@ -12,7 +12,7 @@
         <SelectDate time v-model="page.range.end" placeholder="Kết thúc" size="sm" />
       </UiFlex>
 
-      <UCard :ui="{ body: { padding: 'p-0 sm:p-0'}}" class="bg-gray mb-2">
+      <UCard :ui="{ body: { padding: 'p-0 sm:p-0'}}" class="bg-gray my-2">
         <LoadingTable v-if="loading.load" />
 
         <UTable v-model:sort="page.sort" :columns="columns" :rows="list">
@@ -77,8 +77,8 @@
             <UTextarea v-model="stateUndo.reason" />
           </UFormGroup>
 
-          <UiFlex justify="end" class="mt-4">
-            <UButton type="submit" :loading="loading.undo" color="yellow">Xác nhận</UButton>
+          <UiFlex justify="end">
+            <UButton type="submit" :loading="loading.undo" color="rose">Xác nhận</UButton>
             <UButton color="gray" @click="modal.undo = false" :disabled="loading.undo" class="ml-1">Đóng</UButton>
           </UiFlex>
         </UForm>

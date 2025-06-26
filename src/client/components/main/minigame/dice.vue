@@ -5,7 +5,7 @@
       <DataUserCoin v-if="!!authStore.isLogin" />
     </UiFlex>
 
-    <DataMinigameDiceBox :rolling="rolling" :dices="dices" class="mb-6" />
+    <DataMinigameDiceBox :rolling="rolling" :dices="dices" class="mb-8" />
     <DataMinigameDiceJar :jar="jar" class="mb-8" />
 
     <div class="grid grid-cols-12 gap-2 md:gap-6">

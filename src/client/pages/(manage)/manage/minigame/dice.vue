@@ -26,8 +26,8 @@
           <UInput v-model="state.percent.other" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-6">
-          <UButton color="yellow" type="submit" :loading="loading.update" class="mr-1">Cập nhật</UButton>
+        <UiFlex justify="end" class="gap-1">
+          <UButton color="yellow" type="submit" :loading="loading.update">Cập nhật</UButton>
         </UiFlex>
       </UForm>
     </UCard>

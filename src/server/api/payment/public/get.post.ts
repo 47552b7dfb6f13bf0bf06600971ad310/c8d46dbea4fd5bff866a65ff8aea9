@@ -2,17 +2,10 @@ import type { IAuth } from "~~/types"
 
 export default defineEventHandler(async (event) => {
   try {
-    const { _id, secret } = await readBody(event)
+    const { _id } = await readBody(event)
     if(!_id) throw 'Không tìm thấy ID giao dịch'
 
-    let auth : IAuth | null = null
-    if(!secret){
-      auth = await getAuth(event) as IAuth
-    }
-    else {
-      const runtimeConfig = useRuntimeConfig()
-      if(secret != runtimeConfig.apiSecret) throw 'Khóa bí mật không đúng'
-    }
+    const auth = await getAuth(event) as IAuth
 
     const payment = await DB.Payment.findOne({ _id: _id })
     .select('-token')
@@ -21,9 +14,7 @@ export default defineEventHandler(async (event) => {
     })
 
     if(!payment) throw 'Giao dịch không tồn tại'
-    if(!secret && (!!auth && (auth as IAuth).type < 1)){
-      if(payment.user.toString() !== (auth as IAuth)._id.toString()) throw 'Bạn không phải chủ giao dịch'
-    }
+    if((auth.type < 1) && (payment.user.toString() !== auth._id.toString())) throw 'Bạn không phải chủ giao dịch'
     
     return resp(event, { result: payment })
   } 

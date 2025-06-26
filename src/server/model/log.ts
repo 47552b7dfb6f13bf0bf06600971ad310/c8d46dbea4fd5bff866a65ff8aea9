@@ -47,7 +47,6 @@ export const DBLogUser = (mongoose : Mongoose) => {
   return model
 }
 
-
 export const DBLogUserIP = (mongoose : Mongoose) => {
   const schema = new mongoose.Schema<IDBLogUserIP>({ 
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', index: true },

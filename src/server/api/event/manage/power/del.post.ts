@@ -1,4 +1,4 @@
-import type { IAuth, IDBGameRankPowerProcess } from "~~/types"
+import type { IAuth, IDBGameRankPowerUpProcess } from "~~/types"
 
 export default defineEventHandler(async (event) => {
   try {
@@ -8,12 +8,12 @@ export default defineEventHandler(async (event) => {
     const { _id } = await readBody(event)
     if(!_id) throw 'Dữ liệu đầu vào không hợp lệ'
 
-    const processEvent = await DB.GameRankPowerProcess.findOne({ _id: _id }).select('server') as IDBGameRankPowerProcess
+    const processEvent = await DB.GameRankPowerUpProcess.findOne({ _id: _id }).select('server') as IDBGameRankPowerUpProcess
     if(!processEvent) throw 'Tiến trình không tồn tại'
 
-    await DB.GameRankPowerProcess.deleteOne({ _id: processEvent._id })
-    await DB.GameRankPowerProcessLog.deleteMany({ process: processEvent._id })
-    await DB.GameRankPower.deleteMany({ process: processEvent._id })
+    await DB.GameRankPowerUpProcess.deleteOne({ _id: processEvent._id })
+    await DB.GameRankPowerUpProcessLog.deleteMany({ process: processEvent._id })
+    await DB.GameRankPowerUp.deleteMany({ process: processEvent._id })
 
     logAdmin(event, `Xóa tiến trình sự kiện tăng lực chiến của máy chủ <b>${processEvent.server}</b>`)
     return resp(event, { message: 'Xóa thành công' })

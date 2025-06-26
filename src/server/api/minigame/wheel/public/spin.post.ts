@@ -107,9 +107,6 @@ export default defineEventHandler(async (event) => {
         percent: resultGift.percent
       })
 
-      // Log User
-      if(item.type == 'coin') logUser(event, auth._id, `Nhận <b>${resultGift.amount.toLocaleString('vi-VN')}</b> xu từ <b>vòng quay may mắn</b>`)
-
       // Lucky User
       if(item.type != 'wheel_lose' && resultGift.percent <= 5){
         await DB.WheelLuckyUser.create({

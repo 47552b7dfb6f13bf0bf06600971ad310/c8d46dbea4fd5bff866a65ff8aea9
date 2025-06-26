@@ -1,12 +1,12 @@
 <template>
   <UiContent title="Gate" sub="Quản lý các kênh nạp">
-    <UiFlex class="mb-4">
+    <UiFlex class="gap-1">
       <USelectMenu v-model="page.size" :options="[5,10,20,50,100]" class="mr-auto"/>
-      <UButton color="yellow" @click="modal.add = true">Thêm mới</UButton>
+      <UButton color="yellow" icon="i-bx-plus" @click="modal.add = true">Thêm mới</UButton>
     </UiFlex>
 
     <!-- Table -->
-    <UCard :ui="{ body: { padding: 'p-0 sm:p-0' } }">
+    <UCard class="my-2" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
       <LoadingTable v-if="loading.load" />
 
       <UTable 
@@ -51,7 +51,7 @@
     </UCard>
 
     <!-- Pagination -->
-    <UiFlex justify="between" class="py-4">
+    <UiFlex justify="between">
       <USelectMenu v-model="selectedColumns" :options="columns" multiple placeholder="Chọn cột" />
       <UPagination v-model="page.current" :page-count="page.size" :total="page.total" :max="4" />
     </UiFlex>
@@ -90,9 +90,9 @@
           <SelectDisplay v-model="stateAdd.display" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-6">
+        <UiFlex justify="end" class="gap-1">
           <UButton color="yellow" type="submit" :loading="loading.add">Thêm</UButton>
-          <UButton color="gray" @click="modal.add = false" :disabled="loading.add" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.add = false" :disabled="loading.add">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -127,9 +127,9 @@
           <SelectDisplay v-model="stateEdit.display" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-6">
+        <UiFlex justify="end" class="gap-1">
           <UButton color="yellow" type="submit" :loading="loading.edit">Sửa</UButton>
-          <UButton color="gray" @click="modal.edit = false" :disabled="loading.edit" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.edit = false" :disabled="loading.edit">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -145,9 +145,9 @@
           <UInput v-model="stateExtend.qrcode" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-6">
+        <UiFlex justify="end" class="gap-1">
           <UButton color="yellow" type="submit" :loading="loading.extend">Lưu</UButton>
-          <UButton color="gray" @click="modal.extend = false" :disabled="loading.extend" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.extend = false" :disabled="loading.extend">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>

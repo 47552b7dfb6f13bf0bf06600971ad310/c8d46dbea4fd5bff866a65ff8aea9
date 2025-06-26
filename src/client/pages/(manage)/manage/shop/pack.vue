@@ -1,15 +1,15 @@
 <template>
   <UiContent title="Pack Shop" sub="Quản lý cửa hàng gói">
-    <UiFlex class="mb-4 gap-1">
+    <UiFlex class="gap-1">
       <USelectMenu v-model="page.size" :options="[5,10,20,50,100]"/>
       <UForm :state="page" @submit="page.current = 1, getList()" class="mr-auto">
         <UInput v-model="page.search" placeholder="Tìm kiếm..." icon="i-bx-search" size="sm" />
       </UForm>
-      <UButton color="yellow" @click="modal.add = true">Thêm mới</UButton>
+      <UButton color="yellow" icon="i-bx-plus" @click="modal.add = true">Thêm mới</UButton>
     </UiFlex>
     
     <!-- Table -->
-    <UCard :ui="{ body: { padding: 'p-0 sm:p-0' } }">
+    <UCard class="my-2" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
       <LoadingTable v-if="loading.load" />
 
       <UTable 
@@ -54,7 +54,7 @@
     </UCard>
 
     <!-- Pagination -->
-    <UiFlex justify="between" class="py-4">
+    <UiFlex justify="between">
       <USelectMenu v-model="selectedColumns" :options="columns" multiple placeholder="Chọn cột" />
       <UPagination v-model="page.current" :page-count="page.size" :total="page.total" :max="4" />
     </UiFlex>
@@ -78,14 +78,14 @@
           <SelectDisplay v-model="stateAdd.display" />
         </UFormGroup>
 
-        <UiFlex class="mt-4">
-          <UiFlex class="mr-auto">
+        <UiFlex class="gap-1">
+          <UiFlex class="mr-auto gap-2">
             <UToggle v-model="stateAdd.pin" />
-            <UiText size="xs" weight="bold" class="ml-2">Ghim</UiText>
+            <UiText size="xs" weight="bold">Ghim</UiText>
           </UiFlex>
 
           <UButton color="yellow" type="submit" :loading="loading.add">Thêm</UButton>
-          <UButton color="gray" @click="modal.add = false" :disabled="loading.add" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.add = false" :disabled="loading.add">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -109,14 +109,14 @@
           <SelectDisplay v-model="stateEdit.display" />
         </UFormGroup>
 
-        <UiFlex class="mt-4">
-          <UiFlex class="mr-auto">
+        <UiFlex class="gap-1">
+          <UiFlex class="mr-auto gap-2">
             <UToggle v-model="stateEdit.pin" />
-            <UiText size="xs" weight="bold" class="ml-2">Ghim</UiText>
+            <UiText size="xs" weight="bold">Ghim</UiText>
           </UiFlex>
 
           <UButton color="yellow" type="submit" :loading="loading.edit">Sửa</UButton>
-          <UButton color="gray" @click="modal.edit = false" :disabled="loading.edit" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.edit = false" :disabled="loading.edit">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -126,9 +126,9 @@
       <UForm :state="stateGift" @submit="giftAction" class="bg-card rounded-2xl p-4">
         <SelectItemList class="bg-gray" v-model="stateGift.gift" :types="['coin', 'wheel', 'game_item']" />
 
-        <UiFlex justify="end" class="mt-4">
+        <UiFlex justify="end" class="gap-1 mt-2">
           <UButton color="yellow" type="submit" :loading="loading.gift">Lưu</UButton>
-          <UButton color="gray" @click="modal.gift = false" :disabled="loading.gift" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.gift = false" :disabled="loading.gift">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>

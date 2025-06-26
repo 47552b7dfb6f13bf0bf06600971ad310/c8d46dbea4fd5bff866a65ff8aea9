@@ -2,7 +2,7 @@
   <UiFlex justify="center" class="SVN gap-2">
     <UiIcon name="i-icomoon-free-power" size="6" color="yellow" class="relative top-0.5" />
     <UiText color="yellow" size="2xl">Hũ</UiText>
-    <UiText size="2xl">{{displayNumber < 100000000 ? toMoney(displayNumber) : miniMoney(displayNumber)}}</UiText>
+    <UiText size="2xl">{{toMoney(displayNumber)}}</UiText>
   </UiFlex>
 </template>
 

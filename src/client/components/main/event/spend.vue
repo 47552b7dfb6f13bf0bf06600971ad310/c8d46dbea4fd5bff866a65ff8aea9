@@ -2,6 +2,8 @@
 
 <template>
   <div>
+    <DataEventTime :config="config" class="mb-4" />
+
     <UiFlex class="mb-2" >
       <UTabs v-model="tab" :items="tabs"></UTabs>
     </UiFlex>

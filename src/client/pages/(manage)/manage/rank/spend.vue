@@ -1,15 +1,15 @@
 <template>
   <UiContent title="Spend Rank" sub="Thông tin xếp hạng tiêu xu" class="max-w-3xl mx-auto">
-    <UiFlex class="mb-4">
-      <USelectMenu v-model="page.size" :options="[5,10,20,50,100]" class="mr-1"/>
+    <UiFlex class="gap-1">
+      <USelectMenu v-model="page.size" :options="[5,10,20,50,100]" />
       <SelectGameServer size="sm" v-model="page.server" class="mr-auto"></SelectGameServer>
 
-      <SelectDate v-model="page.range.start" placeholder="Bắt đầu" size="sm" class="max-w-[140px]"/>
-      <SelectDate v-model="page.range.end" placeholder="Kết thúc" size="sm" class="ml-1 max-w-[140px]"/>
+      <SelectDate v-model="page.range.start" placeholder="Bắt đầu" size="sm" />
+      <SelectDate v-model="page.range.end" placeholder="Kết thúc" size="sm" />
     </UiFlex>
     
     <!-- Table -->
-    <UCard :ui="{ body: { padding: 'p-0 sm:p-0' } }">
+    <UCard class="my-2" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
       <LoadingTable v-if="loading.load" />
 
       <UTable 
@@ -34,7 +34,7 @@
     </UCard>
 
     <!-- Pagination -->
-    <UiFlex justify="end" class="py-4">
+    <UiFlex justify="end">
       <UPagination v-model="page.current" :page-count="page.size" :total="page.total" :max="4" />
     </UiFlex>
 

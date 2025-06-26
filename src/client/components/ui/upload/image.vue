@@ -1,8 +1,11 @@
 <template>
-  <div>
+  <UiFlex class="relative">
     <input @change="onFileChange" type="file" accept=".jpg,.jpeg,.png,.webp,.gif" ref="input" hidden class="none">
-    <slot :select="selectFile" :loading="loading"></slot>
-  </div>
+    <div class="grow">
+      <slot :select="selectFile" :loading="loading"></slot>
+    </div>
+    <UiIcon v-if="!!modelValue" name="i-material-symbols-delete" size="6" color="gray" class="ml-2 cursor-pointer" @click="delFile" />
+  </UiFlex>
 </template>
 
 <script setup>
@@ -14,6 +17,10 @@ const input = ref()
 const loading = ref(false)
 
 const selectFile = () => input.value.click()
+
+const delFile = () => {
+  emit('update:modelValue', null)
+}
 
 const onFileChange = async (e) => {
   try {

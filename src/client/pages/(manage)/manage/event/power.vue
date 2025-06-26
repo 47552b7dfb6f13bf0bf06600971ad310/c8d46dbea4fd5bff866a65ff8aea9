@@ -1,12 +1,12 @@
 <template>
   <UiContent title="Power Up Event" sub="Quản lý sự kiện tăng lực chiến">
-    <UiFlex class="mb-4 gap-1">
+    <UiFlex class="gap-1">
       <USelectMenu v-model="page.size" :options="[5,10,20,50,100]" class="mr-auto"/>
-      <UButton color="yellow" @click="modal.add = true">Thêm mới</UButton>
+      <UButton color="yellow" icon="i-bx-plus" @click="modal.add = true">Thêm mới</UButton>
     </UiFlex>
     
     <!-- Table -->
-    <UCard :ui="{ body: { padding: 'p-0 sm:p-0' } }">
+    <UCard class="my-2" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
       <LoadingTable v-if="loading.load" />
 
       <UTable 
@@ -43,7 +43,7 @@
     </UCard>
 
     <!-- Pagination -->
-    <UiFlex justify="between" class="py-4">
+    <UiFlex justify="between">
       <USelectMenu v-model="selectedColumns" :options="columns" multiple placeholder="Chọn cột" />
       <UPagination v-model="page.current" :page-count="page.size" :total="page.total" :max="4" />
     </UiFlex>
@@ -67,9 +67,9 @@
           <SelectDate v-model="stateAdd.end" placeholder="Chọn ngày" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-4">
+        <UiFlex justify="end" class="gap-1">
           <UButton color="yellow" type="submit" :loading="loading.add">Thêm</UButton>
-          <UButton color="gray" @click="modal.add = false" :disabled="loading.add" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.add = false" :disabled="loading.add">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -93,14 +93,14 @@
           <SelectDate v-model="stateEdit.end" placeholder="Chọn ngày" />
         </UFormGroup>
 
-        <UiFlex class="mt-4">
-          <UiFlex class="mr-auto">
-            <UToggle v-model="stateEdit.active" class="mr-2" />
+        <UiFlex class="gap-1">
+          <UiFlex class="mr-auto gap-2">
+            <UToggle v-model="stateEdit.active" />
             <UiText size="sm" weight="semibold" color="gray" text="Kích hoạt" />
           </UiFlex>
 
           <UButton color="yellow" type="submit" :loading="loading.edit">Sửa</UButton>
-          <UButton color="gray" @click="modal.edit = false" :disabled="loading.edit" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.edit = false" :disabled="loading.edit">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -114,9 +114,9 @@
 
         <ManageEventPowerAward v-model="stateAward.award" />
 
-        <UiFlex justify="end" class="mt-4">
+        <UiFlex justify="end" class="gap-1 mt-2">
           <UButton color="yellow" @click="awardAction" :loading="loading.award">Lưu</UButton>
-          <UButton color="gray" @click="modal.award = false" :disabled="loading.award" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.award = false" :disabled="loading.award">Đóng</UButton>
         </UiFlex>
       </UiContent>
     </UModal>

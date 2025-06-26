@@ -1,15 +1,15 @@
 <template>
   <UiContent title="Giftcode" sub="Quản lý mã quà tặng">
-    <UiFlex class="mb-4 gap-1">
+    <UiFlex class="gap-1">
       <USelectMenu v-model="page.size" :options="[5,10,20,50,100]" />
       <UForm :state="page" @submit="page.current = 1, getList()" class="mr-auto">
         <UInput v-model="page.search" placeholder="Tìm kiếm..." icon="i-bx-search" size="sm" />
       </UForm>
-      <UButton color="yellow" @click="modal.add = true" >Thêm mới</UButton>
+      <UButton color="yellow" icon="i-bx-plus" @click="modal.add = true" >Thêm mới</UButton>
     </UiFlex>
     
     <!-- Table -->
-    <UCard :ui="{ body: { padding: 'p-0 sm:p-0' } }">
+    <UCard class="my-2" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
       <LoadingTable v-if="loading.load" />
 
       <UTable 
@@ -72,7 +72,7 @@
     </UCard>
 
     <!-- Pagination -->
-    <UiFlex justify="between" class="py-4">
+    <UiFlex justify="between">
       <USelectMenu v-model="selectedColumns" :options="columns" multiple placeholder="Chọn cột" />
       <UPagination v-model="page.current" :page-count="page.size" :total="page.total" :max="4" />
     </UiFlex>
@@ -93,7 +93,7 @@
         </UFormGroup>
 
         <UFormGroup label="Tài khoản">
-          <SelectUsers class="bg-gray" v-model="stateAdd.users" />
+          <SelectUserList class="bg-gray" v-model="stateAdd.users" />
         </UFormGroup>
 
         <UFormGroup label="Hết hạn">
@@ -104,21 +104,21 @@
           <SelectDisplay v-model="stateAdd.display" />
         </UFormGroup>
 
-        <UiFlex class="mt-4">
+        <UiFlex class="gap-1">
           <UiFlex class="mr-auto gap-1" type="col" items="start">
-            <UiFlex>
-              <UToggle v-model="stateAdd.public" />
-              <UiText size="xs" weight="bold" class="ml-2">Công Khai</UiText>
+            <UiFlex class="gap-2">
+              <UToggle v-model="stateAdd.public" color="green" />
+              <UiText size="xs" weight="bold">Công Khai</UiText>
             </UiFlex>
 
-            <UiFlex>
-              <UToggle v-model="stateAdd.justone" />
-              <UiText size="xs" weight="bold" class="ml-2">Dùng Một Lần</UiText>
+            <UiFlex class="gap-2">
+              <UToggle v-model="stateAdd.justone" color="rose" />
+              <UiText size="xs" weight="bold">Dùng Một Lần</UiText>
             </UiFlex>
           </UiFlex>
 
           <UButton color="yellow" type="submit" :loading="loading.add">Thêm</UButton>
-          <UButton color="gray" @click="modal.add = false" :disabled="loading.add" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.add = false" :disabled="loading.add">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -139,7 +139,7 @@
         </UFormGroup>
 
         <UFormGroup label="Tài khoản">
-          <SelectUsers class="bg-gray" v-model="stateEdit.users" />
+          <SelectUserList class="bg-gray" v-model="stateEdit.users" />
         </UFormGroup>
 
         <UFormGroup label="Hết hạn">
@@ -150,21 +150,21 @@
           <SelectDisplay v-model="stateEdit.display" />
         </UFormGroup>
 
-        <UiFlex class="mt-4">
+        <UiFlex class="gap-1">
           <UiFlex class="mr-auto gap-1" type="col" items="start">
-            <UiFlex>
-              <UToggle v-model="stateEdit.public" />
-              <UiText size="xs" weight="bold" class="ml-2">Công Khai</UiText>
+            <UiFlex class="gap-2">
+              <UToggle v-model="stateEdit.public" color="green" />
+              <UiText size="xs" weight="bold">Công Khai</UiText>
             </UiFlex>
 
-            <UiFlex>
-              <UToggle v-model="stateEdit.justone" />
-              <UiText size="xs" weight="bold" class="ml-2">Dùng Một Lần</UiText>
+            <UiFlex class="gap-2">
+              <UToggle v-model="stateEdit.justone" color="rose" />
+              <UiText size="xs" weight="bold">Dùng Một Lần</UiText>
             </UiFlex>
           </UiFlex>
 
           <UButton color="yellow" type="submit" :loading="loading.edit">Sửa</UButton>
-          <UButton color="gray" @click="modal.edit = false" :disabled="loading.edit" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.edit = false" :disabled="loading.edit">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -174,9 +174,9 @@
       <UForm :state="stateGift" @submit="giftAction" class="bg-card rounded-2xl p-4">
         <SelectItemList class="bg-gray" v-model="stateGift.gift" :types="['coin', 'wheel', 'game_item']" />
 
-        <UiFlex justify="end" class="mt-4">
+        <UiFlex justify="end" class="mt-2 gap-1">
           <UButton color="yellow" type="submit" :loading="loading.gift">Lưu</UButton>
-          <UButton color="gray" @click="modal.gift = false" :disabled="loading.gift" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.gift = false" :disabled="loading.gift">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>

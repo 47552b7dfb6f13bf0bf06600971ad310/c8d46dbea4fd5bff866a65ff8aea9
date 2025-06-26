@@ -79,7 +79,7 @@
         </UCard>
       </UFormGroup>
 
-      <UiFlex class="mt-4 gap-0.5" justify="end">
+      <UiFlex class="gap-1" justify="end">
         <UButton color="yellow" type="submit" :loading="buying">Mua Ngay</UButton>
         <UButton color="gray" :disabled="buying" @click="emit('close')">Đóng</UButton>
       </UiFlex>

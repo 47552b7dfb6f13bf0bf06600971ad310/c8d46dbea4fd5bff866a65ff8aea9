@@ -14,9 +14,7 @@ export default defineEventHandler(async (event) => {
     const itemData = await DB.Item.findOne({ _id: wheelItem.item }).select('item_name') as IDBItem
 
     await DB.Wheel.deleteOne({ _id: _id })
-
-    logAdmin(event, `Xóa vật phẩm <b>${itemData.item_name}</b> khỏi vòng quay`)
-
+    logAdmin(event, `Xóa vật phẩm <b>${itemData ? itemData.item_name : 'Không Xác Định'}</b> khỏi vòng quay`)
     return resp(event, { message: 'Xóa vật phẩm thành công' })
   } 
   catch (e:any) {

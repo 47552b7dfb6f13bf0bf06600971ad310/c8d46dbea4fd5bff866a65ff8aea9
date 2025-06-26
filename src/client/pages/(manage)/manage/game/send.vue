@@ -28,17 +28,16 @@
           <SelectItemList class="bg-gray" v-model="state.items" :types="['game_item']" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-4">
+        <UiFlex justify="end">
           <UButton color="yellow" type="submit" :loading="!!loading">Gửi Ngay</UButton>
         </UiFlex>
       </UForm>
     </UCard>
 
-    <UModal v-model="modal" preventClose :ui="{width: 'sm:max-w-[320px]'}">
-      <UiFlex type="col" justify="center" class="p-4">
-        <UiIcon :name="!!loading ? 'i-bx-mail-send' : 'i-bx-check'" size="24" color="primary" />
-        <UiText align="center" class="mb-2" color="gray">{{ !!loading ? 'Vui lòng đợi tiến trình kết thúc' : 'Đã hoàn tất' }}</UiText>
-        <UButton :loading="loading" @click="modal = false" :color="!!loading ? 'gray' : 'primary'">{{ !!loading ? 'Đang gửi' : 'Đóng' }}</UButton>
+    <UModal v-model="modal" :ui="{width: 'sm:max-w-[250px]'}">
+      <UiFlex type="col" justify="center" class="bg-card rounded-2xl p-4">
+        <UiIcon :name="!!loading ? 'i-bx-mail-send' : 'i-bx-check'" size="20" color="primary" />
+        <UiText align="center" class="mb-4" color="gray">{{ !!loading ? 'Vui lòng đợi tiến trình kết thúc' : 'Đã hoàn tất' }}</UiText>
       </UiFlex>
     </UModal>
   </UiContent>

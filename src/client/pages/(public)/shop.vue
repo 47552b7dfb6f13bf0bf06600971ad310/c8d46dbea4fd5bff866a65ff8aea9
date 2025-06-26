@@ -27,9 +27,11 @@
         </swiper-container >
       </ClientOnly>
 
-      <MainShopRecharge v-if="tab === 'recharge'" />
-      <MainShopItem v-if="tab === 'item'" />
-      <MainShopPack v-if="tab === 'pack'" />
+      <Transition name="page" mode="out-in">
+        <MainShopRecharge v-if="tab === 'recharge'" />
+        <MainShopItem v-else-if="tab === 'item'" />
+        <MainShopPack v-else-if="tab === 'pack'" />
+      </Transition>
     </div>
   </div>
 </template>

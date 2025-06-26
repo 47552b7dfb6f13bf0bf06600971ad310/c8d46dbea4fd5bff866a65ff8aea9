@@ -5,22 +5,24 @@
     <div class="@container grid grid-cols-12 gap-2" v-else>
       <UCard v-for="(row, index) in list" :key="index" class="bg-gray @4xl:col-span-3 @xl:col-span-4 col-span-6 ring-1 cursor-pointer" @click="openReceive(row)" >
         <UiFlex type="col">
-          <UiText mini weight="semibold" class="text-sm md:text-lg line-clamp-1 mb-4 max-w-[90%]">
+          <UiText mini weight="semibold" class="text-sm md:text-lg line-clamp-1 max-w-[90%]">
             {{ row.name }}
           </UiText>
 
-          <UiFlex justify="between" class="w-full mb-1">
-            <UiIcon name="i-material-symbols-light-line-start-circle-rounded" size="5" color="gray" />
-            <UiText mini size="sm" color="green" weight="semibold">{{ useDayJs().displayTime(row.start) }}</UiText>
-          </UiFlex>
+          <div class="my-6 w-full">
+            <UiFlex justify="between" class="w-full mb-1">
+              <UiIcon name="i-material-symbols-light-line-start-circle-rounded" size="5" color="gray" />
+              <UiText mini size="sm" color="green" weight="semibold">{{ useDayJs().displayTime(row.start) }}</UiText>
+            </UiFlex>
 
-          <UiFlex justify="between" class="w-full mb-4">
-            <UiIcon name="i-material-symbols-light-line-end-circle-rounded" size="5" color="gray" />
-            <UiText mini size="sm" color="rose" weight="semibold">{{ useDayJs().displayTime(row.end) }}</UiText>
-          </UiFlex>
+            <UiFlex justify="between" class="w-full">
+              <UiIcon name="i-material-symbols-light-line-end-circle-rounded" size="5" color="gray" />
+              <UiText mini size="sm" color="rose" weight="semibold">{{ useDayJs().displayTime(row.end) }}</UiText>
+            </UiFlex>
+          </div>
 
           <UButton color="gray" class="px-4 md:px-6 max-w-full">
-            Xem Chi Tiết
+            Chi Tiết
           </UButton>
         </UiFlex>
       </UCard>

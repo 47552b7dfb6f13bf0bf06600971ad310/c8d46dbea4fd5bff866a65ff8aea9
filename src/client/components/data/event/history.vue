@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UiFlex class="mb-2 gap-1">
+    <UiFlex class="gap-1">
       <USelectMenu v-model="page.size" :options="[5,10,20,50,100]" />
 
       <USelectMenu 
@@ -17,7 +17,7 @@
       <SelectDate time v-model="page.range.end" placeholder="Kết thúc" size="sm" />
     </UiFlex>
 
-    <UCard class="bg-gray mb-2" :ui="{ 
+    <UCard class="bg-gray my-2" :ui="{ 
       body: { padding: 'p-0 sm:p-0' },
       header: { padding: 'px-3 sm:px-3 py-2 sm:py-2' },
       footer: { padding: 'p-2 sm:p-2' },
@@ -49,9 +49,6 @@
 
 <script setup>
 const props = defineProps(['user'])
-
-
-const route = useRoute()
 
 const loading = ref({
   load: true
@@ -89,8 +86,7 @@ const page = ref({
     start: null,
     end: null
   },
-  user: props.user || null,
-  secret: route.params._secret
+  user: props.user || null
 })
 watch(() => page.value.size, () => getList())
 watch(() => page.value.current, () => getList())

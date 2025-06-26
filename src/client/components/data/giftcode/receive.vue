@@ -31,7 +31,7 @@
         </div>
       </UFormGroup>
 
-      <UiFlex justify="end" class="mt-4 gap-1">
+      <UiFlex justify="end" class="gap-1">
         <UButton color="yellow" @click="submit" :loading="loading" v-if="!!isActive">Nhận</UButton>
         <UButton color="gray" :disabled="loading" @click="emit('close')">Đóng</UButton>
       </UiFlex>

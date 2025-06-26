@@ -25,8 +25,10 @@
         </swiper-container >
       </ClientOnly>
 
-      <MainRankLevel v-if="tab === 'level'" />
-      <MainRankPower v-if="tab === 'power'" />
+      <Transition name="page" mode="out-in">
+        <MainRankLevel v-if="tab === 'level'" />
+        <MainRankPower v-else-if="tab === 'power'" />
+      </Transition>
     </div>
   </div>
 </template>

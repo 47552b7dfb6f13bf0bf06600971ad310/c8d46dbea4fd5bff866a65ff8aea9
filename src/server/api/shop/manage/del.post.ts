@@ -10,13 +10,10 @@ export default defineEventHandler(async (event) => {
 
     const shopItem = await DB.Shop.findOne({ _id: _id }).select('item') as IDBShop
     if(!shopItem) throw 'Vật phẩm cửa hàng không tồn tại'
-
     const itemData = await DB.Item.findOne({ _id: shopItem.item }).select('item_name') as IDBItem
 
-    await DB.Shop.deleteOne({ _id: _id })
-
-    logAdmin(event, `Xóa vật phẩm <b>${itemData.item_name}</b> khỏi cửa hàng`)
-
+    await DB.Shop.deleteOne({ _id: shopItem._id })
+    logAdmin(event, `Xóa vật phẩm <b>${itemData ? itemData.item_name : 'Không Xác Định'}</b> khỏi cửa hàng`)
     return resp(event, { message: 'Xóa vật phẩm thành công' })
   } 
   catch (e:any) {

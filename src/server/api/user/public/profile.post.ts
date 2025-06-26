@@ -2,19 +2,11 @@ import type { IAuth } from "~~/types"
 
 export default defineEventHandler(async (event) => {
   try {
-    const { _id, secret } = await readBody(event)
+    const { _id } = await readBody(event)
 
-    let auth : IAuth | null = null
-    if(!secret){
-      auth = await getAuth(event, false) as IAuth | null
-    }
-    else {
-      const runtimeConfig = useRuntimeConfig()
-      if(secret != runtimeConfig.apiSecret) throw 'Khóa bí mật không đúng'
-    }
-
+    const auth = await getAuth(event, false) as IAuth | null
     const select = ['username', 'avatar', 'level', 'type']
-    if(!!secret || (!!auth && (auth.type > 0 || auth._id == _id))){
+    if(!!auth && (auth.type > 0 || auth._id.toString() == _id.toString())){
       select.push(...['currency', 'email', 'phone', 'block', 'referral', 'pay', 'spend', 'login'])
     }
 

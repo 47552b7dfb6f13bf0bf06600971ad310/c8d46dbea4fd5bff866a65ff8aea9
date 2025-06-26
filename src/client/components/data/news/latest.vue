@@ -25,7 +25,6 @@
             spaceBetween: 12,
           },
         }"
-        :autoplay="{ delay: 2500, disableOnInteraction: false }" 
         :loop="true"
       >
         <swiper-slide v-for="(item, idx) in list" :key="idx" >

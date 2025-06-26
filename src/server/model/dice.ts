@@ -31,6 +31,7 @@ export const DBDiceHistory = (mongoose : Mongoose) => {
   const schema = new mongoose.Schema<IDBDiceHistory>({ 
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', index: true },
     dices: [{ type: Number }],
+    my: [{ type: Number }],
     coin: {
       play: { type: Number, index: true },
       receive: { type: Number, index: true },

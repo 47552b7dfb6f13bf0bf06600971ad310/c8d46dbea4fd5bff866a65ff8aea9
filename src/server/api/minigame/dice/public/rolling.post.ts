@@ -48,7 +48,12 @@ const getDicesPlay = (body : any) : any => {
     6: parseInt(body.dice6 || '0')
   }
 
-  return dicesPlay
+  const dicesPlayArr = []
+  for (const [key, value] of Object.entries(dicesPlay)) {
+    if(value > 0) dicesPlayArr.push(key)
+  }
+
+  return { dicesPlayArr, dicesPlay }
 }
 
 const getTotalCoinPlay = (dicesPlay : any) : number => {
@@ -117,8 +122,9 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event)
 
     // Make Coin Play
-    const dicesPlay = getDicesPlay(body)
-    if(!dicesPlay) throw 'Dữ liệu đặt cược sai' 
+    const dicesPlayFormat = getDicesPlay(body)
+    if(!dicesPlayFormat) throw 'Dữ liệu đặt cược sai' 
+    const { dicesPlayArr, dicesPlay } = dicesPlayFormat
     const coinPlay = getTotalCoinPlay(dicesPlay)
     if(coinPlay < 1) throw 'Dữ liệu đặt cược sai' 
 
@@ -206,6 +212,7 @@ export default defineEventHandler(async (event) => {
     await DB.DiceHistory.create({
       user: auth._id,
       dices: dices,
+      my: dicesPlayArr,
       coin: {
         play: coinPlay,
         receive: coinReceive,
@@ -215,7 +222,8 @@ export default defineEventHandler(async (event) => {
 
     // Log User
     logUser(event, auth._id, `Dùng <b>${coinPlay.toLocaleString('vi-VN')}</b> xu để chơi <b>xúc xắc may mắn</b>`)
-    if(coinReceive > 0) logUser(event, auth._id, `Nhận <b>${coinReceive.toLocaleString('vi-VN')}</b> xu từ <b>xúc xắc may mắn</b>`)
+    const coinReal = (coinPlay + coinReceive)
+    if(coinReal > 0) logUser(event, auth._id, `Nhận <b>${coinReal.toLocaleString('vi-VN')}</b> xu từ <b>xúc xắc may mắn</b>`)
     IO.to(auth._id.toString()).emit('auth-update')
 
     // Lucky User

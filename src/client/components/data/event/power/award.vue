@@ -1,20 +1,24 @@
 <template>
   <div>
+    <UiText align="center" color="gray" size="sm px-8">
+      Từ ngày <span class="text-green-400 font-semibold">{{ useDayJs().displayFull(event.start) }} </span> 
+      đến ngày <span class="text-rose-400 font-semibold">{{ useDayJs().displayFull(event.end) }} </span> 
+    </UiText>
+
+    <UiText align="center" color="orange" size="xs" class="italic px-8 mb-2">
+      Hệ thống tự động trả quà sau khi kết thúc thời gian sự kiện
+    </UiText>
+
     <UCard class="bg-gray" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
-    <UTable :columns="columns" :rows="list" v-model:sort="sort">
-      <template #rank-data="{ row }">
-        <UBadge color="gray" variant="soft">Hạng {{ row.rank }}</UBadge>
-      </template>
+      <UTable :columns="columns" :rows="list" v-model:sort="sort">
+        <template #rank-data="{ row }">
+          <UBadge color="gray" variant="soft">Hạng {{ row.rank }}</UBadge>
+        </template>
 
-      <template #gift-data="{ row }">
-        <DataItemList :items="row.gift" class="min-w-[400px] max-w-[400px]" />
-      </template>
-
-      <template #actions-data="{ row, index }">
-        <UButton icon="i-bx-edit-alt" color="gray" class="mr-1" @click="openEdit(row, index)" />
-        <UButton icon="i-bx-trash" color="red" @click="delAction(index)" />
-      </template>
-    </UTable>
+        <template #gift-data="{ row }">
+          <DataItemList :items="row.gift" class="min-w-[400px] max-w-[400px]" />
+        </template>
+      </UTable>
     </UCard>
   </div>
 </template>

@@ -116,6 +116,7 @@ export interface IDBConfig {
       editSpend: Array<number>
       editLogin: Array<number>
       reset: Array<number>
+      del: Array<number>
     }
     gate: {
       add: Array<number>

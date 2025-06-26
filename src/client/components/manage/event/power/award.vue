@@ -1,10 +1,10 @@
 <template>
   <div>
-    <UiFlex justify="end" class="mb-2">
+    <UiFlex justify="end">
       <UButton color="gray" @click="modal.add = true">Thêm mới</UButton>
     </UiFlex>
 
-    <UCard class="bg-gray" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
+    <UCard class="bg-gray mt-2" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
       <UTable :columns="columns" :rows="list" v-model:sort="sort">
         <template #rank-data="{ row }">
           <UBadge color="gray" variant="soft">Hạng {{ row.rank }}</UBadge>
@@ -19,43 +19,43 @@
           <UButton icon="i-bx-trash" color="red" @click="delAction(index)" />
         </template>
       </UTable>
-
-      <!-- Modal Add -->
-      <UModal v-model="modal.add" preventClose :ui="{width: 'sm:max-w-[700px]'}">
-        <UForm @submit="addAction" class="bg-card rounded-2xl p-4">
-          <UFormGroup label="Hạng">
-            <UInput v-model="stateAdd.rank" />
-          </UFormGroup>
-
-          <UFormGroup label="Phần thưởng">
-            <SelectItemList class="bg-gray" v-model="stateAdd.gift" :types="['coin', 'wheel', 'game_item']" />
-          </UFormGroup>
-
-          <UiFlex justify="end" class="mt-4">
-            <UButton color="yellow" type="submit">Thêm</UButton>
-            <UButton color="gray" @click="modal.add = false" class="ml-1">Đóng</UButton>
-          </UiFlex>
-        </UForm>
-      </UModal>
-
-      <!-- Modal Edit -->
-      <UModal v-model="modal.edit" preventClose :ui="{width: 'sm:max-w-[700px]'}">
-        <UForm @submit="editAction" class="bg-card rounded-2xl p-4">
-          <UFormGroup label="Hạng">
-            <UInput v-model="stateEdit.rank" />
-          </UFormGroup>
-
-          <UFormGroup label="Phần thưởng">
-            <SelectItemList class="bg-gray" v-model="stateEdit.gift" :types="['coin', 'wheel', 'game_item']" />
-          </UFormGroup>
-
-          <UiFlex justify="end" class="mt-4">
-            <UButton color="yellow" type="submit">Sửa</UButton>
-            <UButton color="gray" @click="modal.edit = false" class="ml-1">Đóng</UButton>
-          </UiFlex>
-        </UForm>
-      </UModal>
     </UCard>
+
+    <!-- Modal Add -->
+    <UModal v-model="modal.add" preventClose :ui="{width: 'sm:max-w-[700px]'}">
+      <UForm @submit="addAction" class="bg-card rounded-2xl p-4">
+        <UFormGroup label="Hạng">
+          <UInput v-model="stateAdd.rank" />
+        </UFormGroup>
+
+        <UFormGroup label="Phần thưởng">
+          <SelectItemList class="bg-gray" v-model="stateAdd.gift" :types="['coin', 'wheel', 'game_item']" />
+        </UFormGroup>
+
+        <UiFlex justify="end" class="gap-1">
+          <UButton color="yellow" type="submit">Thêm</UButton>
+          <UButton color="gray" @click="modal.add = false">Đóng</UButton>
+        </UiFlex>
+      </UForm>
+    </UModal>
+
+    <!-- Modal Edit -->
+    <UModal v-model="modal.edit" preventClose :ui="{width: 'sm:max-w-[700px]'}">
+      <UForm @submit="editAction" class="bg-card rounded-2xl p-4">
+        <UFormGroup label="Hạng">
+          <UInput v-model="stateEdit.rank" />
+        </UFormGroup>
+
+        <UFormGroup label="Phần thưởng">
+          <SelectItemList class="bg-gray" v-model="stateEdit.gift" :types="['coin', 'wheel', 'game_item']" />
+        </UFormGroup>
+
+        <UiFlex justify="end" class="gap-1">
+          <UButton color="yellow" type="submit">Sửa</UButton>
+          <UButton color="gray" @click="modal.edit = false">Đóng</UButton>
+        </UiFlex>
+      </UForm>
+    </UModal>
   </div>
 </template>
 

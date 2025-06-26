@@ -1,4 +1,4 @@
-import type { IAuth, IDBGameRankPowerProcess } from "~~/types"
+import type { IAuth, IDBGameRankPowerUpProcess } from "~~/types"
 
 export default defineEventHandler(async (event) => {
   try {
@@ -13,11 +13,11 @@ export default defineEventHandler(async (event) => {
     const endDate = formatDate(end)
     if(startDate.timestamp > endDate.timestamp) throw 'Thời gian bắt đầu không thể lớn hơn thời gian kết thúc'
 
-    const processEvent = await DB.GameRankPowerProcess.findOne({ _id: _id }).select('server active send end') as IDBGameRankPowerProcess
+    const processEvent = await DB.GameRankPowerUpProcess.findOne({ _id: _id }).select('server active send end') as IDBGameRankPowerUpProcess
     if(!processEvent) throw 'Tiến trình không tồn tại'
 
     if(processEvent.server != server){
-      const getByServer = await DB.GameRankPowerProcess.findOne({ server: server }).select('_id') as IDBGameRankPowerProcess
+      const getByServer = await DB.GameRankPowerUpProcess.findOne({ server: server }).select('_id') as IDBGameRankPowerUpProcess
       if(!!getByServer) throw 'Tiến trình cho máy chủ này đã tồn tại'
     }
 
@@ -29,13 +29,13 @@ export default defineEventHandler(async (event) => {
     }
 
     delete body['_id']
-    await DB.GameRankPowerProcess.updateOne({ _id: processEvent._id }, {
+    await DB.GameRankPowerUpProcess.updateOne({ _id: processEvent._id }, {
       ...body,
       start: startDate.dayjs.startOf('date')['$d'],
       end: endDate.dayjs.endOf('date')['$d'],
     })
 
-    if(!!active) await rankPowerProcessWrite(server)
+    if(!!active) await rankPowerUpProcessWrite(server)
 
     logAdmin(event, `Sửa tiến trình sự kiện tăng lực chiến của máy chủ <b>${processEvent.server}</b>`)
     return resp(event, { message: 'Sửa thành công' })

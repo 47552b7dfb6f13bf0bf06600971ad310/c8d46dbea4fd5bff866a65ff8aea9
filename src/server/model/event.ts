@@ -6,8 +6,7 @@ export const DBEventConfig = (mongoose : Mongoose) => {
     type: { type: String },
     name: { type: String },
     start: { type: Date },
-    end: { type: Date },
-    display: { type: Number, default: 1 }
+    end: { type: Date }
   }, {
     timestamps: true
   })

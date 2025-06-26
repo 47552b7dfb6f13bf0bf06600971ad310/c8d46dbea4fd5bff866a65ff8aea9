@@ -151,8 +151,8 @@ const navItems = [
     defaultOpen: false,
     slot: 'tab-9',
     children: [
-      { label: 'Gói', to: '/manage/shop/pack' },
       { label: 'Vật phẩm', to: '/manage/shop/item' },
+      { label: 'Gói vật phẩm', to: '/manage/shop/pack' },
       { label: 'Lịch sử', to: '/manage/shop/history' }, 
     ]
   },
@@ -164,7 +164,7 @@ const navItems = [
     children: [
       { label: 'Tăng lực chiến', to: '/manage/event/power' },
       { label: 'Mời bạn', to: '/manage/event/referral' },
-      { label: 'Đăng nhập', to: '/manage/event/login' }, 
+      { label: 'Điểm danh', to: '/manage/event/login' }, 
       { label: 'Tích nạp', to: '/manage/event/pay' }, 
       { label: 'Tiêu phí', to: '/manage/event/spend' },
       { label: 'Nạp đơn', to: '/manage/event/paymusty' }, 
@@ -181,6 +181,7 @@ const navItems = [
       { label: 'Vòng quay', to: '/manage/minigame/wheel' }, 
       { label: 'Xúc xắc', to: '/manage/minigame/dice' },
       { label: 'Đập trứng', to: '/manage/minigame/egg' },
+      { label: 'Lịch sử', to: '/manage/minigame/history' },
     ]
   },
   {
@@ -189,6 +190,8 @@ const navItems = [
     defaultOpen: false,
     slot: 'tab-12',
     children: [
+      { label: 'Cấp độ', to: '/manage/rank/level' },
+      { label: 'Lực chiến', to: '/manage/rank/power' }, 
       { label: 'Nạp tiền', to: '/manage/rank/payment' }, 
       { label: 'Tiêu phí', to: '/manage/rank/spend' },
     ]

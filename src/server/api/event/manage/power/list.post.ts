@@ -1,4 +1,4 @@
-import type { IAuth, IDBGameRankPowerProcess } from "~~/types"
+import type { IAuth, IDBGameRankPowerUpProcess } from "~~/types"
 
 export default defineEventHandler(async (event) => {
   try {
@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     sorting[sort.column] = sort.direction == 'desc' ? -1 : 1
     const match : any = {}
 
-    const list = await DB.GameRankPowerProcess
+    const list = await DB.GameRankPowerUpProcess
     .find(match)
     .populate({ path: 'award.gift.item', select: 'item_id item_name item_image type'})
     .sort(sorting)
@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
       }))
     })
 
-    const total = await DB.GameRankPowerProcess.count(match)
+    const total = await DB.GameRankPowerUpProcess.count(match)
     return resp(event, { result: { list: formatList, total } })
   } 
   catch (e:any) {

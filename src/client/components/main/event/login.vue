@@ -1,5 +1,7 @@
 <template>
   <div>
+    <DataEventTime :config="config" class="mb-4" />
+
     <UiFlex class="mb-2" >
       <UTabs v-model="tab" :items="tabs"></UTabs>
     </UiFlex>
@@ -47,8 +49,7 @@ watch(() => modal.value.receive, (val) => !val && (stateReceive.value = null))
 
 const config = ref({
   start: null,
-  end: null,
-  display: 0
+  end: null
 })
 
 const list = ref([])

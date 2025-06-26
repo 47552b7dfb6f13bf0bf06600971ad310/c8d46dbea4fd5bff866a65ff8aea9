@@ -17,6 +17,7 @@
 <script setup>
 const props = defineProps({
   modelValue: String,
+  loading: Boolean,
   serverData: Object,
   options: {
     type: Array,
@@ -25,7 +26,7 @@ const props = defineProps({
   disabled: Boolean,
   auto: Boolean
 })
-const emit = defineEmits(['update:modelValue', 'update:serverData'])
+const emit = defineEmits(['update:modelValue', 'update:serverData', 'update:loading'])
 
 const loading = ref(true)
 
@@ -48,17 +49,21 @@ watch(select, val => {
 const fetch = async () => {
   try {
     loading.value = true
+    emit('update:loading', true)
     const list = await useAPI('game/public/server')
 
-    loading.value = false
     options.value = options.value.concat(list.map(i => ({ value: i.server_id, label: i.server_name })))
     if(options.value.length > 0 && !!props.auto){
       server.value = options.value[0]['value']
     }
+
+    loading.value = false
+    emit('update:loading', false)
   }
   catch (e){
-    loading.value = false
     options.value = []
+    loading.value = false
+    emit('update:loading', false)
   }
 }
 

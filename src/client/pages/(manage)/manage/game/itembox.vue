@@ -1,15 +1,15 @@
 <template>
   <UiContent title="Item Box" sub="Quản lý gói vật phẩm">
-    <UiFlex class="mb-4 gap-1">
+    <UiFlex class="gap-1">
       <USelectMenu v-model="page.size" :options="[5,10,20,50,100]" />
       <UForm :state="page" @submit="page.current = 1, getList()" class="mr-auto">
         <UInput v-model="page.search" placeholder="Tìm kiếm..." icon="i-bx-search" size="sm" />
       </UForm>
-      <UButton color="yellow" @click="modal.add = true" >Thêm mới</UButton>
+      <UButton color="yellow" icon="i-bx-plus" @click="modal.add = true" >Thêm mới</UButton>
     </UiFlex>
     
     <!-- Table -->
-    <UCard :ui="{ body: { padding: 'p-0 sm:p-0' } }">
+    <UCard class="my-2" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
       <LoadingTable v-if="loading.load" />
 
       <UTable 
@@ -38,7 +38,7 @@
     </UCard>
 
     <!-- Pagination -->
-    <UiFlex justify="between" class="py-4">
+    <UiFlex justify="between">
       <USelectMenu v-model="selectedColumns" :options="columns" multiple placeholder="Chọn cột" />
       <UPagination v-model="page.current" :page-count="page.size" :total="page.total" :max="4" />
     </UiFlex>
@@ -54,9 +54,9 @@
           <SelectItemList class="bg-gray" v-model="stateAdd.gift" :types="['coin', 'wheel', 'game_item']" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-6">
+        <UiFlex justify="end" class="gap-1">
           <UButton color="yellow" type="submit" :loading="loading.add">Thêm</UButton>
-          <UButton color="gray" @click="modal.add = false" :disabled="loading.add" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.add = false" :disabled="loading.add">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -72,9 +72,9 @@
           <SelectItemList class="bg-gray" v-model="stateEdit.gift" :types="['coin', 'wheel', 'game_item']" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-6">
+        <UiFlex justify="end" class="gap-1">
           <UButton color="yellow" type="submit" :loading="loading.edit">Sửa</UButton>
-          <UButton color="gray" @click="modal.edit = false" :disabled="loading.edit" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.edit = false" :disabled="loading.edit">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -158,6 +158,7 @@ const actions = (row) => [
     icon: 'i-bx-pencil',
     click: () => {
       Object.keys(stateEdit.value).forEach(key => stateEdit.value[key] = row[key])
+      stateEdit.value.gift = JSON.parse(JSON.stringify(row.gift))
       modal.value.edit = true
     }
   }],[{

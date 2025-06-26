@@ -55,6 +55,12 @@
         <MainMinigame />
       </PlayModal>
     </UModal>
+
+    <UModal v-model="modal.rank" preventClose :ui="{ width: 'sm:max-w-[700px]' }">
+      <PlayModal title="Xếp Hạng" sub="Các loại xếp hạng của trò chơi" @close="modal.rank = false">
+        <MainRank />
+      </PlayModal>
+    </UModal>
   </div>
 </template>
 
@@ -85,7 +91,8 @@ const modal = ref({
   },
   shop: false,
   event: false,
-  minigame: false
+  minigame: false,
+  rank: false
 })
 
 const { style } = useDraggable(el, {
@@ -144,60 +151,62 @@ const menu = computed(() => {
     list.push(action)
   }
 
-  // Shop
-  if(!!show.value.shop.item || !!show.value.shop.pack) list.push([{
-    label: 'Cửa Hàng',
-    icon: 'i-bxs-shopping-bag',
-    click: () => modal.value.shop = true
-  }])
-
-  // Event
   if(
-    !!show.value.event.referral 
+    !!show.value.shop.item
+    || !!show.value.shop.pack
+    || !!show.value.event.referral 
     || !!show.value.event.login 
     || !!show.value.event.pay 
     || !!show.value.event.spend 
     || !!show.value.event.paymusty 
     || !!show.value.event.paydays
-  ) list.push([{
-    label: 'Sự Kiện',
-    icon: 'i-bxs-calendar',
-    click: () => modal.value.event = true
-  }])
+    || !!show.value.minigame.wheel 
+    || !!show.value.minigame.dice
+    || !!show.value.rank.level 
+    || !!show.value.rank.power
+  ){
+    const action = []
+    if(!!show.value.shop.item || !!show.value.shop.pack) action.push({
+      label: 'Cửa Hàng',
+      icon: 'i-bxs-shopping-bag',
+      click: () => modal.value.shop = true
+    })
 
-  // Minigame
-  if(!!show.value.minigame.wheel || !!show.value.minigame.dice) list.push([{
-    label: 'Minigame',
-    icon: 'i-bxs-game',
-    click: () => modal.value.minigame = true
-  }])
+    if(
+      !!show.value.event.referral 
+      || !!show.value.event.login 
+      || !!show.value.event.pay 
+      || !!show.value.event.spend 
+      || !!show.value.event.paymusty 
+      || !!show.value.event.paydays
+    ) action.push({
+      label: 'Sự Kiện',
+      icon: 'i-bxs-calendar',
+      click: () => modal.value.event = true
+    })
+
+    if(!!show.value.minigame.wheel || !!show.value.minigame.dice) action.push({
+      label: 'Minigame',
+      icon: 'i-bxs-game',
+      click: () => modal.value.minigame = true
+    })
+
+    if(!!show.value.rank.level || !!show.value.rank.power) action.push({
+      label: 'Xếp Hạng',
+      icon: 'i-bxs-bar-chart-alt-2',
+      click: () => modal.value.rank = true
+    })
+
+    list.push(action)
+  }
 
   list.push([{
     label: 'Thoát',
     icon: 'i-solar-exit-bold',
-    click: () => goBackOrHome()
+    click: () => !!props.admin ? useTo().navigateToSSL('/manage/game/roles') : useTo().navigateToSSL('/')
   }])
 
   return list
-})
-
-const previousUrl = ref('')
-const canGoBack = ref(false)
-
-const goBackOrHome = () => {
-  if (canGoBack.value) {
-    router.back()
-  } else {
-    useTo().navigateToSSL('/')
-  }
-}
-
-onMounted(() => {
-  if (process.client) {
-    previousUrl.value = document.referrer
-    const isSameOrigin = previousUrl.value.startsWith(window.location.origin)
-    canGoBack.value = isSameOrigin && window.history.length > 1
-  }
 })
 </script>
 

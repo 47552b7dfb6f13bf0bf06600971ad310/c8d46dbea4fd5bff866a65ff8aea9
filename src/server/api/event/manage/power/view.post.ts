@@ -1,5 +1,5 @@
 import { Types } from "mongoose"
-import type { IAuth, IDBGameRankPowerProcess } from "~~/types"
+import type { IAuth, IDBGameRankPowerUpProcess } from "~~/types"
 
 export default defineEventHandler(async (event) => {
   try {
@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     if(!size || !current || !search) throw 'Dữ liệu phân trang sai'
     if(!fetchID) throw 'Không tìm thấy ID tiến trình'
 
-    const processEvent = await DB.GameRankPowerProcess.findOne({ _id: fetchID }).select('server') as IDBGameRankPowerProcess
+    const processEvent = await DB.GameRankPowerUpProcess.findOne({ _id: fetchID }).select('server') as IDBGameRankPowerUpProcess
     if(!processEvent) throw 'Tiến trình không tồn tại'
 
     const match : any = {}
@@ -22,10 +22,10 @@ export default defineEventHandler(async (event) => {
       if(search.by == 'ROLE-NAME') match['role_name'] = { $regex : search.key.toLowerCase(), $options : 'i' }
     }
     
-    const data = await DB.GameRankPower.aggregate([
+    const data = await DB.GameRankPowerUp.aggregate([
       {
         $lookup: {
-          from: "GameRankPowerProcess",
+          from: "GameRankPowerUpProcess",
           localField: "process",
           foreignField: "_id",
           as: "processData"

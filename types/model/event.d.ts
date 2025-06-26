@@ -10,7 +10,6 @@ export interface IDBEventConfig {
   name: string
   start: Date
   end: Date
-  display: number
 }
 
 export interface IDBEvent {

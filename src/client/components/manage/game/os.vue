@@ -1,5 +1,5 @@
 <template>
-  <UiFlex justify="center" class="gap-4 my-8">
+  <UiFlex justify="center" class="gap-4 ">
     <div v-if="!!os.ram" class="relative" :style="{ width: `${size}px`, height: `${size}px` }">
       <svg class="h-full w-full" :viewBox="`0 0 ${actualSize} ${actualSize}`">
         <circle

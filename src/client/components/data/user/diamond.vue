@@ -1,6 +1,10 @@
 <template>
   <UButton class="color-blue-light bg-anim-light relative pr-10" :size="size" >
-    <span class="text-white">{{ authStore.profile.currency.diamond > 99999999 ? miniMoney(authStore.profile.currency.diamond) : toMoney(authStore.profile.currency.diamond) }}</span> 
+    <UiNumber :num="authStore.profile.currency.diamond">
+      <template #default="{ display }">
+        {{ display > 9999999 ? miniMoney(display) : toMoney(display) }}
+      </template>
+    </UiNumber>
     <UiIcon name="i-ic-sharp-diamond" size="6" class="absolute right-2"/>
   </UButton>
 </template>

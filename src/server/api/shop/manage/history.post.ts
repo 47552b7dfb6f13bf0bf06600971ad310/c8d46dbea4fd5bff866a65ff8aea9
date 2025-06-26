@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
     const auth = await getAuth(event) as IAuth
     if(auth.type < 1) throw 'Bạn không phải quản trị viên'
 
-    const { size, current, sort, user } = await readBody(event)
+    const { size, current, sort, user, range } = await readBody(event)
     if(!size || !current) throw 'Dữ liệu phân trang sai'
     if(!sort.column || !sort.direction) throw 'Dữ liệu sắp xếp sai'
 
@@ -22,10 +22,12 @@ export default defineEventHandler(async (event) => {
         $in: users.map(i => i._id)
       }
     }
+    if(!!range && !!range['start'] && !!range['end']){
+      match['createdAt'] = { $gte: new Date(range['start']), $lte: new Date(range['end']) }
+    }
 
     const list = await DB.ShopHistory
     .find(match)
-    .select('user server item amount price createdAt')
     .populate({ path: 'user', select: 'username' })
     .populate({ path: 'item', select: 'item_name item_image type' })
     .sort(sorting)

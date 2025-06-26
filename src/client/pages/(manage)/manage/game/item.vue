@@ -1,18 +1,24 @@
 <template>
   <UiContent title="Item" sub="Quản lý vật phẩm">
-    <UiFlex class="mb-4 gap-1">
+    <UiFlex class="gap-1">
       <USelectMenu v-model="page.size" :options="[5,10,20,50,100]" />
       <UForm :state="page" @submit="page.current = 1, getList()" class="mr-auto">
         <UInput v-model="page.search" placeholder="Tìm kiếm..." icon="i-bx-search" size="sm" />
       </UForm>
 
-      <UButton color="yellow" @click="modal.add = true">Thêm mới</UButton>
-      <UButton color="primary" @click="modal.multiple = true">Thêm hàng loạt</UButton>
-      <UButton color="green" :loading="loading.exportExcel" @click="exportExcel">Xuất Excel</UButton>
+      <UButton color="yellow" icon="i-bx-plus" @click="modal.add = true">Thêm mới</UButton>
+      <UButton color="orange" icon="i-bx-plus" @click="modal.multiple = true">Thêm hàng loạt</UButton>
+
+      <UDropdown :items="[
+        [{ label: 'Excel', click: () => exportAction('excel')}],
+        [{ label: 'Json', click: () => exportAction('json')}],
+      ]">
+        <UButton color="green" icon="i-healthicons-excel-logo" :loading="loading.export">Xuất</UButton>
+      </UDropdown>
     </UiFlex>
     
     <!-- Table -->
-    <UCard :ui="{ body: { padding: 'p-0 sm:p-0' } }">
+    <UCard class="my-2" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
       <LoadingTable v-if="loading.load" />
 
       <UTable 
@@ -43,7 +49,7 @@
     </UCard>
 
     <!-- Pagination -->
-    <UiFlex justify="between" class="py-4">
+    <UiFlex justify="between">
       <USelectMenu v-model="selectedColumns" :options="columns" multiple placeholder="Chọn cột" />
       <UPagination v-model="page.current" :page-count="page.size" :total="page.total" :max="5" />
     </UiFlex>
@@ -80,9 +86,9 @@
           <UInput v-model="stateAdd.item_image" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-6">
+        <UiFlex justify="end" class="gap-1">
           <UButton color="yellow" type="submit" :loading="loading.add">Thêm</UButton>
-          <UButton color="gray" @click="modal.add = false" :disabled="loading.add" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.add = false" :disabled="loading.add">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -102,9 +108,9 @@
           <UInput v-model="stateEdit.item_image" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-6">
+        <UiFlex justify="end" class="gap-1">
           <UButton color="yellow" type="submit" :loading="loading.edit">Sửa</UButton>
-          <UButton color="gray" @click="modal.edit = false" :disabled="loading.edit" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.edit = false" :disabled="loading.edit">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -120,9 +126,9 @@
           </UiUploadJson>
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-4">
+        <UiFlex justify="end" class="gap-1">
           <UButton type="submit" :loading="loading.multiple">Thêm</UButton>
-          <UButton color="gray" @click="modal.multiple = false" :disabled="loading.multiple" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.multiple = false" :disabled="loading.multiple">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -219,7 +225,7 @@ const loading = ref({
   edit: false,
   del: false,
   multiple: false,
-  exportExcel: false
+  export: false
 })
 
 // Type
@@ -314,17 +320,17 @@ const delAction = async (_id) => {
   }
 }
 
-const exportExcel = async () => {
+const exportAction = async (type) => {
   try {
-    loading.value.exportExcel = true
-    const url = await useAPI('item/manage/excel')
+    loading.value.export = true
+    const url = await useAPI('item/manage/export', { type: type })
 
     window.open(url, '_blank')
 
-    loading.value.exportExcel = false
+    loading.value.export = false
   }
   catch (e) {
-    loading.value.exportExcel = false
+    loading.value.export = false
   }
 }
 

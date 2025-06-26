@@ -36,9 +36,9 @@
           <UInput v-model="stateAdd.amount" type="number" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-4">
+        <UiFlex justify="end" class="gap-1">
           <UButton color="yellow" type="submit">Thêm</UButton>
-          <UButton color="gray" @click="modal.add = false" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.add = false">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>
@@ -54,9 +54,9 @@
           <UInput v-model="stateEdit.amount" type="number" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-4">
+        <UiFlex justify="end" class="gap-1">
           <UButton color="yellow" type="submit">Sửa</UButton>
-          <UButton color="gray" @click="modal.edit = false" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.edit = false">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>

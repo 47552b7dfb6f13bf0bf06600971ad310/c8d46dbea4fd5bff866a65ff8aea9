@@ -17,27 +17,19 @@
 
     <UTable v-model:sort="page.sort" :columns="columns" :rows="list">
       <template #map-data="{ row }">
-        <UiText color="gray" variant="soft">{{ `${format[row.row]} - ${row.index}` }}</UiText>
+        <UBadge color="primary" class="font-semibold" variant="soft">{{ `${format[row.row]} - ${row.index}` }}</UBadge>
       </template>
 
       <template #server-data="{ row }">
         <UBadge color="gray" variant="soft">{{ row.server ? `${row.server}` : '...' }}</UBadge>
       </template>
 
-      <template #role-data="{ row }">
-        <UBadge color="gray" variant="soft">{{ row.role ? `${row.role}` : '...' }}</UBadge>
-      </template>
-
-      <template #item-data="{ row }">
+      <template #amount-data="{ row }">
         <DataItem :item="{
           name: row.item.item_name,
           image: row.item.item_image,
           type: row.item.type
-        }" />
-      </template>
-
-      <template #amount-data="{ row }">
-        <UiText weight="semibold">{{ toMoney(row.amount) }}</UiText>
+        }" :amount="row.amount" />
       </template>
 
       <template #createdAt-data="{ row }">
@@ -73,17 +65,11 @@ const columns = [
     key: 'map',
     label: 'Tọa độ',
   },{
-    key: 'item',
-    label: 'Phần thưởng',
-  },{
     key: 'server',
     label: 'Máy chủ',
   },{
-    key: 'role',
-    label: 'Nhân vật',
-  },{
     key: 'amount',
-    label: 'Số lượng',
+    label: 'Phần thưởng',
     sortable: true
   },{
     key: 'createdAt',
@@ -104,8 +90,7 @@ const page = ref({
     start: null,
     end: null
   },
-  user: props.user || null,
-  secret: route.params._secret
+  user: props.user || null
 })
 
 watch(() => props.reload, () => getList())

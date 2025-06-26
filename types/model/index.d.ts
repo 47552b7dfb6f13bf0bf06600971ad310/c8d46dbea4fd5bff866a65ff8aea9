@@ -13,7 +13,11 @@ export { IDBGiftcode, IDBGiftcodeHistory } from './giftcode'
 export { IDBDice, IDBDiceHistory, IDBDiceLuckyUser } from './dice'
 export { IDBWheel, IDBWheelHistory, IDBWheelLuckyUser } from './wheel'
 export { IDBEgg, IDBEggUser, IDBEggHistory } from './egg'
-export { IDBGameRankPowerProcess, IDBGameRankPowerProcessLog, IDBGameRankPower } from './game'
+export { 
+  IDBGameRankPowerUpProcess, IDBGameRankPowerUpProcessLog, IDBGameRankPowerUp,
+  IDBGameRankProcess, IDBGameRankProcessLog,
+  IDBGameMission, IDBGameMissionHistory
+} from './game'
 export { IDBLogAdmin, IDBLogAdminSendItem, IDBLogUser, IDBLogUserIP, IDBLogBlockIP } from './log'
 export { IDBAdsLanding, IDBAdsFrom } from './ads'
 export { IDBAdminIP } from './ip'
@@ -65,9 +69,13 @@ export interface IGlobalDB {
   EggUser: Model<IDBEggUser>
   EggHistory: Model<IDBEggHistory>
 
-  GameRankPowerProcess: Model<IDBGameRankPowerProcess>
-  GameRankPowerProcessLog: Model<IDBGameRankPowerProcessLog>
-  GameRankPower: Model<IDBGameRankPower>
+  GameRankProcess: Model<IDBGameRankProcess>
+  GameRankProcessLog: Model<IDBGameRankProcessLog>
+  GameRankPowerUpProcess: Model<IDBGameRankPowerUpProcess>
+  GameRankPowerUpProcessLog: Model<IDBGameRankPowerUpProcessLog>
+  GameRankPowerUp: Model<IDBGameRankPowerUp>
+  GameMission: Model<IDBGameMission>
+  GameMissionHistory: Model<IDBGameMissionHistory>
 
   LogAdmin: Model<IDBLogAdmin>
   LogAdminSendItem: Model<IDBLogAdminSendItem>

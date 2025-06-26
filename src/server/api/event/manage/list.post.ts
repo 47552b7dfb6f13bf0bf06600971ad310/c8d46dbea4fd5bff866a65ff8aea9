@@ -10,8 +10,8 @@ export default defineEventHandler(async (event) => {
     if(!sort.column || !sort.direction) throw 'Dữ liệu sắp xếp sai'
     if(!type) throw 'Kiểu sự kiện không hỗ trợ'
 
-    const eventConfig = await DB.EventConfig.findOne({ type: type }).select('_id') as IDBEventConfig
-    if(!eventConfig) throw 'Kiểu sự kiện không hỗ trợ'
+    const config = await DB.EventConfig.findOne({ type: type }) as IDBEventConfig
+    if(!config) throw 'Kiểu sự kiện không hỗ trợ'
 
     const sorting : any = { }
     sorting[sort.column] = sort.direction == 'desc' ? -1 : 1
@@ -62,7 +62,7 @@ export default defineEventHandler(async (event) => {
     ])
 
     const total = await DB.Event.count(match)
-    return resp(event, { result: { list, total } })
+    return resp(event, { result: { list, total, config } })
   } 
   catch (e:any) {
     return resp(event, { code: 500, message: e.toString() })

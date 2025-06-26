@@ -28,9 +28,9 @@
           <SelectUser v-model:user-data="stateAdd" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-6">
+        <UiFlex justify="end" class="gap-1">
           <UButton color="yellow" type="submit">Thêm</UButton>
-          <UButton color="gray" @click="modal.add = false" class="ml-1">Đóng</UButton>
+          <UButton color="gray" @click="modal.add = false">Đóng</UButton>
         </UiFlex>
       </UForm>
     </UModal>

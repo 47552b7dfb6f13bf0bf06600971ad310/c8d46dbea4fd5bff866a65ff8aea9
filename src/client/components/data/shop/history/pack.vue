@@ -1,34 +1,31 @@
 <template>
   <div>
-    <UiFlex class="mb-2 gap-1">
-      <USelectMenu v-model="page.size" :options="[5,10,20,50,100]" class="mr-auto" />
+    <UiFlex class="gap-1">
+      <USelectMenu v-model="page.size" :options="[5,10,20,50,100]"/>
 
-      <SelectDate time v-model="page.range.start" placeholder="Bắt đầu" size="sm" />
+      <SelectDate time v-model="page.range.start" placeholder="Bắt đầu" size="sm" class="ml-auto" />
       <SelectDate time v-model="page.range.end" placeholder="Kết thúc" size="sm" />
     </UiFlex>
-
-    <UCard class="bg-gray" :ui="{ 
-      body: { padding: 'p-0 sm:p-0' },
-      header: { padding: 'px-3 sm:px-3 py-2 sm:py-2' },
-      footer: { padding: 'p-2 sm:p-2' },
-    }">
+    
+    <!-- Table -->
+    <UCard class="bg-gray my-2" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
       <LoadingTable v-if="loading.load" />
 
-      <UTable v-model:sort="page.sort" :columns="columns" :rows="list">
-        <template #item-data="{ row }">
-          <DataItem :item="{
-            name: row.item.item_name,
-            image: row.item.item_image,
-            type: row.item.type
-          }"/>
-        </template>
-
-        <template #server-data="{ row }">
-          <UBadge color="gray" variant="soft">{{ row.server ? `${row.server}` : '...' }}</UBadge>
+      <UTable 
+        v-model:sort="page.sort"
+        :columns="selectedColumns"
+        :rows="list"
+      >
+        <template #pack-data="{ row }">
+          <UiText weight="semibold">{{ row.pack ? `${row.pack.name}` : '...' }}</UiText>
         </template>
 
         <template #amount-data="{ row }">
           <UiText weight="semibold">{{ toMoney(row.amount) }}</UiText>
+        </template>
+
+        <template #server-data="{ row }">
+          <UBadge variant="soft" color="gray">{{ row.server ? `${row.server}` : '...' }}</UBadge>
         </template>
 
         <template #price-data="{ row }">
@@ -41,8 +38,9 @@
       </UTable>
     </UCard>
 
-    <UiFlex justify="end" class="mt-2">
-      <UPagination v-model="page.current" :page-count="page.size" :total="page.total" :max="5" />
+    <!-- Pagination -->
+    <UiFlex justify="end">
+      <UPagination v-model="page.current" :page-count="page.size" :total="page.total" :max="4" />
     </UiFlex>
   </div>
 </template>
@@ -50,28 +48,23 @@
 <script setup>
 const props = defineProps(['user'])
 
-
-const route = useRoute()
-
 const { toMoney } = useMoney()
 
-const loading = ref({
-  load: true
-})
-
+// List
 const list = ref([])
 
+// Columns
 const columns = [
   {
-    key: 'item',
-    label: 'Mặt hàng',
-  },{
-    key: 'server',
-    label: 'Máy chủ',
+    key: 'pack',
+    label: 'Gói',
   },{
     key: 'amount',
     label: 'Số lượng',
     sortable: true
+  },{
+    key: 'server',
+    label: 'Máy chủ',
   },{
     key: 'price',
     label: 'Giá mua',
@@ -82,26 +75,28 @@ const columns = [
     sortable: true
   }
 ]
+const selectedColumns = ref([...columns])
 
+// Page
 const page = ref({
-  size: 5,
+  size: 10,
   current: 1,
   sort: {
     column: 'createdAt',
     direction: 'desc'
   },
-  total: 0,
   range: {
     start: null,
     end: null
   },
+  total: 0,
   user: props.user || null,
-  secret: route.params._secret
 })
 watch(() => page.value.size, () => getList())
 watch(() => page.value.current, () => getList())
 watch(() => page.value.sort.column, () => getList())
 watch(() => page.value.sort.direction, () => getList())
+watch(() => page.value.user, (val) => !val && getList())
 watch(() => page.value.range.start, (val) => {
   if(!!val && !!page.value.range.end) return (page.value.current != 1 ? page.value.current = 1 : getList())
   if(!val && !page.value.range.end) return (page.value.current != 1 ? page.value.current = 1 : getList())
@@ -111,10 +106,16 @@ watch(() => page.value.range.end, (val) => {
   if(!val && !page.value.range.start) return (page.value.current != 1 ? page.value.current = 1 : getList())
 })
 
+// Loading
+const loading = ref({
+  load: true
+})
+
+// Fetch
 const getList = async () => {
   try {
     loading.value.load = true
-    const data = await useAPI(`shop/public/history`, JSON.parse(JSON.stringify(page.value)))
+    const data = await useAPI('shop/public/pack/history', JSON.parse(JSON.stringify(page.value)))
 
     loading.value.load = false
     list.value = data.list

@@ -25,15 +25,15 @@
         </swiper-container >
       </ClientOnly>
 
-      <div>
+      <Transition name="page" mode="out-in">
         <MainEventPower v-if="tab === 'powerup'" scroll />
-        <MainEventReferral v-if="tab === 'referral'" scroll />
-        <MainEventLogin v-if="tab === 'login'" scroll />
-        <MainEventPay v-if="tab === 'pay'" scroll />
-        <MainEventSpend v-if="tab === 'spend'" scroll />
-        <MainEventPaymusty v-if="tab === 'paymusty'" scroll />
-        <MainEventPaydays v-if="tab === 'paydays'" scroll />
-      </div>
+        <MainEventReferral v-else-if="tab === 'referral'" scroll />
+        <MainEventLogin v-else-if="tab === 'login'" scroll />
+        <MainEventPay v-else-if="tab === 'pay'" scroll />
+        <MainEventSpend v-else-if="tab === 'spend'" scroll />
+        <MainEventPaymusty v-else-if="tab === 'paymusty'" scroll />
+        <MainEventPaydays v-else-if="tab === 'paydays'" scroll />
+      </Transition>
     </div>
   </div>
 </template>

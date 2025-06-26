@@ -9,10 +9,10 @@
     px-4
     md:gap-1 gap-0.5
   ">
-    <LayoutPublicNavSlide class="flex xl:hidden" />
+    <LayoutPublicNavSlide class="hidden sm:flex xl:hidden" />
     
-    <NuxtLink to="/">
-      <UiLogo class="hidden sm:flex sm:ml-2 xl:ml-0"/>
+    <NuxtLink to="/" class="sm:ml-3 xl:ml-0">
+      <UiLogo/>
     </NuxtLink>
 
     <UiFlex class="ml-auto gap-1">

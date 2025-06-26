@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
     const auth = await getAuth(event) as IAuth
     if(auth.type < 1) throw 'Bạn không phải quản trị viên'
 
-    const { size, current, sort, type, user } = await readBody(event)
+    const { size, current, sort, type, user, range } = await readBody(event)
     if(!size || !current) throw 'Dữ liệu phân trang sai'
     if(!sort.column || !sort.direction) throw 'Dữ liệu sắp xếp sai'
 
@@ -24,6 +24,9 @@ export default defineEventHandler(async (event) => {
       match['user._id'] = {
         $in: users.map(i => i._id)
       }
+    }
+    if(!!range && !!range['start'] && !!range['end']){
+      match['createdAt'] = { $gte: new Date(range['start']), $lte: new Date(range['end']) }
     }
 
     const histories = await DB.EventHistory

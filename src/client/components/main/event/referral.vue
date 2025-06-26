@@ -1,5 +1,7 @@
 <template>
   <div :class="{ 'HideScroll max-h-[60vh] overflow-y-auto p-0.5' : !!scroll }">
+    <DataEventTime :config="config" class="mb-4" />
+
     <DataEmpty v-if="!!loading || list.length == 0" :loading="loading" text="Chưa có mốc thưởng ở sự kiện này" class="min-h-[300px]"></DataEmpty>
     
     <div class="@container grid grid-cols-12 gap-2" v-else>

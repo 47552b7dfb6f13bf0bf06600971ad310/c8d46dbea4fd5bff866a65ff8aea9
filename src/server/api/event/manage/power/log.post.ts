@@ -1,4 +1,4 @@
-import type { IAuth, IDBGameRankPowerProcess } from "~~/types"
+import type { IAuth, IDBGameRankPowerUpProcess } from "~~/types"
 
 export default defineEventHandler(async (event) => {
   try {
@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     if(!size || !current) throw 'Dữ liệu phân trang sai'
     if(!sort.column || !sort.direction) throw 'Dữ liệu sắp xếp sai'
 
-    const processEvent = await DB.GameRankPowerProcess.findOne({ _id: fetchID }).select('_id') as IDBGameRankPowerProcess
+    const processEvent = await DB.GameRankPowerUpProcess.findOne({ _id: fetchID }).select('_id') as IDBGameRankPowerUpProcess
     if(!processEvent) throw 'Tiến trình không tồn tại'
 
     const sorting : any = { }
@@ -17,13 +17,13 @@ export default defineEventHandler(async (event) => {
 
     const match : any = { process: processEvent._id }
 
-    const list = await DB.GameRankPowerProcessLog
+    const list = await DB.GameRankPowerUpProcessLog
     .find(match)
     .sort(sorting)
     .limit(size)
     .skip((current - 1) * size)
 
-    const total = await DB.GameRankPowerProcessLog.count(match)
+    const total = await DB.GameRankPowerUpProcessLog.count(match)
     return resp(event, { result: { list, total } })
   } 
   catch (e:any) {

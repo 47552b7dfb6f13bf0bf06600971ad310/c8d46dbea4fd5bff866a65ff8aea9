@@ -1,8 +1,8 @@
 <template>
-  <UContainer :ui="{ padding: 'p-0 sm:p-0 lg:p-0' }">
-    <ManageGameOs class="md:max-w-xl max-w-full mx-auto" />
+  <div class="max-w-[500px] mx-auto">
+    <ManageGameOs class="md:max-w-xl max-w-full mx-auto my-8 px-8" />
 
-    <UiFlex justify="center" class="gap-2 flex-wrap pt-4">
+    <UiFlex justify="center" class="gap-2 flex-wrap mt-12">
       <UButton 
         v-for="(item, index) in menus" :key="index"
         size="xl" 
@@ -24,7 +24,7 @@
         {{ item.label }}
       </UButton>
     </UiFlex>
-  </UContainer>
+  </div>
 </template>
 
 <script setup>
@@ -35,9 +35,14 @@ const cfgStore = useConfigStore()
 const config = computed(() => cfgStore.config)
 
 const menus = [
-  { label: 'Thống kê', icon: 'i-bxs-bar-chart-alt-2', color: 'gray', to: '/manage/statistic' },
-  { label: 'Nạp tiền', icon: 'i-bxs-credit-card', color: 'gray', to: '/manage/payment' },
-  { label: 'Thành viên', icon: 'i-bxs-user', color: 'gray', to: '/manage/user' },
-  { label: 'Cài đặt', icon: 'i-bxs-cog', color: 'gray', to: '/manage/config/page' },
+  { label: 'Thống Kê', icon: 'i-bxs-bar-chart-alt-2', color: 'gray', to: '/manage/statistic' },
+  { label: 'Nạp Tiền', icon: 'i-bxs-credit-card', color: 'gray', to: '/manage/payment' },
+  { label: 'Thành Viên', icon: 'i-bxs-user', color: 'gray', to: '/manage/user' },
+  { label: 'Cài Đặt', icon: 'i-bxs-cog', color: 'gray', to: '/manage/config/page' },
+  { label: 'Giftcode', icon: 'i-bx-barcode-reader', color: 'gray', to: '/manage/giftcode' },
+  { label: 'Cửa Hàng', icon: 'i-bx-shopping-bag', color: 'gray', to: '/manage/shop/item' },
+  { label: 'Sự Kiện', icon: 'i-bx-calendar', color: 'gray', to: '/manage/event/login' },
+  { label: 'Minigame', icon: 'i-bx-game', color: 'gray', to: '/manage/minigame/wheel' },
+  { label: 'Nhật Ký', icon: 'i-bx-book', color: 'gray', to: '/manage/log/admin' },
 ]
 </script>

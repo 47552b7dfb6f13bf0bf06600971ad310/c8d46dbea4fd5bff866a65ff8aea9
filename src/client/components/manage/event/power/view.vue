@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UiFlex class="mb-2 gap-1">
+    <UiFlex class="gap-1">
       <USelectMenu v-model="page.size" :options="[5,10,20,50,100]" />
 
       <UForm :state="page" @submit="page.current = 1, getList()" class="ml-auto">
@@ -11,7 +11,7 @@
       </UForm>
     </UiFlex>
 
-    <UCard class="bg-gray" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
+    <UCard class="bg-gray my-2" :ui="{ body: { padding: 'p-0 sm:p-0' } }">
       <LoadingTable v-if="loading.load" />
 
       <UTable :columns="columns" :rows="list">
@@ -30,7 +30,7 @@
     </UCard>
 
     <!-- Pagination -->
-    <UiFlex justify="end" class="mt-2" v-if="page.total > list.length">
+    <UiFlex justify="end" v-if="page.total > list.length">
       <UPagination :max="5" :page-count="page.size" :total="page.total" v-model="page.current" />
     </UiFlex>
 
@@ -123,5 +123,5 @@ const getList = async () => {
   } 
 }
 
-onMounted(() => getList())
+onMounted(() => setTimeout(getList, 1))
 </script>

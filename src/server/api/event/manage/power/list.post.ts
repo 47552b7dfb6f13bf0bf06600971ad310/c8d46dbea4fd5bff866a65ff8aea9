@@ -1,4 +1,4 @@
-import type { IAuth, IDBGameRankPowerUpProcess } from "~~/types"
+import type { IAuth } from "~~/types"
 
 export default defineEventHandler(async (event) => {
   try {

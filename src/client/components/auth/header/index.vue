@@ -3,6 +3,8 @@
     <NuxtLink to="/payment">
       <DataUserCoin />
     </NuxtLink>
+
+    <SocketNavSlide class="flex lg:hidden" />
     
     <UPopover :ui="{wrapper: 'inline-flex'}" :popper="{ strategy: 'absolute', placement: 'bottom-end' }" v-model:open="open">
       <UButton
@@ -93,7 +95,7 @@ const logout = async () => {
 const menuUser = computed(() => {
   const list = []
 
-  if(!!authStore.isAdmin || !!authStore.isSMod){
+  if(!!authStore.profile.type > 0){
     list.push({
       label: 'Quản trị viên',
       icon: 'i-bx-shield-quarter',

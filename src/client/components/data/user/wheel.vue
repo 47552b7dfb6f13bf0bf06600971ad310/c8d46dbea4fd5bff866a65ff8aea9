@@ -1,5 +1,5 @@
 <template>
-  <UButton class="color-blue-light bg-anim-light relative pr-10" :size="size" >
+  <UButton color="gray" class="bg-anim-light relative pr-10" :size="size" >
     <UiNumber :num="authStore.profile.currency.wheel">
       <template #default="{ display }">
         {{ display > 9999999 ? miniMoney(display) : toMoney(display) }}

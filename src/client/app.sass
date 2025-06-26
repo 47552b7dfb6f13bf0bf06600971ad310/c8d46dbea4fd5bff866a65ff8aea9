@@ -189,6 +189,15 @@ body
 .page-enter-from, .page-leave-to 
   opacity: 0
 
+
+.slide-right-left
+  &-enter-from, &-leave-to
+    transform: translateX(100%)
+  &-enter-active, &-leave-active
+    transition: all 0.25s ease
+  &-enter-to, &-leave-from
+    transform: translateX(0)
+
 @keyframes jump
   30%
     transform: scale(1.2)

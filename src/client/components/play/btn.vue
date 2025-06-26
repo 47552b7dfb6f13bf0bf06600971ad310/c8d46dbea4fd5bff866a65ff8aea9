@@ -1,14 +1,17 @@
 <template>
   <div>
     <UButton 
+      v-if="!custom"
       class="color-blue-light bg-anim-light" 
       icon="i-ion-game-controller" 
       :block="block" 
       :size="size || 'lg'" 
-      @click="modal = true"
+      @click="open"
     >
       {{ text || 'Chơi Ngay' }}
     </UButton>
+
+    <slot :open="open"></slot>
 
     <UModal v-model="modal" :ui="{ width: 'sm:max-w-[400px]' }">
       <UiContent title="Chơi Ngay" sub="Chọn hệ điều hành của bạn" class="bg-card rounded-2xl p-4">
@@ -39,7 +42,7 @@
 
 <script setup>
 const runtimeConfig = useRuntimeConfig()
-const props = defineProps(['block', 'text', 'size'])
+const props = defineProps(['block', 'text', 'size', 'custom'])
 
 const loading = ref(false)
 const modal = ref(false)
@@ -47,6 +50,10 @@ const modal = ref(false)
 const authStore = useAuthStore()
 const configStore = useConfigStore()
 const config = computed(() => configStore.config)
+
+const open = () => {
+  modal.value = true
+}
 
 const download = (link) => {
   if(!link) return useNotify().error('Chúng tôi đang cập nhật link tải, vui lòng quay lại sau')

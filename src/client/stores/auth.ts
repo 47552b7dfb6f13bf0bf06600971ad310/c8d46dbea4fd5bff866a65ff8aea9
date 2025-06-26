@@ -18,8 +18,8 @@ export const useAuthStore = defineStore('auth', () => {
       key: `auth/public/get-${Date.now()}`,
     })
     isAdmin.value = auth.type == 3
-    isSMod.value = auth.type == 2
-    isDev.value = auth.type == 1
+    isDev.value = auth.type == 2
+    isSMod.value = auth.type == 1
     isLogin.value = true
     profile.value = auth
   }

@@ -1,14 +1,19 @@
 <template>
-  <div class="fixed bottom-0 w-full z-50 px-2 py-2">
-    <UiFlex class="box-blue py-2.5 px-4 rounded-2xl shadow-2xl max-w-[500px] mx-auto" justify="between">
-      <NuxtLink :to="item.to" v-for="(item, index) in items" :key="index">
-        <UiFlex type="col" justify="center" items="center" class="gap-1">
-          <UiIcon :name="item.icon" size="6" />
-          <UiText class="text-[10px] sm:text-xs" mini>{{ item.label }}</UiText>
-        </UiFlex>
-      </NuxtLink>
-    </UiFlex>
-  </div>
+  <UiFlex class="
+    fixed bottom-[-2px] left-[50%] -translate-x-[50%]
+    w-auto max-w-full 
+    overflow-hidden 
+    z-50 
+    box-blue py-2.5 px-6 rounded-t-2xl 
+    shadow-2xl gap-4
+  " justify="center">
+    <NuxtLink :to="item.to" v-for="(item, index) in items" :key="index">
+      <UiFlex type="col" justify="center" items="center" class="gap-1">
+        <UiIcon :name="item.icon" size="6" />
+        <UiText class="text-[10px] sm:text-xs" mini>{{ item.label }}</UiText>
+      </UiFlex>
+    </NuxtLink>
+  </UiFlex>
 </template>
 
 <script setup>

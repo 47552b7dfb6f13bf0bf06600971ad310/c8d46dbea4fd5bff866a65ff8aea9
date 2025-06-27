@@ -16,7 +16,7 @@
       
       <UiFlex justify="end" items="center" class="gap-1 ml-auto">
         <LazyAuthHeader />
-        <SocketNavSlide />
+        <SocketNavSlide class="hidden lg:flex"/>
       </UiFlex>
     </UiFlex>
   </header>

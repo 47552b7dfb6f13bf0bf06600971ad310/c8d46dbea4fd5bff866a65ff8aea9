@@ -5,7 +5,7 @@
     </UiFlex>
 
     <div>
-      <UiText class="text-xs md:text-base mb-1">Mạng xã hội</UiText>
+      <UiText class="text-xs md:text-base mb-1">Mạng Xã Hội</UiText>
       <UiFlex class="gap-2">
         <UiImg 
           class="max-w-[25px] max-h-[25px] md:max-w-[30px] md:max-h-[30px] cursor-pointer rounded-full"

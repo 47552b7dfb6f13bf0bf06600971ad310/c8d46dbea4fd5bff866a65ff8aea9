@@ -5,18 +5,20 @@ export default defineEventHandler(async (event) => {
     const auth = await getAuth(event) as IAuth
     await checkPermission(event, 'user.del')
 
-    const { day } = await readBody(event)
+    const { day, limit } = await readBody(event)
     if(!!isNaN(parseInt(day)) || parseInt(day) < 30) throw 'Dữ liệu đầu vào không hợp lệ'
 
     const now = formatDate()
     const startNow = now.dayjs.startOf('date')
     const dateDel = startNow.subtract(day, 'day')
+    const max = limit || 500
 
     const list = await DB.User
     .aggregate([
       { $match: { 
         'login.update': { $lte: dateDel['$d'] },
-        'type': { $lt: 1 }
+        // 'pay.total.money': { $gt: 0 },
+        'type': { $eq: 0 }
       }},
       {
         $lookup: {
@@ -33,52 +35,58 @@ export default defineEventHandler(async (event) => {
       },
       { $addFields: { totalMoney: { $sum: '$payments.money' }}},
       { $match: { totalMoney: { $lt: 1 } }},
-      { $project: { username: 1, totalMoney: 1 }}
+      { $sort: { createdAt: 1 }},
+      { $limit: max },
+      { $project: { _id: 1 }}
     ])
     if(list.length == 0) throw 'Không có tài khoản nào thỏa mãn để xóa'
 
+    const bot = await DB.User.findOne({ username: 'bot' }).select('_id') as IDBUser
+    if (!bot) throw 'Không tìm thấy tài khoản Bot'
+
     const users = list.map((user) => user._id)
-    const bot = await DB.User.findOne({'username': 'bot'}).select('_id') as IDBUser
 
-    await DB.WheelHistory.deleteMany({ user: { $in: users }})
-    await DB.WheelLuckyUser.deleteMany({ user: { $in: users }})
-    await DB.DiceHistory.deleteMany({ user: { $in: users }})
-    await DB.DiceLuckyUser.deleteMany({ user: { $in: users }})
-    await DB.EggUser.deleteMany({ user: { $in: users }})
-    await DB.EggHistory.deleteMany({ user: { $in: users }})
+    const deletePromises = [
+      DB.WheelHistory.deleteMany({ user: { $in: users } }),
+      DB.WheelLuckyUser.deleteMany({ user: { $in: users } }),
+      DB.DiceHistory.deleteMany({ user: { $in: users } }),
+      DB.DiceLuckyUser.deleteMany({ user: { $in: users } }),
+      DB.EggUser.deleteMany({ user: { $in: users } }),
+      DB.EggHistory.deleteMany({ user: { $in: users } }),
+      DB.ShopHistory.deleteMany({ user: { $in: users } }),
+      DB.ShopPackHistory.deleteMany({ user: { $in: users } }),
+      DB.EventHistory.deleteMany({ user: { $in: users } }),
+      DB.GiftcodeHistory.deleteMany({ user: { $in: users } }),
+      DB.LogUser.deleteMany({ user: { $in: users } }),
+      DB.LogUserIP.deleteMany({ user: { $in: users } }),
+      DB.SocketChat.deleteMany({ user: { $in: users } }),
+      DB.SocketOnline.deleteMany({ user: { $in: users } }),
+      DB.UserLogin.deleteMany({ user: { $in: users } }),
+      DB.Payment.deleteMany({ user: { $in: users } }),
+      DB.LogAdminSendItem.deleteMany({ from: { $in: users } }),
+      DB.LogAdminSendItem.deleteMany({ to: { $in: users } }),
+      DB.LogAdmin.deleteMany({ user: { $in: users } })
+    ]
+    await Promise.all(deletePromises)
 
-    await DB.ShopHistory.deleteMany({ user: { $in: users }})
-    await DB.ShopPackHistory.deleteMany({ user: { $in: users }})
+    const bulkOps = users.flatMap((_id) => ([
+      { updateMany: { filter: { 'referral.person': _id }, update: { 'referral.person': null } } }, // User
+      { updateMany: { filter: { 'user': _id }, update: { 'user': bot._id } } },                    // Spend or Payment
+      { updateMany: { filter: { 'verify.person': _id }, update: { 'verify.person': bot._id } } },  // Payment
+      { updateMany: { filter: { 'creator': _id }, update: { 'creator': bot._id } } },              // News
+      { updateMany: { filter: { 'updater': _id }, update: { 'updater': bot._id } } },              // News
+    ]))
 
-    await DB.EventHistory.deleteMany({ user: { $in: users }})
-
-    await DB.GiftcodeHistory.deleteMany({ user: { $in: users }})
-
-    await DB.LogUser.deleteMany({ user: { $in: users }})
-    await DB.LogUserIP.deleteMany({ user: { $in: users }})
+    await Promise.all([
+      DB.User.bulkWrite(bulkOps),
+      DB.Spend.bulkWrite(bulkOps),
+      DB.Payment.bulkWrite(bulkOps),
+      DB.News.bulkWrite(bulkOps),
+    ])
     
-    await DB.SocketChat.deleteMany({ user: { $in: users }})
-    await DB.SocketOnline.deleteMany({ user: { $in: users }})
+    await DB.User.deleteMany({ _id: { $in: users } })
 
-    await DB.UserLogin.deleteMany({ user: { $in: users }})
-
-    await DB.Payment.deleteMany({ user: { $in: users }})
-
-    users.forEach(async (_id) => {
-      await DB.Giftcode.updateMany({}, { $pull: { 'users': _id } })
-      await DB.Payment.updateMany({ 'verify.person': _id }, { 'verify.person': bot._id })
-      await DB.News.updateMany({ 'creator': _id }, { 'creator': bot._id })
-      await DB.News.updateMany({ 'updater': _id }, { 'updater': bot._id })
-      await DB.Spend.updateMany({ 'user': _id }, { 'user': bot._id })
-      await DB.User.updateMany({ 'referral.person': _id }, { 'referral.person': null })
-      await DB.LogAdmin.updateMany({ 'user': _id }, { 'user': bot._id })
-      await DB.LogAdminSendItem.updateMany({ 'from': _id }, { 'from': bot._id })
-      await DB.LogAdminSendItem.updateMany({ 'to': _id }, { 'to': bot._id })
-    })
-    
-    await DB.User.deleteMany({ _id: { $in: users }})
-
-    logAdmin(event, `Xóa các tài khoản chưa <b>đăng nhập</b> trong ${day} ngày`)
+    logAdmin(event, `Xóa ${max} tài khoản chưa <b>đăng nhập</b> trong ${day} ngày`)
     return resp(event, { message: 'Sửa dữ liệu đăng nhập thành công' })
   } 
   catch (e:any) {

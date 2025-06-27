@@ -142,9 +142,9 @@
           <UInput v-model="stateEditPay.pay.month.money" type="number" />
         </UFormGroup>
 
-        <UFormGroup label="Tổng">
+        <!-- <UFormGroup label="Tổng">
           <UInput v-model="stateEditPay.pay.total.money" type="number" />
-        </UFormGroup>
+        </UFormGroup> -->
 
         <UFormGroup label="Lý do">
           <UTextarea v-model="stateEditPay.reason" />
@@ -168,9 +168,9 @@
           <UInput v-model="stateEditSpend.spend.month.coin" type="number" />
         </UFormGroup>
 
-        <UFormGroup label="Tổng">
+        <!-- <UFormGroup label="Tổng">
           <UInput v-model="stateEditSpend.spend.total.coin" type="number" />
-        </UFormGroup>
+        </UFormGroup> -->
 
         <UFormGroup label="Lý do">
           <UTextarea v-model="stateEditSpend.reason" />

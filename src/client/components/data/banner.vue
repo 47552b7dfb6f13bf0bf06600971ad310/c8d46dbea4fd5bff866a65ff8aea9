@@ -1,20 +1,38 @@
 <template>
   <UCard class="relative @container rounded-2xl overflow-hidden" :ui="{ body: { padding: 'p-0 sm:p-0'} }">
-    <UiFlex items="start">
+    <UiFlex items="center">
       <UiImg :src="config.og_image" w="16" h="9" img-size="700px" class="bg-card @3xl:max-w-[55%] @3xl:min-w-[55%] @3xl:w-[55%] w-full" />
 
-      <div class="@3xl:p-6 p-4 @3xl:relative absolute bottom-0 bg-gray-blur backdrop-blur-sm w-full">
-        <UiText weight="bold" class="line-clamp-3 mb-0.5 text-base @xl:text-xl @3xl:text-3xl @3xl:text-gray-300">
-          {{ config.name }}
-        </UiText>
-        
-        <UiText color="gray" class="line-clamp-1 @xl:line-clamp-3 italic text-xs @xl:text-sm @2xl:text-base @3xl:text-lg">
-          {{ config.description }}
-        </UiText>
-      </div>
+      <UiFlex class="
+        @3xl:flex-col
+        @3xl:p-6 p-4 
+        @3xl:relative absolute bottom-0 
+        bg-gray-blur backdrop-blur-sm w-full grow 
+        gap-4
+      ">
+        <div>
+          <UiText weight="bold" class="
+            SVN line-clamp-2 mb-1 @3xl:mb-2
+            text-2xl @3xl:text-3xl @4xl:text-4xl 
+            @3xl:text-center
+          " >
+            {{ config.name }}
+          </UiText>
+          
+          <UiText color="gray" class="
+            line-clamp-1 @3xl:line-clamp-3 italic
+            text-xs @3xl:text-sm @4xl:text-base 
+            @3xl:text-center
+          ">
+            {{ config.description }}
+          </UiText>
+        </div>
+
+        <PlayBtn size="md" />
+      </UiFlex>
     </UiFlex>
 
-    <PlayBtn class="absolute top-1 right-1 @xl:bottom-1 @3xl:top-auto"></PlayBtn>
+    <!-- <PlayBtn class="absolute top-1 right-1 @xl:bottom-1 @3xl:top-auto"></PlayBtn> -->
   </UCard>
 </template>
 

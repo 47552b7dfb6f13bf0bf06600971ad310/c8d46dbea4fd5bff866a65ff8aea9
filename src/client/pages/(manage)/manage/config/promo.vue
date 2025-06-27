@@ -18,7 +18,11 @@
           <UInput v-model="stateConfig.promo.payment.second" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-4">
+        <UiText color="gray" size="sm" class="mb-2">
+          Khuyến mãi <b class="text-rose-500"> nạp đầu</b> và <b class="text-rose-500">nạp lần 2</b> sẽ cộng dồn với khuyến mãi của kênh nạp !
+        </UiText>
+
+        <UiFlex justify="end">
           <UButton color="yellow" @click="updateConfig('promo')" :loading="updating">Cập Nhật</UButton>
         </UiFlex>
       </UForm>

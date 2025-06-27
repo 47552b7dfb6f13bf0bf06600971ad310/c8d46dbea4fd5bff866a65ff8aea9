@@ -85,8 +85,6 @@ export default defineEventHandler(async (event) => {
       }
     ])
 
-    await rankPowerUpProcessAward()
-
     return resp(event, { result: { 
       list: data[0].list ? data[0].list : [],
       total: data[0].pagination ? (data[0].pagination[0] ? data[0].pagination[0].total : 0) : 0

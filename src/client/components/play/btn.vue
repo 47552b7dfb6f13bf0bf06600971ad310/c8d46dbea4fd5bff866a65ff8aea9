@@ -8,7 +8,7 @@
       :size="size || 'lg'" 
       @click="open"
     >
-      {{ text || 'Chơi Ngay' }}
+      <UiText mini>{{ text || 'Chơi Ngay' }}</UiText>
     </UButton>
 
     <slot :open="open"></slot>

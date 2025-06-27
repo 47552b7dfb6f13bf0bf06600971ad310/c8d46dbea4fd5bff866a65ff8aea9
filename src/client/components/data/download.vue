@@ -5,7 +5,7 @@
     </UiFlex>
 
     <div>
-      <UiText class="text-xs md:text-base mb-1">Chơi ngay</UiText>
+      <UiText class="text-xs md:text-base mb-1">Chơi Nhanh</UiText>
       <UiFlex class="gap-2">
         <UiIcon name="i-bx-world" class="cursor-pointer w-6 h-6 md:w-8 md:h-8" v-if="!configStore.config.game.mobile" @click="start()"/>
         <UiIcon name="i-bxl-android" class="cursor-pointer w-6 h-6 md:w-8 md:h-8" @click="download(configStore.config.download.apk)"/>

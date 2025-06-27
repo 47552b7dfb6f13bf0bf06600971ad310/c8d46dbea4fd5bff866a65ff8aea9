@@ -34,27 +34,27 @@
         </template>
 
         <template #level-data="{ row }">
-          <UBadge color="primary" variant="soft">{{ `Cấp ${row.level || 0}` }}</UBadge>
+          <UBadge color="primary" variant="soft">{{ row.level ? `Cấp ${row.level.number || 0}` : `Cấp 0` }}</UBadge>
         </template>
         
-        <template #pay-data="{ row }">
-          {{ toMoney(row.pay || 0) }}
+        <template #[`pay.total.money-data`]="{ row }">
+          {{ toMoney(row.pay.total.money || 0) }}
         </template>
 
-        <template #spend-data="{ row }">
-          {{ toMoney(row.spend || 0) }}
+        <template #[`spend.total.coin-data`]="{ row }">
+          {{ toMoney(row.spend.total.coin || 0) }}
         </template>
 
-        <template #coin-data="{ row }">
-          {{ toMoney(row.coin || 0) }}
+        <template #[`currency.coin-data`]="{ row }">
+          {{ toMoney(row.currency.coin || 0) }}
         </template>
 
-        <template #diamond-data="{ row }">
-          {{ toMoney(row.diamond || 0) }}
+        <template #[`diamond.coin-data`]="{ row }">
+          {{ toMoney(row.currency.diamond || 0) }}
         </template>
 
-        <template #login-data="{ row }">
-          {{ `${row.login || 0} ngày` }}
+        <template #[`login.total-data`]="{ row }">
+          {{ `${row.login.total || 0} ngày` }}
         </template>
 
         <template #block-data="{ row }">
@@ -168,9 +168,9 @@
           <UInput v-model="stateEditPay.pay.month.money" type="number" />
         </UFormGroup>
 
-        <UFormGroup label="Tổng">
+        <!-- <UFormGroup label="Tổng">
           <UInput v-model="stateEditPay.pay.total.money" type="number" />
-        </UFormGroup>
+        </UFormGroup> -->
 
         <UFormGroup label="Lý do">
           <UTextarea v-model="stateEditPay.reason" />
@@ -194,9 +194,9 @@
           <UInput v-model="stateEditSpend.spend.month.coin" type="number" />
         </UFormGroup>
 
-        <UFormGroup label="Tổng">
+        <!-- <UFormGroup label="Tổng">
           <UInput v-model="stateEditSpend.spend.total.coin" type="number" />
-        </UFormGroup>
+        </UFormGroup> -->
 
         <UFormGroup label="Lý do">
           <UTextarea v-model="stateEditSpend.reason" />
@@ -263,30 +263,29 @@ const columns = [
     label: 'Tên',
   },{
     key: 'level',
-    label: 'Cấp độ',
-    sortable: true
+    label: 'Cấp độ'
   },{
-    key: 'pay',
+    key: 'pay.total.money',
     label: 'Tổng nạp',
     sortable: true
   },{
-    key: 'spend',
+    key: 'spend.total.coin',
     label: 'Tổng tiêu',
     sortable: true
   },{
-    key: 'coin',
+    key: 'currency.coin',
     label: 'Xu',
     sortable: true
   },{
-    key: 'diamond',
+    key: 'currency.diamond',
     label: 'Cống hiến',
     sortable: true
   },{
-    key: 'login',
+    key: 'login.total',
     label: 'Đăng nhập',
     sortable: true
   },{
-    key: 'referral',
+    key: 'referral.count',
     label: 'Mời',
     sortable: true
   },{
@@ -458,7 +457,7 @@ const actions = (row) => [
     label: 'Sửa tiền tệ',
     icon: 'i-bx-coin',
     click: () => {
-      Object.keys(stateEditCurrency.value.origin).forEach(key => stateEditCurrency.value.origin[key] = row[key])
+      Object.keys(stateEditCurrency.value.origin).forEach(key => stateEditCurrency.value.origin[key] = row.currency[key])
       stateEditCurrency.value._id = row._id
       stateEditCurrency.value.type = 'origin'
       modal.value.editCurrency = true
@@ -467,7 +466,7 @@ const actions = (row) => [
     label: 'Sửa tích nạp',
     icon: 'i-bx-wallet',
     click: () => {
-      stateEditPay.value.pay = JSON.parse(JSON.stringify(row.pay_data))
+      stateEditPay.value.pay = JSON.parse(JSON.stringify(row.pay))
       stateEditPay.value._id = row._id
       modal.value.editPay = true
     }
@@ -475,7 +474,7 @@ const actions = (row) => [
     label: 'Sửa tiêu phí',
     icon: 'i-bx-wallet-alt',
     click: () => {
-      stateEditSpend.value.spend = JSON.parse(JSON.stringify(row.spend_data))
+      stateEditSpend.value.spend = JSON.parse(JSON.stringify(row.spend))
       stateEditSpend.value._id = row._id
       modal.value.editSpend = true
     }
@@ -483,7 +482,7 @@ const actions = (row) => [
     label: 'Sửa đăng nhập',
     icon: 'i-bx-calendar',
     click: () => {
-      stateEditLogin.value.login = JSON.parse(JSON.stringify(row.login_data))
+      stateEditLogin.value.login = JSON.parse(JSON.stringify(row.login))
       stateEditLogin.value._id = row._id
       modal.value.editLogin = true
     }
@@ -503,12 +502,12 @@ const actionsReset = (user) => [
   [
     { label: 'Đặt lại tích nạp ngày', click: () => resetAction('pay.day', user)},
     { label: 'Đặt lại tích nạp tháng', click: () => resetAction('pay.month', user)},
-    { label: 'Đặt lại tích nạp năm', click: () => resetAction('pay.total', user)},
+    // { label: 'Đặt lại tích nạp năm', click: () => resetAction('pay.total', user)},
   ],
   [
     { label: 'Đặt lại tiêu phí ngày', click: () => resetAction('spend.day', user)},
     { label: 'Đặt lại tiêu phí tháng', click: () => resetAction('spend.month', user)},
-    { label: 'Đặt lại tiêu phí năm', click: () => resetAction('spend.total', user)},
+    // { label: 'Đặt lại tiêu phí năm', click: () => resetAction('spend.total', user)},
   ],
   [
     { label: 'Đặt lại đăng nhập tháng', click: () => resetAction('login.month', user)},

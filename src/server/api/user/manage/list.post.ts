@@ -1,3 +1,4 @@
+import { Types } from "mongoose"
 import type { IAuth } from "~~/types"
 
 export default defineEventHandler(async (event) => {
@@ -18,59 +19,18 @@ export default defineEventHandler(async (event) => {
       if(search.by == 'MAIL') match['email'] = { $regex : search.key.toLowerCase(), $options : 'i' }
       if(search.by == 'PHONE') match['phone'] = { $regex : search.key, $options : 'i' }
       if(search.by == 'IP') {
-        const listIP = await DB.LogUserIP.find({
-          ip: { $regex : search.key, $options : 'i' }
-        }).select('user')
-
-        match['_id'] = {
-          $in: listIP.map(i => i.user)
-        }
+        const listIP = await DB.LogUserIP.find({  ip: { $regex : search.key, $options : 'i' }}).select('user')
+        match['_id'] = {  $in: listIP.map(i => i.user)}
       }
     }
 
     const list = await DB.User
-    .aggregate([
-      { $match: match },
-      {
-        $lookup: {
-          from: "Level",
-          localField: "level",
-          foreignField: "_id",
-          pipeline: [{
-            $project: { number: 1 }
-          }],
-          as: "level"
-        }
-      },
-      { $unwind: { path: "$level" } },
-      { 
-        $project: {
-          username: 1, 
-          email: 1,
-          phone: 1,
-          level: '$level.number',
-          coin: '$currency.coin',
-          wheel: '$currency.wheel',
-          diamond: '$currency.diamond',
-          referral: '$referral.count',
-          pay: '$pay.total.money',
-          spend: '$spend.total.coin',
-          login: '$login.total',
-          ip: '$login.last_ip',
-          pay_data: '$pay',
-          spend_data: '$spend',
-          wheel_data: '$wheel',
-          dice_data: '$dice',
-          login_data: '$login',
-          type: 1,
-          block: 1,
-          createdAt: 1
-        }
-      },
-      { $sort: sorting },
-      { $skip: (current - 1) * size },
-      { $limit: size }
-    ])
+    .find(match)
+    .select('-password -avatar -reg -social -paymusty -paydays -action')
+    .populate({ path: 'level', select: 'number' })
+    .sort(sorting)
+    .skip((current - 1) * size)
+    .limit(size)
 
     const total = await DB.User.count(match)
     return resp(event, { result: { list, total } })

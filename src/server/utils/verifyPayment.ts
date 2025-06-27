@@ -54,6 +54,7 @@ export default async (
   if(!gate) throw 'Không tìm thấy thông tin kênh nạp'
 
   // Set Verify Person
+  const time = new Date()
   let verify_person
   if(!!verifier){
     verify_person = verifier
@@ -70,21 +71,9 @@ export default async (
   .sort({ 'verify.time' : -1 })
   .limit(1) as IDBPayment
 
-  // Update Payment
-  const time = new Date()
-  await DB.Payment.updateOne({ _id: _id }, {
-    money: realMoney,
-    status: realStatus,
-    verify: {
-      person: verify_person,
-      time: time,
-      reason: realReason
-    }
-  })
-
   // Check Status
   if(realStatus == 1){
-    // Set Coin
+    // Set Frist and Second
     let fristCoin = 0
     let secondCoin = 0
     const countPayDone = await DB.Payment.count({ user: user._id, status: 1 })
@@ -93,10 +82,11 @@ export default async (
 
     // Bonus Level and Gate
     const levelBonus = parseInt(String(level.bonus))
-    const gateBonus = getGateBonus(event, gate.bonus)
+    // const gateBonus = getGateBonus(event, gate.bonus) // Cộng dồn
+    const gateBonus = (fristCoin == 0 && secondCoin == 0) ? getGateBonus(event, gate.bonus) : 0 // Riêng
     const bonusCoin = Math.floor(realMoney * ((levelBonus + gateBonus) / 100))
-    const coin = realMoney + bonusCoin
-    const totalCoin = coin + fristCoin + secondCoin
+
+    const totalCoin = realMoney + bonusCoin + fristCoin + secondCoin
 
     // Bonus Save Pay
     let bonusSavePay = 0
@@ -177,13 +167,14 @@ export default async (
           const diamond = Math.floor(realMoney * (diamondBonus / 100))
 
           await DB.User.updateOne({ _id: referraler._id },{ $inc: { 'currency.diamond': diamond }})
-          logUser(event, user._id, `Nhận được <b>${diamond.toLocaleString('vi-VN')} Cống Hiến</b> từ giao dịch nạp tiền <b>${payment.code}</b> của bạn bè <b>${referraler.username}</b>`)
+          logUser(event, user._id, `Nhận được <b>${diamond.toLocaleString('vi-VN')} Cống Hiến</b> từ giao dịch nạp <b>${realMoney.toLocaleString('vi-VN')} VNĐ</b> của bạn bè <b>${referraler.username}</b>`)
         }
       }
     }
 
     // Log User
-    logUser(event, user._id, `Nhận <b>${coin.toLocaleString('vi-VN')} xu, ${bonusWheel.toLocaleString('vi-VN')} lượt quay</b> từ giao dịch nạp tiền thành công <b>${payment.code}</b>`)
+    logUser(event, user._id, `Nhận <b>${realMoney.toLocaleString('vi-VN')} xu, ${bonusWheel.toLocaleString('vi-VN')} lượt quay</b> từ giao dịch nạp tiền thành công <b>${payment.code}</b>`)
+    if(bonusCoin > 0) logUser(event, user._id, `Tặng thêm <b>${bonusCoin.toLocaleString('vi-VN')} Xu</b> từ kênh nạp và phúc lợi cấp độ`)
     if(fristCoin > 0) logUser(event, user._id, `Tặng thêm <b>${fristCoin.toLocaleString('vi-VN')} Xu</b> vì nạp lần đầu`)
     if(secondCoin > 0) logUser(event, user._id, `Tặng thêm <b>${secondCoin.toLocaleString('vi-VN')} Xu</b> vì nạp lần 2`)
     IO.to(user._id.toString()).emit('auth-update')
@@ -194,4 +185,15 @@ export default async (
   else {
     if(!!verifier) logAdmin(event, `Từ chối giao dịch nạp tiền <b>${payment.code}</b> với lý do <b>${realReason}</b>`, verifier)
   }
+
+  // Update Payment
+  await DB.Payment.updateOne({ _id: _id }, {
+    money: realMoney,
+    status: realStatus,
+    verify: {
+      person: verify_person,
+      time: time,
+      reason: realReason
+    }
+  })
 }

@@ -51,7 +51,7 @@
 
               <div class="bg-gray rounded-2xl p-4">
                 <UiText color="rose" size="xs" weight="bold" class="mb-3">Lưu ý</UiText>
-                <UiText color="gray" size="sm" class="mb-2">- Khuyến mãi <b class="text-rose-500"> nạp đầu</b> và <b class="text-rose-500">nạp lần 2</b> sẽ cộng dồn với khuyến mãi của kênh nạp .</UiText>
+                <UiText color="gray" size="sm" class="mb-2">- Khuyến mãi <b class="text-rose-500"> nạp đầu</b> và <b class="text-rose-500">nạp lần 2</b> sẽ không cộng dồn với khuyến mãi của kênh nạp .</UiText>
                 <UiText color="gray" size="sm" class="mb-2">- Hệ thống cung cấp <b class="text-rose-500">thông tin người nhận ngẫu nhiên</b>, vui lòng dựa vào thông tin hiển thị trên mã <b class="text-rose-500">QR để nạp tiền</b>.</UiText>
                 <UiText color="gray" size="sm">- <b class="text-rose-500">Mã QR</b> chỉ cung cấp cho <b class="text-rose-500">nạp tiền lần này</b>. Vui lòng không lưu lại sử dụng cho những lần nạp tiền sau.</UiText>
               </div>
@@ -83,7 +83,7 @@
 
               <div class="bg-gray rounded-2xl p-4">
                 <UiText color="rose" size="xs" weight="bold" class="mb-3">Lưu ý</UiText>
-                <UiText color="gray" size="sm" class="mb-2">- Khuyến mãi <b class="text-rose-500"> nạp đầu</b> và <b class="text-rose-500">nạp lần 2</b> sẽ cộng dồn với khuyến mãi của kênh nạp .</UiText>
+                <UiText color="gray" size="sm" class="mb-2">- Khuyến mãi <b class="text-rose-500"> nạp đầu</b> và <b class="text-rose-500">nạp lần 2</b> sẽ không cộng dồn với khuyến mãi của kênh nạp .</UiText>
                 <UiText color="gray" size="sm" class="mb-2">- Tất cả thẻ cào của các nhà mạng có mức chiết khấu là <b class="text-rose-500">20%</b>, nên khuyến mãi khi nạp qua kênh này sẽ luôn ít hơn các kênh còn lại.</UiText>
                 <UiText color="gray" size="sm">- Nếu bạn <b class="text-rose-500">nhập sai thông tin</b> thẻ có thể bị mất, vui lòng nhập chính xác.</UiText>
               </div>

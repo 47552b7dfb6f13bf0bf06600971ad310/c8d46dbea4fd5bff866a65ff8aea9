@@ -13,16 +13,8 @@ export default async (event: H3Event, throwError : boolean = true) : Promise<IAu
     const user = await DB.User.findOne({ _id: decoded._id }).select('username block type token action') as IDBUser
 
     if(!user) throw 'Xác thực tài khoản không thành công'
-    if(user.token != token) {
-      await DB.SocketOnline.updateOne({ user: user._id }, { user: null })
-      IO.emit('online-update')
-      throw 'Tài khoản đang đăng nhập ở nơi khác, vui lòng đăng nhập lại'
-    }
-    if(user.block == 1) {
-      await DB.SocketOnline.updateOne({ user: user._id }, { user: null })
-      IO.emit('online-update')
-      throw 'Tài khoản đang bị khóa, vui lòng đăng nhập bằng tài khoản khác'
-    }
+    if(user.token != token) throw 'Tài khoản đang đăng nhập ở nơi khác, vui lòng đăng nhập lại'
+    if(user.block == 1) throw 'Tài khoản đang bị khóa, vui lòng đăng nhập bằng tài khoản khác'
 
     const result = { 
       _id: user._id,

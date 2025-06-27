@@ -70,5 +70,5 @@ const active = computed(() => {
   return true
 })
 
-watch(() => route.query.type, (val) => tab.value = val)
+watch(() => route.query.type, (val) => tab.value = val ? val : (!!items.value[0] ? items.value[0].type : null))
 </script>

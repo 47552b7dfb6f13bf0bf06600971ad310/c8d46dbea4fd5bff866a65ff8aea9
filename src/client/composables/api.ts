@@ -52,7 +52,7 @@ export const useAPI = async (path : string, post?: any, options: any = {}) => {
         }
       }
       else if(code == 401) { 
-        await removeAuth()
+        if(import.meta.client) await removeAuth()
         return Promise.reject(message)
       }
       else {

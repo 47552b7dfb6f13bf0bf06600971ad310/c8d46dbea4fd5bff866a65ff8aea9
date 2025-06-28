@@ -13,57 +13,18 @@ export default defineEventHandler(async (event) => {
     const sorting : any = { }
     sorting[sort.column] = sort.direction == 'desc' ? -1 : 1
 
-    const match : any = { }
+    const match : any = { user: new Types.ObjectId(userCheck) }
     if(!!type) match['type'] = type
     if(!!range && !!range['start'] && !!range['end']){
       match['createdAt'] = { $gte: new Date(range['start']), $lte: new Date(range['end']) }
     }
 
-    const histories = await DB.EventHistory
-    .aggregate([
-      { $match: { user: new Types.ObjectId(userCheck) }},
-      {
-        $lookup: {
-          from: "Event",
-          localField: "event",
-          foreignField: "_id",
-          pipeline: [{
-            $project: {
-              type: 1, need: 1
-            },
-          }],
-          as: "event"
-        }
-      },
-      { $unwind: { path: '$event' }},
-      {
-        $project: {
-          user: 1,
-          type: '$event.type',
-          need: '$event.need',
-          server: 1,
-          createdAt: 1
-        }
-      },
-      { $match: match },
-      {
-        $facet: {
-          list: [
-            { $sort: sorting },
-            { $skip: (current - 1) * size },
-            { $limit: size },
-          ],
-          pagination: [
-            { $count: "total" }
-          ]
-        }
-      }
-    ])
+    const list = await DB.EventHistory
+    .find(match)
+    .populate({ path: 'event', select: 'need type' })
+    const total = await DB.EventHistory.count(match)
 
-    return resp(event, { result: { 
-      list: histories[0].list ? histories[0].list : [],
-      total: histories[0].pagination ? (histories[0].pagination[0] ? histories[0].pagination[0].total : 0) : 0
-    }})
+    return resp(event, { result: { list, total }})
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

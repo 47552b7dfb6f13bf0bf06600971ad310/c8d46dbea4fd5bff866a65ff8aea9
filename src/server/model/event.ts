@@ -73,6 +73,7 @@ export const DBEventHistory = (mongoose : Mongoose) => {
   const schema = new mongoose.Schema<IDBEventHistory>({ 
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', index: true },
     event: { type: mongoose.Schema.Types.ObjectId, ref: 'Event', index: true },
+    type: { type: String },
     server: { type: String },
     role: { type: String },
   }, {

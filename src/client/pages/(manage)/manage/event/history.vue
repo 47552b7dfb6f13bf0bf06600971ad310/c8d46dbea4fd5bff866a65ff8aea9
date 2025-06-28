@@ -41,10 +41,10 @@
           <UBadge variant="soft" color="gray">{{ row.role ? `${row.role}` : '...' }}</UBadge>
         </template>
 
-        <template #type-data="{ row }">{{ typeFormat[row.type] }}</template>
+        <template #[`event.type-data`]="{ row }">{{ typeFormat[row.event.type] }}</template>
 
-        <template #need-data="{ row }">
-          <UiText weight="semibold">{{ useMoney().toMoney(row.need) }}</UiText>
+        <template #[`event.need-data`]="{ row }">
+          <UiText weight="semibold">{{ useMoney().toMoney(row.event.need) }}</UiText>
         </template>
 
         <template #createdAt-data="{ row }">
@@ -77,10 +77,10 @@ const list = ref([])
 // Columns
 const columns = [
   {
-    key: 'type',
+    key: 'event.type',
     label: 'Loại',
   },{
-    key: 'need',
+    key: 'event.need',
     label: 'Điều kiện',
   },{
     key: 'user',

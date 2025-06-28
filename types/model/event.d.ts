@@ -31,6 +31,7 @@ export interface IDBEventHistory {
   updatedAt: Date
   user: Types.ObjectId
   event: Types.ObjectId
+  type: string
   server: string
   role: string
 }

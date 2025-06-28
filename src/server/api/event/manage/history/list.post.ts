@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
     sorting[sort.column] = sort.direction == 'desc' ? -1 : 1
 
     const match : any = {}
+    if(!!type) match['type'] = type
     if(!!user) {
       const users = await DB.User.find({
         username : { $regex : user.toLowerCase(), $options : 'i' }
@@ -24,59 +25,14 @@ export default defineEventHandler(async (event) => {
       match['createdAt'] = { $gte: new Date(range['start']), $lte: new Date(range['end']) }
     }
 
-    const histories = await DB.EventHistory
-    .aggregate([
-      ...((match['user'] || match['createdAt']) ? [{ $match: match }] : []),
-      {
-        $lookup: {
-          from: "User",
-          localField: "user",
-          foreignField: "_id",
-          pipeline: [{ $project: { username: 1 } }],
-          as: "user"
-        }
-      },
-      { $unwind: { path: '$user' }},
-      {
-        $lookup: {
-          from: "Event",
-          localField: "event",
-          foreignField: "_id",
-          pipeline: [{ $project: { type: 1, need: 1  } }],
-          as: "event"
-        }
-      },
-      { $unwind: { path: '$event' }},
-      {
-        $project: {
-          user: 1,
-          type: '$event.type',
-          need: '$event.need',
-          server: 1,
-          role: 1,
-          createdAt: 1
-        }
-      },
-      ...(type ? [{ $match: { "type": type } }] : []),
-      { $sort: sorting },
-      {
-        $facet: {
-          list: [
-            
-            { $skip: (current - 1) * size },
-            { $limit: size },
-          ],
-          pagination: [
-            { $count: "total" }
-          ]
-        }
-      }
-    ])
+    const list = await DB.EventHistory
+    .find(match)
+    .populate({ path: 'event', select: 'need type' })
+    .populate({ path: 'user', select: 'username' })
 
-    return resp(event, { result: { 
-      list: histories[0].list ? histories[0].list : [],
-      total: histories[0].pagination ? (histories[0].pagination[0] ? histories[0].pagination[0].total : 0) : 0
-    }})
+    const total = await DB.EventHistory.count(match)
+
+    return resp(event, { result: { list, total }})
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

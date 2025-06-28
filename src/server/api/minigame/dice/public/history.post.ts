@@ -18,37 +18,16 @@ export default defineEventHandler(async (event) => {
       match['createdAt'] = { $gte: new Date(range['start']), $lte: new Date(range['end']) }
     }
 
-    const histories = await DB.DiceHistory
-    .aggregate([
-      { $match: match },
-      {
-        $project: {
-          dices: 1,
-          my: 1,
-          play: '$coin.play',
-          receive: '$coin.receive',
-          jar: '$coin.jar',
-          createdAt: 1
-        }
-      },
-      {
-        $facet: {
-          list: [
-            { $sort: sorting },
-            { $skip: (current - 1) * size },
-            { $limit: size },
-          ],
-          pagination: [
-            { $count: "total" }
-          ]
-        }
-      }
-    ])
+    const list = await DB.DiceHistory
+    .find(match)
+    .populate({ path: 'user', select: 'username' })
+    .sort(sorting)
+    .skip((current - 1) * size)
+    .limit(size)
 
-    return resp(event, { result: { 
-      list: histories[0].list ? histories[0].list : [],
-      total: histories[0].pagination ? (histories[0].pagination[0] ? histories[0].pagination[0].total : 0) : 0
-    }})
+    const total = await DB.DiceHistory.count(match)
+
+    return resp(event, { result: { list, total }})
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

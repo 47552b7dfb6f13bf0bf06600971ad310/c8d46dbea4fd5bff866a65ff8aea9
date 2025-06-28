@@ -105,6 +105,7 @@ export default defineEventHandler(async (event) => {
     await DB.EventHistory.create({
       user: auth._id,
       event: eventData._id,
+      type: eventData.type,
       server: server,
       role: role
     })

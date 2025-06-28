@@ -29,10 +29,10 @@
           <UBadge color="gray" variant="soft">{{ row.server ? `${row.server}` : '...' }}</UBadge>
         </template>
 
-        <template #type-data="{ row }">{{ typeFormat[row.type] }}</template>
+        <template #[`event.type-data`]="{ row }">{{ typeFormat[row.event.type] }}</template>
 
-        <template #need-data="{ row }">
-          <UBadge variant="soft">{{ useMoney().toMoney(row.need) }}</UBadge>
+        <template #[`event.need-data`]="{ row }">
+          <UBadge variant="soft">{{ useMoney().toMoney(row.event.need) }}</UBadge>
         </template>
 
         <template #createdAt-data="{ row }">
@@ -58,10 +58,10 @@ const list = ref([])
 
 const columns = [
   {
-    key: 'type',
+    key: 'event.type',
     label: 'Loại',
   },{
-    key: 'need',
+    key: 'event.need',
     label: 'Điều kiện',
   },{
     key: 'server',

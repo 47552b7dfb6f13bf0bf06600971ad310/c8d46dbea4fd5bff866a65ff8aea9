@@ -37,16 +37,16 @@
           </UiFlex>
         </template>
 
-        <template #play-data="{ row }">
-          <UiText weight="semibold">{{ toMoney(row.play) }}</UiText>
+        <template #[`coin.play-data`]="{ row }">
+          <UiText weight="semibold">{{ toMoney(row.coin.play) }}</UiText>
         </template>
 
-        <template #receive-data="{ row }">
-          <UiText weight="semibold" color="rose" v-if="row.receive < 0">
-            - {{ toMoney(row.receive*-1) }}
+        <template #[`coin.receive-data`]="{ row }">
+          <UiText weight="semibold" color="rose" v-if="row.coin.receive < 0">
+            - {{ toMoney(row.coin.receive*-1) }}
           </UiText>
           <UiText weight="semibold" color="green" v-else>
-            + {{ toMoney(row.receive) }}
+            + {{ toMoney(row.coin.receive) }}
           </UiText>
         </template>
 
@@ -87,11 +87,11 @@ const columns = [
     key: 'dices',
     label: 'Kết quả',
   },{
-    key: 'play',
+    key: 'coin.play',
     label: 'Cước',
     sortable: true
   },{
-    key: 'receive',
+    key: 'coin.receive',
     label: 'Lãi / Lỗ',
     sortable: true
   },{

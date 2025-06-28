@@ -6,12 +6,9 @@ export default (io : SocketServer, socket : Socket) => {
     try {
       if(!socket.authID) throw 'Bạn chưa đăng nhập'
 
-      const result = await DB.LogUser.aggregate([
-        { $match: { user: new Types.ObjectId(socket.authID), watched: false } },
-        { $group: { _id: '$user', unreadCount: { $sum: 1 }}},
-      ])
+      const result = await DB.LogUser.count({ user: new Types.ObjectId(socket.authID), watched: false })
 
-      socket.emit('notify-single-new', result[0] ? result[0].unreadCount : 0)
+      socket.emit('notify-single-new', result)
     }
     catch(e:any) {
       return

@@ -55,11 +55,11 @@ const open = () => {
   modal.value = true
 }
 
-const download = (link) => {
-  if(!link) return useNotify().error('Chúng tôi đang cập nhật link tải, vui lòng quay lại sau')
+const download = (url) => {
+  if(!url) return useNotify().error('Chúng tôi đang cập nhật link tải, vui lòng quay lại sau')
 
   const link = document.createElement('a')
-  link.href = link
+  link.href = url
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)

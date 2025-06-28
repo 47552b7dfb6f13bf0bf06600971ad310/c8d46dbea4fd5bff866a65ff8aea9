@@ -20,11 +20,11 @@ const runtimeConfig = useRuntimeConfig()
 const configStore = useConfigStore()
 const authStore = useAuthStore()
 
-const download = (link) => {
-  if(!link) return useNotify().error('Link tải chưa sẵn sàng, vui lòng quay lại sau')
+const download = (url) => {
+  if(!url) return useNotify().error('Link tải chưa sẵn sàng, vui lòng quay lại sau')
 
   const link = document.createElement('a')
-  link.href = link
+  link.href = url
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)

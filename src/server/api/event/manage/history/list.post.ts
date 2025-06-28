@@ -29,6 +29,9 @@ export default defineEventHandler(async (event) => {
     .find(match)
     .populate({ path: 'event', select: 'need type' })
     .populate({ path: 'user', select: 'username' })
+    .sort(sorting)
+    .limit(size)
+    .skip((current - 1) * size)
 
     const total = await DB.EventHistory.count(match)
 

@@ -57,7 +57,12 @@ const open = () => {
 
 const download = (link) => {
   if(!link) return useNotify().error('Chúng tôi đang cập nhật link tải, vui lòng quay lại sau')
-  window.open(link, '_blank'); 
+
+  const link = document.createElement('a')
+  link.href = link
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
 
 const playWeb = async () => {

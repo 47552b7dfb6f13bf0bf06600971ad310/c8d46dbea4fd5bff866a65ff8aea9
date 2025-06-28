@@ -22,7 +22,12 @@ const authStore = useAuthStore()
 
 const download = (link) => {
   if(!link) return useNotify().error('Link tải chưa sẵn sàng, vui lòng quay lại sau')
-  useTo().openNewTab(link)
+
+  const link = document.createElement('a')
+  link.href = link
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
 
 const start = async () => {

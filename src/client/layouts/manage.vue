@@ -19,7 +19,7 @@
       </div>
       
       <div class="xl:col-span-10 col-span-12">
-        <main class="p-4 max-w-[1700px] mx-auto w-full overflow-x-hidden">
+        <main class="p-4 max-w-[1700px] mx-auto w-full overflow-x-hidden min-h-full">
           <slot></slot>
         </main>
       </div>

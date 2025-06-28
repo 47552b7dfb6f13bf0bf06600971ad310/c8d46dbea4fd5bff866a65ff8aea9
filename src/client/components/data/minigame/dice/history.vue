@@ -127,7 +127,7 @@ const getList = async () => {
     list.value = data.list
     page.value.total = data.total
 
-    setTimeout(() => loading.value.load = false, 500)
+    loading.value.load = false
   }
   catch (e) {
     loading.value.load = false

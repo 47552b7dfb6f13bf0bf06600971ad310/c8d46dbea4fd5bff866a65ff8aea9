@@ -37,6 +37,10 @@
           <UBadge variant="soft" color="gray">{{ row.server ? `${row.server}` : '...' }}</UBadge>
         </template>
 
+        <template #role-data="{ row }">
+          <UBadge variant="soft" color="gray">{{ row.role ? `${row.role}` : '...' }}</UBadge>
+        </template>
+
         <template #type-data="{ row }">{{ typeFormat[row.type] }}</template>
 
         <template #need-data="{ row }">
@@ -73,17 +77,20 @@ const list = ref([])
 // Columns
 const columns = [
   {
+    key: 'type',
+    label: 'Loại',
+  },{
+    key: 'need',
+    label: 'Điều kiện',
+  },{
     key: 'user',
     label: 'Tài khoản',
   },{
     key: 'server',
     label: 'Máy chủ',
   },{
-    key: 'type',
-    label: 'Loại',
-  },{
-    key: 'need',
-    label: 'Điều kiện',
+    key: 'role',
+    label: 'Nhân vật',
   },{
     key: 'createdAt',
     label: 'Ngày nhận',

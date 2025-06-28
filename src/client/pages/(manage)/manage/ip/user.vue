@@ -22,11 +22,13 @@
         </template>
 
         <template #users-data="{ row }">
-          <UButton 
-            v-for="user in row.users" :key="user._id"
-            size="2xs" color="gray" class="m-1"
-            @click="viewUser(user._id)"
-          >{{ user.username }}</UButton>
+          <UiFlex wrap>
+            <UButton 
+              v-for="user in row.users" :key="user._id"
+              size="2xs" color="gray" class="m-1"
+              @click="viewUser(user._id)"
+            >{{ user.username }}</UButton>
+          </UiFlex>
         </template>
         
         <template #block-data="{ row }">

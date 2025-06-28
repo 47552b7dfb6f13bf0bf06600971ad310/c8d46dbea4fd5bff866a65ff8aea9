@@ -49,15 +49,15 @@
           </UBadge>
         </template>
 
-        <template #verify_person-data="{ row }">
-          <span v-if="!row.verify_person">...</span>
-          <UBadge v-else variant="soft" color="gray" class="cursor-pointer" @click="viewUser(row.verify_person._id)">
-            {{ row.verify_person.username }}
+        <template #[`verify.person-data`]="{ row }">
+          <span v-if="!row.verify.person">...</span>
+          <UBadge v-else variant="soft" color="gray" class="cursor-pointer" @click="viewUser(row.verify.person._id)">
+            {{ row.verify.person.username }}
           </UBadge>
         </template>
 
-        <template #verify_time-data="{ row }">
-          {{ row.verify_time ? useDayJs().displayFull(row.verify_time) : '...' }}
+        <template #[`verify.time-data`]="{ row }">
+          {{ row.verify.time ? useDayJs().displayFull(row.verify.time) : '...' }}
         </template>
 
         <template #createdAt-data="{ row }">
@@ -159,10 +159,10 @@ const columns = [
     label: 'Trạng thái',
     sortable: true
   },{
-    key: 'verify_person',
+    key: 'verify.person',
     label: 'Người duyệt',
   },{
-    key: 'verify_time',
+    key: 'verify.time',
     label: 'Ngày duyệt',
     sortable: true
   },{

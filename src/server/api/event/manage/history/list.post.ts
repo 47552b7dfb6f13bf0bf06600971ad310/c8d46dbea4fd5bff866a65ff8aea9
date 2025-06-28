@@ -13,15 +13,12 @@ export default defineEventHandler(async (event) => {
     sorting[sort.column] = sort.direction == 'desc' ? -1 : 1
 
     const match : any = {}
-    if(!!type) {
-      match['type'] = type
-    }
     if(!!user) {
       const users = await DB.User.find({
         username : { $regex : user.toLowerCase(), $options : 'i' }
       }).select('_id')
 
-      match['user._id'] = { $in: users.map(i => i._id)}
+      match['user'] = { $in: users.map(i => i._id)}
     }
     if(!!range && !!range['start'] && !!range['end']){
       match['createdAt'] = { $gte: new Date(range['start']), $lte: new Date(range['end']) }
@@ -29,16 +26,13 @@ export default defineEventHandler(async (event) => {
 
     const histories = await DB.EventHistory
     .aggregate([
+      ...((match['user'] || match['createdAt']) ? [{ $match: match }] : []),
       {
         $lookup: {
           from: "User",
           localField: "user",
           foreignField: "_id",
-          pipeline: [{
-            $project: {
-              username: 1
-            },
-          }],
+          pipeline: [{ $project: { username: 1 } }],
           as: "user"
         }
       },
@@ -48,11 +42,7 @@ export default defineEventHandler(async (event) => {
           from: "Event",
           localField: "event",
           foreignField: "_id",
-          pipeline: [{
-            $project: {
-              type: 1, need: 1
-            },
-          }],
+          pipeline: [{ $project: { type: 1, need: 1  } }],
           as: "event"
         }
       },
@@ -63,14 +53,16 @@ export default defineEventHandler(async (event) => {
           type: '$event.type',
           need: '$event.need',
           server: 1,
+          role: 1,
           createdAt: 1
         }
       },
-      { $match: match },
+      ...(type ? [{ $match: { "type": type } }] : []),
+      { $sort: sorting },
       {
         $facet: {
           list: [
-            { $sort: sorting },
+            
             { $skip: (current - 1) * size },
             { $limit: size },
           ],

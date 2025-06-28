@@ -20,15 +20,13 @@ export default defineEventHandler(async (event) => {
     }
 
     const logIP = await DB.LogUserIP.aggregate([
-      { $match: match },
+      ...((match['ip']) ? [{ $match: match }] : []),
       {
         $lookup: {
           from: "User",
           localField: "user",
           foreignField: "_id",
-          pipeline: [
-            { $project: { username: 1 }}
-          ],
+          pipeline: [ { $project: { username: 1 }}],
           as: "user"
         }
       },
@@ -48,10 +46,10 @@ export default defineEventHandler(async (event) => {
       },
       { $unwind: { path: '$block', preserveNullAndEmptyArrays: true }},
       { $project: { ip: '$_id', users: 1, count: 1, block: { $cond: [{$not: ["$block"]}, 0, 1]} }},
+      { $sort: sorting },
       {
         $facet: {
           list: [
-            { $sort: sorting },
             { $skip: (current - 1) * size },
             { $limit: size },
           ],

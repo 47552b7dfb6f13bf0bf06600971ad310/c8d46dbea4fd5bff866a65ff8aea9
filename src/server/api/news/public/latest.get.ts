@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
     .select('category title description og_image pin createdAt')
     .populate({ path: 'category', select: 'name color' })
     .sort({ pin: -1, createdAt: -1 })
-    .limit(12)
+    .limit(4)
 
     return resp(event, { result: news })
   } 

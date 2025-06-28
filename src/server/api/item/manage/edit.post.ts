@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
     await DB.Item.updateOne({ _id: _id }, body)
     
     logAdmin(event, `Sửa vật phẩm trò chơi <b>${item.item_name}</b>`)
-    return resp(event, { message: 'Sửa vật phẩm thành công' })
+    return resp(event, { message: 'Sửa thành công' })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

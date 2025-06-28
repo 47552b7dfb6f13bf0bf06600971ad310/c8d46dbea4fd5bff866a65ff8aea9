@@ -34,10 +34,6 @@
           {{ row.bonus_presentee_pay }}%
         </template>
 
-        <template #updatedAt-data="{ row }">
-          {{ useDayJs().displayFull(row.updatedAt) }}
-        </template>
-
         <template #actions-data="{ row }">
           <UDropdown :items="actions(row)">
             <UButton color="gray" icon="i-bx-dots-horizontal-rounded" :disabled="loading.del"/>
@@ -164,9 +160,6 @@ const columns = [
     key: 'bonus_presentee_pay',
     label: 'Bạn bè nạp thưởng CH',
     sortable: true
-  },{
-    key: 'updatedAt',
-    label: 'Cập nhật',
   },{
     key: 'actions',
     label: 'Chức năng',

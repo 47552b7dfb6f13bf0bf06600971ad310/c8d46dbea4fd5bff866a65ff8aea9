@@ -4,10 +4,10 @@
     
     <UAvatarGroup :max="max" :size="size" :ui="{ ring: 'ring-0' }">
       <UAvatar
-        v-for="(item, index) in items" :key="index"
-        :src="imgSrc(item.image, item.type)"
-        :alt="item.name"
-        :chip-text="'x'+useMoney().miniMoney(item.amount)"
+        v-for="(data, index) in items" :key="index"
+        :src="imgSrc(data.item?.item_image, data.item?.type)"
+        :alt="data.item?.item_name"
+        :chip-text="'x'+useMoney().miniMoney(data.amount)"
         :chip-color="amountColor"
         chip-position="bottom-right"
         :ui="{

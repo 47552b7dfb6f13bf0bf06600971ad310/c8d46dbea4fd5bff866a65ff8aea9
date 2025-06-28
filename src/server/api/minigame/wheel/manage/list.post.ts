@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 
     const list = await DB.Wheel
     .find()
-    .populate({ path: 'item' })
+    .populate({ path: 'item', select: 'item_id item_name item_image type' })
     .sort(sorting)
     .limit(size)
     .skip((current - 1) * size)

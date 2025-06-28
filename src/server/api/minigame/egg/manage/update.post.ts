@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
       // @ts-expect-error
       config[`${name}`] = {
         price: data[`${name}`].price,
-        gift:  data[`${name}`].gift.map(({ _id : item, amount, percent } : any) => ({ item, amount, percent }))
+        gift:  data[`${name}`].gift.map(({ item, amount, percent } : any) => ({ item: item._id, amount, percent }))
       }
     })
 

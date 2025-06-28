@@ -31,16 +31,8 @@ export default defineEventHandler(async (event) => {
     if(countReceiveAuth > 0) throw 'Bạn đã nhận mã này rồi'
 
     // Result
-    const resultGiftcode : any = JSON.parse(JSON.stringify(giftcodeData))
-    resultGiftcode.gift = giftcodeData.gift.map(gift => ({
-      name: (gift.item as IDBItem).item_name,
-      image: (gift.item as IDBItem).item_image,
-      type: (gift.item as IDBItem).type,
-      amount: gift.amount
-    }))
-
     const result = {
-      giftcode: resultGiftcode,
+      giftcode: giftcodeData,
       server: server_id
     }
 

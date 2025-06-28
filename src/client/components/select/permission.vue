@@ -26,7 +26,7 @@
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])
 
-const selected = ref(props.modelValue)
+const selected = ref(props.modelValue || [])
 
 const names = ref({
   1: 'SMOD',

@@ -18,93 +18,33 @@ export default defineEventHandler(async (event) => {
         username : { $regex : from.toLowerCase(), $options : 'i' }
       }).select('_id')
       
-      match['from'] = {
-        $in: users.map(i => i._id)
-      }
+      match['from'] = { $in: users.map(i => i._id) }
     }
     if(!!to){
       const users = await DB.User.find({
         username : { $regex : to.toLowerCase(), $options : 'i' }
       }).select('_id')
       
-      match['to'] = {
-        $in: users.map(i => i._id)
-      }
+      match['to'] = { $in: users.map(i => i._id) }
     }
     if(!!range && !!range['start'] && !!range['end']){
       match['createdAt'] = { $gte: new Date(range['start']), $lte: new Date(range['end']) }
     }
 
     const list = await DB.LogAdminSendItem
-    .aggregate([
-      { $match: match },
-      {
-        $lookup: {
-          from: "User",
-          localField: "from",
-          foreignField: "_id",
-          pipeline: [{
-            $project: { username: 1 },
-          }],
-          as: "from"
-        }
-      },
-      { $unwind: { path: '$from', preserveNullAndEmptyArrays: true } },
-      {
-        $lookup: {
-          from: "User",
-          localField: "to",
-          foreignField: "_id",
-          pipeline: [{
-            $project: { username: 1 },
-          }],
-          as: "to"
-        }
-      },
-      { $unwind: { path: '$to', preserveNullAndEmptyArrays: true } },
-      {
-        $lookup: {
-          from: "Item",
-          localField: "gift.item",
-          foreignField: "_id",
-          pipeline: [{
-            $project: { item_name: 1, item_image: 1, type: 1 },
-          }],
-          as: "giftdata"
-        }
-      },
-      { 
-        $addFields: {
-          gift: {
-            $map: {
-              input: '$giftdata',
-              in: {
-                _id: '$$this._id',
-                name: '$$this.item_name',
-                image: '$$this.item_image',
-                type: '$$this.type',
-                amount: { 
-                  $getField: {
-                    field: 'amount',
-                    input: {
-                      $arrayElemAt: [ '$gift', { $indexOfArray: ['$gift.item', '$$this._id']} ]
-                    }
-                  }
-                },
-              }
-            }
-          }
-        } 
-      },
-      { $sort: sorting },
-      { $skip: (current - 1) * size },
-      { $limit: size }
-    ])
+    .find(match)
+    .populate({ path: 'from', select: 'username' })
+    .populate({ path: 'to', select: 'username' })
+    .populate({ path: 'gift.item', select: 'item_id item_name item_image type'})
+    .sort(sorting)
+    .skip((current - 1) * size)
+    .limit(size)
 
     const total = await DB.LogAdminSendItem.count(match)
+
     return resp(event, { result: { list, total } })
   } 
   catch (e:any) {
-    return resp(event, { code: 400, message: e.toString() })
+    return resp(event, { code: 500, message: e.toString() })
   }
 })

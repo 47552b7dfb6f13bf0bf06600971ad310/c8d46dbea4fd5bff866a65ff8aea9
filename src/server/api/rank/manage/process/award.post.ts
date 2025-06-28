@@ -14,9 +14,9 @@ export default defineEventHandler(async (event) => {
 
     const formatAward = award.map((i : any) => ({
       rank: i.rank,
-      gift: i.gift.map((item : any) => ({
-        item: item._id,
-        amount: item.amount
+      gift: i.gift.map((data : any) => ({
+        item: data.item._id,
+        amount: data.amount
       }))
     }))
 

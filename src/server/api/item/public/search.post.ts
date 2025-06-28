@@ -7,7 +7,6 @@ export default defineEventHandler(async (event) => {
         { item_name: { $regex : key, $options : 'i' }},
         { item_id: { $regex : key, $options : 'i' }},
       ]
-      
     }
     if(!!types && types.length) match['type'] = { $in: types }
 

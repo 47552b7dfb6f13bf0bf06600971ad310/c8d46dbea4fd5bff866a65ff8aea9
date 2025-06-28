@@ -10,7 +10,7 @@
         bg-gray-blur backdrop-blur-sm w-full grow 
         gap-4
       ">
-        <div>
+        <div class="grow">
           <UiText weight="bold" class="
             SVN line-clamp-2 mb-1 @3xl:mb-2
             text-2xl @3xl:text-3xl @4xl:text-4xl 

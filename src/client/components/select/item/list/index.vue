@@ -12,7 +12,11 @@
 
     <UTable :columns="columns" :rows="list">
       <template #image-data="{ row }">
-        <DataItemImage :src="row.image" :type="row.type" />
+        <DataItemImage :src="row.item.item_image" :type="row.item.type" />
+      </template>
+
+      <template #name-data="{ row }">
+        {{ row.item.item_name }}
       </template>
 
       <template #amount-data="{ row }">
@@ -64,7 +68,6 @@
 </template>
 
 <script setup>
-const toast = useToast()
 const props = defineProps({
   modelValue: Array,
   types: { type: Array, default: () => [] }
@@ -113,7 +116,7 @@ watch(() => modal.value.add, (val) => !val && (stateAdd.value = {
 
 const openEdit = (row, index) => {
   stateEdit.value.index = index
-  stateEdit.value.name = row.name
+  stateEdit.value.name = row.item.item_name
   stateEdit.value.amount = row.amount
   modal.value.edit = true
 }
@@ -125,7 +128,7 @@ const mergeGift = (gift) => {
   const arr = list.value.concat(giftFormat)
 
   list.value = arr.reduce((a, c) => {
-    const obj = a.find((obj) => obj._id === c._id)
+    const obj = a.find((obj) => obj.item._id === c.item._id)
     if(!obj) a.push(c)
     else obj.amount += c.amount
     return a
@@ -140,14 +143,13 @@ const addAction = () => {
     if(stateAdd.value.amount < 1) throw 'Số lượng phải lớn hơn 0'
 
     const data = JSON.parse(JSON.stringify(stateAdd.value))
-    const _id = data._id
     const item = data.item
 
-    const check = list.value.find(i => i._id === _id)
+    const check = list.value.find(i => i.item._id === data._id)
     if(!!check) throw 'Vật phẩm đã tồn tại'
 
-    item.amount = stateAdd.value.amount
-    list.value.push(item)
+    delete data['_id']
+    list.value.push(data)
 
     emit('update:modelValue', list.value)
     modal.value.add = false
@@ -159,6 +161,7 @@ const addAction = () => {
 
 const editAction = () => {
   try {
+    if(!stateEdit.value.amount) throw 'Vui lòng nhập đầy đủ'
     if(stateEdit.value.amount < 1) throw 'Số lượng phải lớn hơn 0'
     if(!list.value[stateEdit.value.index]) throw 'Chỉ mục vật phẩm sai'
 
@@ -183,4 +186,10 @@ const delAction = (index) => {
     useNotify().error(e.toString())
   }
 }
+
+onMounted(() => {
+  setTimeout(() => {
+    list.value = props.modelValue
+  }, 100)
+})
 </script>

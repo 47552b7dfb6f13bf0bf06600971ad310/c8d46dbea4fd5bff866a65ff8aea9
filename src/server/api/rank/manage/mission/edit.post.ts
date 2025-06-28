@@ -18,12 +18,12 @@ export default defineEventHandler(async (event) => {
     }
 
     delete body['_id']
-    const giftFormat = gift.map((i : any) => ({ item: i._id, amount: i.amount }))
+    const giftFormat = gift.map((i : any) => ({ item: i.item._id, amount: i.amount }))
     body.gift = giftFormat
     await DB.GameMission.updateOne({ _id: _id }, body)
 
     logAdmin(event, `Sửa nhiệm vụ đạt <b>${mission.type == 'level' ? 'cấp' : 'lực chiến'} ${mission.need}</b> của máy chủ <b>${mission.server}</b>`)
-    return resp(event, { message: 'Sửa gói thành công' })
+    return resp(event, { message: 'Sửa thành công' })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

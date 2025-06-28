@@ -14,18 +14,18 @@
         :columns="selectedColumns" 
         :rows="list"
       >
-        <template #item-data="{ row }">
-          <DataItem :item="{
-            name: row.item ? row.item.item_name : '...',
-            image: row.item ? row.item.item_image : null,
-            type: row.item ? row.item.type || 'game_item' : 'game_item'
-          }"  />
-        </template>
-
         <template #type-data="{ row }">
           <UBadge color="gray" variant="soft">
-            {{ typeFormat[row.item ? row.item.type || 'game_item' : 'game_item'] }}
+            {{ typeFormat[row.item ? row.item.type || 'none' : 'none'] }}
           </UBadge>
+        </template>
+
+        <template #item-data="{ row }">
+          <DataItem v-if="row.item" :item="{
+            name: row.item.item_name,
+            image: row.item.item_image,
+            type: row.item.type
+          }"  />
         </template>
 
         <template #amount-data="{ row }">{{ toMoney(row.amount) }}</template>
@@ -192,6 +192,7 @@ const loading = ref({
 
 // Type
 const typeFormat = {
+  'none': 'Không xác định',
   'game_item': 'Vật phẩm',
   'coin': 'Xu Web',
   'wheel': 'Lượt quay',

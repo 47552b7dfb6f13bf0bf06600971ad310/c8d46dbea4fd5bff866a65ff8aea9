@@ -11,7 +11,11 @@
     
     <UTable :columns="columns" :rows="list">
       <template #image-data="{ row }">
-        <DataItemImage :src="row.image" :type="row.type" />
+        <DataItemImage :src="row.item.item_image" :type="row.item.type" />
+      </template>
+
+      <template #name-data="{ row }">
+        {{ row.item.item_name }}
       </template>
 
       <template #amount-data="{ row }">
@@ -75,7 +79,6 @@
 </template>
 
 <script setup>
-const toast = useToast()
 const props = defineProps({
   modelValue: Array,
   types: { type: Array, default: () => [] }
@@ -128,18 +131,9 @@ watch(() => modal.value.add, (val) => !val && (stateAdd.value = {
   percent: null
 }))
 
-const showError = (text) => {
-  toast.add({
-    title: 'Lỗi',
-    description: text,
-    icon: 'i-bx-error',
-    color: 'red'
-  })
-}
-
 const openEdit = (row, index) => {
   stateEdit.value.index = index
-  stateEdit.value.name = row.name
+  stateEdit.value.name = row.item.item_name
   stateEdit.value.amount = row.amount
   stateEdit.value.percent = row.percent
   modal.value.edit = true
@@ -152,21 +146,19 @@ const addAction = () => {
     if(stateAdd.value.amount < 1) throw 'Số lượng phải lớn hơn 0'
 
     const data = JSON.parse(JSON.stringify(stateAdd.value))
-    const _id = data._id
     const item = data.item
 
-    const check = list.value.find(i => i._id === _id)
+    const check = list.value.find(i => i.item._id === data._id)
     if(!!check) throw 'Vật phẩm đã tồn tại'
 
-    item.amount = stateAdd.value.amount
-    item.percent = stateAdd.value.percent
-    list.value.push(item)
+    delete data['_id']
+    list.value.push(data)
 
     emit('update:modelValue', list.value)
     modal.value.add = false
   }
   catch (e) {
-    showError(e.toString())
+    useNotify().error(e.toString())
   }
 }
 
@@ -184,7 +176,7 @@ const editAction = () => {
     modal.value.edit = false
   }
   catch (e) {
-    showError(e.toString())
+    useNotify().error(e.toString())
   }
 }
 
@@ -196,13 +188,13 @@ const delAction = (index) => {
     emit('update:modelValue', list.value)
   }
   catch (e) {
-    showError(e.toString())
+    useNotify().error(e.toString())
   }
 }
 
 onMounted(() => {
   setTimeout(() => {
     list.value = props.modelValue
-  }, 100);
+  }, 100)
 })
 </script>

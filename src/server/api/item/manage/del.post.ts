@@ -63,7 +63,7 @@ export default defineEventHandler(async (event) => {
 
     await DB.Item.deleteOne({ _id: _id })
     logAdmin(event, `Xóa vật phẩm trò chơi <b>${item.item_name}</b>`)
-    return resp(event, { message: 'Xóa vật phẩm thành công' })
+    return resp(event, { message: 'Xóa thành công' })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

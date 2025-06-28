@@ -15,15 +15,12 @@ export default defineEventHandler(async (event) => {
     const eventConfig = await DB.EventConfig.findOne({ type: eventData.type }).select('name') as IDBEventConfig
     if(!eventConfig) throw 'Kiểu sự kiện không hỗ trợ'
 
-    const giftFormat = gift.map((i : any) => ({
-      item: i._id,
-      amount: i.amount
-    }))
+    const giftFormat = gift.map((i : any) => ({ item: i.item._id, amount: i.amount }))
     
     await DB.Event.updateOne({ _id: _id }, { gift: giftFormat })
 
     logAdmin(event, `Cập nhật phần thưởng cho mốc <b>${eventData.need}</b> cho sự kiện <b>${eventConfig.name}</b>`)
-    return resp(event, { message: 'Sửa phần thưởng mốc thành công' })
+    return resp(event, { message: 'Sửa thành công' })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

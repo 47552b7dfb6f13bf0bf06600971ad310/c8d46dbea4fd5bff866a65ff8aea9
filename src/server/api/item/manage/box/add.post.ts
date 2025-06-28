@@ -12,16 +12,13 @@ export default defineEventHandler(async (event) => {
     const getByName = await DB.ItemBox.findOne({ name: name }).select('_id')
     if(!!getByName) throw 'Tên gói đã tồn tại'
 
-    const giftFormat = gift.map((i : any) => ({
-      item: i._id,
-      amount: i.amount
-    }))
+    const giftFormat = gift.map((i : any) => ({ item: i.item._id, amount: i.amount }))
     body.gift = giftFormat
 
     await DB.ItemBox.create(body)
 
     logAdmin(event, `Thêm gói vật phẩm <b>${name}</b>`)
-    return resp(event, { message: 'Thêm mã thành công' })
+    return resp(event, { message: 'Thêm thành công' })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

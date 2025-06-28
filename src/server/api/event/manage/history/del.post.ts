@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     if(!histories) throw 'Dữ liệu lịch sử không tồn tại'
 
     await DB.EventHistory.deleteOne({ _id: _id })
-    return resp(event, { message: 'Xóa dữ liệu thành công' })
+    return resp(event, { message: 'Xóa thành công' })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

@@ -23,8 +23,7 @@ export default defineEventHandler(async (event) => {
     await DB.Event.create(body)
 
     logAdmin(event, `Tạo mốc <b>${need}</b> cho sự kiện <b>${eventConfig.name}</b>`)
-
-    return resp(event, { message: 'Thêm mốc thưởng thành công' })
+    return resp(event, { message: 'Thêm thành công' })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

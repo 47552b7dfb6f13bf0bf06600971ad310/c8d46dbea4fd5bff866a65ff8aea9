@@ -70,30 +70,15 @@ export default defineEventHandler(async (event) => {
       const end = now.endOf('date')
       const matchTime = { $gte: new Date(start['$d']), $lte: new Date(end['$d']) }
 
-      const historyDay = await DB.ShopPackHistory.aggregate([
-        { $match: {
-          user: user._id,
-          pack: shopPack._id,
-          createdAt: matchTime
-        }},
-        {
-          $project: {
-            createdAt: 1,
-            amount: 1,
-            timeformat: {
-              $dateToString: { format: '%Y-%m-%d', date: '$createdAt', timezone: 'Asia/Ho_Chi_Minh' }
-            }
-          }
-        },
-        {
-          $group: {
-            _id: '$timeformat',
-            count: { $sum: '$amount' }
-          }
-        },
-      ])
+      const historyDay = await DB.ShopPackHistory.count({
+        user: user._id,
+        pack: shopPack._id,
+        server: server,
+        role: role,
+        createdAt: matchTime
+      })
 
-      if(!!historyDay[0] && historyDay[0].count >= shopPack.limit) throw `Hôm nay bạn đã đạt giới hạn mua gói này`
+      if(historyDay >= shopPack.limit) throw `Hôm nay bạn đã đạt giới hạn mua gói này cho nhân vật của máy chủ này`
     }
 
     // Format Gift

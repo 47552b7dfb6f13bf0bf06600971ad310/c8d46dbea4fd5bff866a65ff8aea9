@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     await DB.News.updateOne({ _id: _id }, body)
     logAdmin(event, `Sửa thông tin cơ bản tin tức <b>${newsCheck.title}</b>`)
 
-    return resp(event, { message: 'Sửa tin tức thành công' })
+    return resp(event, { message: 'Sửa thành công' })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

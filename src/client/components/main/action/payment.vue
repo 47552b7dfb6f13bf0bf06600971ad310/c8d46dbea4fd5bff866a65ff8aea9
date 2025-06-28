@@ -1,121 +1,114 @@
 <template>
-  <div class="@container grid grid-cols-12 gap-4">
-    <!--Left-->
-    <div class="@3xl:col-span-8 col-span-12">
-      <DataPromoPayment class="mb-4" />
+  <div>
+    <DataEmpty text="Chức năng đang bảo trì, vui lòng quay lại sau" class="min-h-[300px]" :loading="loading.config" v-if="!!loading.config || !config || (!!config && !!config.maintenance)"></DataEmpty>
 
-      <UCard>
-        <UForm ref="form" :state="state" :validate="validate" @submit="submit">
-          <UFormGroup name="gate">
-            <SelectGate auto v-model="state.gate" v-model:gate="gateSelect" />
-          </UFormGroup>
+    <div class="@container grid grid-cols-12 gap-4" v-else>
+      <!--Left-->
+      <div class="@3xl:col-span-8 col-span-12">
+        <DataPromoPayment class="mb-4" />
 
-          <DataEmpty class="min-h-[200px]" loading v-if="!gateSelect"/>
-          <div v-else>
-            <UAlert title="Ưu Đãi" icon="i-bxs-gift" color="red" variant="soft" class="mb-4" v-if="(!!savePayBonus && savePayBonus.number > 0)">
-              <template #description>
-                <UiText>
-                  Tặng 
-                  <b>{{ savePayBonus.number }}%</b> 
-                  giá trị nạp vào tích nạp ngày và tháng
-                  <b v-if="savePayBonus.time">{{ savePayBonus.time }}</b>
-                </UiText>
-              </template>
-            </UAlert>
-
-            <UFormGroup label="Khuyến mãi" v-if="gateBonus && gateBonus.number > 0">
-              <UInput :model-value="`+${gateBonus.number}% ${gateBonus.time}`" readonly />
+        <UCard>
+          <UForm ref="form" :state="state" :validate="validate" @submit="submit">
+            <UFormGroup name="gate">
+              <SelectGate auto v-model="state.gate" v-model:gate="gateSelect" />
             </UFormGroup>
 
-            <!-- QR -->
-            <div v-if="gateSelect.type != 1" class="mb-4">
-              <UFormGroup name="money">
+            <DataEmpty class="min-h-[300px]" text="Các kênh nạp chưa sẵn sàng, vui lòng quay lại sau" v-if="!gateSelect"/>
+            
+            <div v-else>
+              <UAlert title="Ưu Đãi" icon="i-bxs-gift" color="red" variant="soft" class="mb-4" v-if="(!!savePayBonus && savePayBonus.number > 0)">
+                <template #description>
+                  <UiText>
+                    Tặng 
+                    <b>{{ savePayBonus.number }}%</b> 
+                    giá trị nạp vào tích nạp ngày và tháng
+                    <b v-if="savePayBonus.time">{{ savePayBonus.time }}</b>
+                  </UiText>
+                </template>
+              </UAlert>
+
+              <UFormGroup label="Khuyến mãi" v-if="!!promo && promo.number > 0">
+                <UInput :model-value="`+${promo.number}% ${promo.time}`" readonly />
+              </UFormGroup>
+
+              <!-- QR -->
+              <div v-if="gateSelect.type != 1" class="mb-4">
+                <UFormGroup label="Số tiền nạp" name="money">
+                  <UInput v-model="state.money" type="number" placeholder="Nhập số tiền nạp (>= 20.000)"/>
+                </UFormGroup>
+
+                <UFormGroup label="Số xu nhận" v-if="!!totalCoin">
+                  <UInput :model-value="`${useMoney().toMoney(totalCoin)} Xu`" readonly />
+                </UFormGroup>
+
                 <div class="bg-gray rounded-2xl p-4">
-                  <UiFlex justify="between" class="mb-4">
-                    <UiText color="gray" size="sm">Số Xu Nhận</UiText>
-                    <UiText color="gray" size="sm" >
-                      {{ useMoney().toMoney(totalCoin || 0) }} Xu
-                    </UiText>
-                  </UiFlex>
-
-                  <UInput 
-                    v-model="state.money" 
-                    variant="none" 
-                    type="number" 
-                    size="3xl" 
-                    placeholder="Nhập số tiền nạp (>= 20.000)" 
-                    class="font-bold"
-                  />
+                  <UiText color="rose" size="xs" weight="bold" class="mb-3">Lưu ý</UiText>
+                  <UiText color="gray" size="sm" class="mb-2">- Khuyến mãi <b class="text-rose-500"> nạp đầu</b> và <b class="text-rose-500">nạp lần 2</b> sẽ không cộng dồn với khuyến mãi của kênh nạp .</UiText>
+                  <UiText color="gray" size="sm" class="mb-2">- Hệ thống cung cấp <b class="text-rose-500">thông tin người nhận ngẫu nhiên</b>, vui lòng dựa vào thông tin hiển thị trên mã <b class="text-rose-500">QR để nạp tiền</b>.</UiText>
+                  <UiText color="gray" size="sm">- <b class="text-rose-500">Mã QR</b> chỉ cung cấp cho <b class="text-rose-500">nạp tiền lần này</b>. Vui lòng không lưu lại sử dụng cho những lần nạp tiền sau.</UiText>
                 </div>
-              </UFormGroup>
-
-              <div class="bg-gray rounded-2xl p-4">
-                <UiText color="rose" size="xs" weight="bold" class="mb-3">Lưu ý</UiText>
-                <UiText color="gray" size="sm" class="mb-2">- Khuyến mãi <b class="text-rose-500"> nạp đầu</b> và <b class="text-rose-500">nạp lần 2</b> sẽ không cộng dồn với khuyến mãi của kênh nạp .</UiText>
-                <UiText color="gray" size="sm" class="mb-2">- Hệ thống cung cấp <b class="text-rose-500">thông tin người nhận ngẫu nhiên</b>, vui lòng dựa vào thông tin hiển thị trên mã <b class="text-rose-500">QR để nạp tiền</b>.</UiText>
-                <UiText color="gray" size="sm">- <b class="text-rose-500">Mã QR</b> chỉ cung cấp cho <b class="text-rose-500">nạp tiền lần này</b>. Vui lòng không lưu lại sử dụng cho những lần nạp tiền sau.</UiText>
               </div>
-            </div>
 
-            <!-- Card -->
-            <div v-if="gateSelect.type == 1" class="mb-4">
-              <UFormGroup label="Chọn nhà mạng" name="card_net">
-                <USelectMenu v-model="state.card.net" :options="card.net" value-attribute="value" size="lg" />
-              </UFormGroup>
-
-              <UFormGroup label="Chọn mệnh giá" name="card_money">
-                <USelectMenu v-model="state.money" :options="card.money" value-attribute="value" size="lg" />
-              </UFormGroup>
-
-              <UiFlex items="start" class="gap-1 flex-col @xl:flex-row">
-                <UFormGroup label="Số Series" name="card_seri" class="grow w-full">
-                  <UInput v-model="state.card.seri" placeholder="Nhập số Series" />
+              <!-- Card -->
+              <div v-if="gateSelect.type == 1" class="mb-4">
+                <UFormGroup label="Chọn nhà mạng" name="card_net">
+                  <USelectMenu v-model="state.card.net" :options="card.net" value-attribute="value" size="lg" />
                 </UFormGroup>
 
-                <UFormGroup label="Mã thẻ (PIN)" name="card_pin" class="grow w-full">
-                  <UInput v-model="state.card.pin" placeholder="Nhập mã thẻ PIN"/>
+                <UFormGroup label="Chọn mệnh giá" name="card_money">
+                  <USelectMenu v-model="state.money" :options="card.money" value-attribute="value" size="lg" />
                 </UFormGroup>
-              </UiFlex>
 
-              <UFormGroup label="Tổng Xu nhận" name="money" v-if="!!totalCoin">
-                <UInput :model-value="`${useMoney().toMoney(totalCoin)} Xu`" readonly />
-              </UFormGroup>
+                <UiFlex items="start" class="gap-1 flex-col @xl:flex-row">
+                  <UFormGroup label="Số Series" name="card_seri" class="grow w-full">
+                    <UInput v-model="state.card.seri" placeholder="Nhập số Series" />
+                  </UFormGroup>
 
-              <div class="bg-gray rounded-2xl p-4">
-                <UiText color="rose" size="xs" weight="bold" class="mb-3">Lưu ý</UiText>
-                <UiText color="gray" size="sm" class="mb-2">- Khuyến mãi <b class="text-rose-500"> nạp đầu</b> và <b class="text-rose-500">nạp lần 2</b> sẽ không cộng dồn với khuyến mãi của kênh nạp .</UiText>
-                <UiText color="gray" size="sm" class="mb-2">- Tất cả thẻ cào của các nhà mạng có mức chiết khấu là <b class="text-rose-500">20%</b>, nên khuyến mãi khi nạp qua kênh này sẽ luôn ít hơn các kênh còn lại.</UiText>
-                <UiText color="gray" size="sm">- Nếu bạn <b class="text-rose-500">nhập sai thông tin</b> thẻ có thể bị mất, vui lòng nhập chính xác.</UiText>
+                  <UFormGroup label="Mã thẻ (PIN)" name="card_pin" class="grow w-full">
+                    <UInput v-model="state.card.pin" placeholder="Nhập mã thẻ PIN"/>
+                  </UFormGroup>
+                </UiFlex>
+
+                <UFormGroup label="Số xu nhận" name="money" v-if="!!totalCoin">
+                  <UInput :model-value="`${useMoney().toMoney(totalCoin)} Xu`" readonly />
+                </UFormGroup>
+
+                <div class="bg-gray rounded-2xl p-4">
+                  <UiText color="rose" size="xs" weight="bold" class="mb-3">Lưu ý</UiText>
+                  <UiText color="gray" size="sm" class="mb-2">- Khuyến mãi <b class="text-rose-500"> nạp đầu</b> và <b class="text-rose-500">nạp lần 2</b> sẽ không cộng dồn với khuyến mãi của kênh nạp .</UiText>
+                  <UiText color="gray" size="sm" class="mb-2">- Tất cả thẻ cào của các nhà mạng có mức chiết khấu là <b class="text-rose-500">20%</b>, nên khuyến mãi khi nạp qua kênh này sẽ luôn ít hơn các kênh còn lại.</UiText>
+                  <UiText color="gray" size="sm">- Nếu bạn <b class="text-rose-500">nhập sai thông tin</b> thẻ có thể bị mất, vui lòng nhập chính xác.</UiText>
+                </div>
               </div>
-            </div>
 
-            <!-- Button -->
-            <UButton block type="submit" :loading="loading" color="yellow" size="lg" :disabled="!!payment">   
-              {{ gateSelect.type != 1 ? 'Tạo Mã QR' : 'Kiểm Tra Thẻ' }}
-            </UButton>
+              <!-- Button -->
+              <UButton block type="submit" :loading="loading.create" color="yellow" size="lg" :disabled="!!payment">   
+                {{ gateSelect.type != 1 ? 'Tạo Mã QR' : 'Kiểm Tra Thẻ' }}
+              </UButton>
+            </div>
+          </UForm>
+        </UCard>
+      </div>
+
+      <!--Right-->
+      <div class="@3xl:col-span-4 col-span-12 @3xl:block hidden">
+        <UCard class="bg-card">
+          <DataEmpty class="min-h-[200px]" v-if="!gateSelect"/>
+
+          <div v-else>
+            <UiImg :src="`/images/payment/create-card.png`" w="1" h="1" img-size="500px" class="w-[90%] mb-6 mx-auto bounce-anim" v-if="gateSelect.type == 1"/>
+            <UiImg :src="`/images/payment/create-qr.png`" w="1" h="1" img-size="500px" class="w-[90%] mb-6 mx-auto bounce-anim" v-if="gateSelect.type == 2"/>
+            <UiImg :src="`/images/payment/create-momo.png`" w="1" h="1" img-size="500px" class="w-[90%] mb-6 mx-auto bounce-anim" v-if="gateSelect.type == 3"/>
+
+            <UiText weight="bold" color="primary" class="text-lg md:text-xl mb-1" align="center">
+              {{ gateSelect.type == 1 ? 'Card Pay' : gateSelect.type == 2 ? 'QR Bank' : 'QR Wallet'}}
+            </UiText>
+            <UiText weight="semibold" color="gray" align="center" class="text-sm md:text-base mb-4">
+              {{ gateSelect.type == 1 ? 'Dễ Dàng - Tiện Lợi' : gateSelect.type == 2 ? 'Nhanh Chóng - An Toàn' : 'Nhanh Chóng - An Toàn' }}
+            </UiText>
           </div>
-        </UForm>
-      </UCard>
-    </div>
-
-    <!--Right-->
-    <div class="@3xl:col-span-4 col-span-12 @3xl:block hidden">
-      <UCard class="bg-card">
-        <DataEmpty loading class="min-h-[200px]" v-if="!gateSelect"/>
-
-        <div v-else>
-          <UiImg :src="`/images/payment/create-card.png`" w="1" h="1" img-size="500px" class="w-[90%] mb-6 mx-auto bounce-anim" v-if="gateSelect.type == 1"/>
-          <UiImg :src="`/images/payment/create-qr.png`" w="1" h="1" img-size="500px" class="w-[90%] mb-6 mx-auto bounce-anim" v-if="gateSelect.type == 2"/>
-          <UiImg :src="`/images/payment/create-momo.png`" w="1" h="1" img-size="500px" class="w-[90%] mb-6 mx-auto bounce-anim" v-if="gateSelect.type == 3"/>
-
-          <UiText weight="bold" color="primary" class="text-lg md:text-xl mb-1" align="center">
-            {{ gateSelect.type == 1 ? 'Card Pay' : gateSelect.type == 2 ? 'QR Bank' : 'QR Wallet'}}
-          </UiText>
-          <UiText weight="semibold" color="gray" align="center" class="text-sm md:text-base mb-4">
-            {{ gateSelect.type == 1 ? 'Dễ Dàng - Tiện Lợi' : gateSelect.type == 2 ? 'Nhanh Chóng - An Toàn' : 'Nhanh Chóng - An Toàn' }}
-          </UiText>
-        </div>
-      </UCard>
+        </UCard>
+      </div>
     </div>
 
     <!-- Modal View -->
@@ -145,9 +138,13 @@
 <script setup>
 const { dayjs, displayFull } = useDayJs()
 const authStore = useAuthStore()
+const configStore = useConfigStore()
 
 const form = ref()
-const loading = ref(false)
+const loading = ref({
+  config: true,
+  create: false
+})
 
 const config = ref(null)
 const limit = ref(undefined)
@@ -181,7 +178,7 @@ const state = ref({
   money: null
 })
 
-const reset = () => {
+const reset = async (reloadConfig) => {
   payment.value = null
   form.value.clear()
   state.value.card = {
@@ -247,15 +244,25 @@ const gateBonus = computed(() => {
   return { number, time }
 })
 
+// Promo
+const promo = computed(() => {
+  if(!gateBonus.value) return null
+
+  const numberFrist = !config.value.frist ? parseInt(configStore.config.promo.payment.first || 0) : 0
+  const numberSecond = (!!config.value.frist && numberFrist == 0) ? (!config.value.second ? parseInt(configStore.config.promo.payment.second || 0) : 0) : 0
+  if(numberFrist > 0) return { number: numberFrist, time: 'Nạp Đầu' }
+  if(numberSecond > 0) return { number: numberSecond, time: 'Nạp Lần 2' }
+  return gateBonus.value
+})
+
 // Total Coin
 const totalCoin = computed(() => {
-  if(!gateBonus.value) return null
+  if(!promo.value) return null
   if(!state.value.money) return null
   if(state.value.money < 20000) return null
 
   const coin = state.value.money
-  const coinBonus = Math.floor((parseInt(state.value.money) * parseInt(gateBonus.value.number)) / 100)
-
+  const coinBonus = Math.floor((parseInt(state.value.money) * parseInt(promo.value.number)) / 100)
   return coin + coinBonus
 })
 
@@ -300,11 +307,15 @@ const validate = (st) => {
 // Get Config
 const getConfig = async () => {
   try {
+    loading.value.config = true
     const configData = await useAPI('payment/public/config')
+
     config.value = configData
+    loading.value.config = false
   }
   catch (e) {
     config.value = null
+    loading.value.config = false
   }
 }
 
@@ -312,17 +323,18 @@ const getConfig = async () => {
 const submit = async () => {
   try {
     if(!authStore.isLogin) return useNotify().error('Vui lòng đăng nhập để nạp xu')
-    loading.value = true
+    loading.value.create = true
     const pay = await useAPI('payment/public/create', JSON.parse(JSON.stringify(state.value)))
 
     payment.value = pay
     modal.value.payment = true
-    loading.value = false
+    loading.value.create = false
   }
   catch (e) {
-    loading.value = false
+    loading.value.create = false
   }
 }
 
 getConfig()
+watch(() => authStore.isLogin, () => getConfig())
 </script>

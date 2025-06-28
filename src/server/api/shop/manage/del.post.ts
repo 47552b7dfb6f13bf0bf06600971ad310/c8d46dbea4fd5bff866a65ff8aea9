@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 
     await DB.Shop.deleteOne({ _id: shopItem._id })
     logAdmin(event, `Xóa vật phẩm <b>${itemData ? itemData.item_name : 'Không Xác Định'}</b> khỏi cửa hàng`)
-    return resp(event, { message: 'Xóa vật phẩm thành công' })
+    return resp(event, { message: 'Xóa thành công' })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

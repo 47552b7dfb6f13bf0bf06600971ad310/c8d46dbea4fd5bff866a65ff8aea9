@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
 
     logAdmin(event, `Sửa nội dung tin tức <b>${news.title}</b>`)
 
-    return resp(event, { message: 'Cập nhật nội dung thành công' })
+    return resp(event, { message: 'Cập nhật thành công' })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

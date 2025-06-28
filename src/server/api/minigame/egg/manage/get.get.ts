@@ -15,22 +15,7 @@ export default defineEventHandler(async (event) => {
     .populate({ path: 'six.gift.item', select: 'item_id item_name item_image type' }) as IDBEgg
     if(!config) throw 'Không tìm thấy cấu hình xúc xắc'
 
-    const result = JSON.parse(JSON.stringify(config)) as IDBEgg
-    const row = ['one', 'two', 'three', 'four', 'five', 'six']
-    row.forEach(name => {
-      // @ts-expect-error
-      result[`${name}`].gift = result[`${name}`].gift.map(i => ({
-        _id: i.item._id,
-        item_id: i.item.item_id,
-        name: i.item.item_name,
-        image: i.item.item_image,
-        type: i.item.type,
-        amount: i.amount,
-        percent: i.percent
-      }))
-    })
-
-    return resp(event, { result: result })
+    return resp(event, { result: config })
   } 
   catch (e:any) {
     return resp(event, { code: 500, message: e.toString() })

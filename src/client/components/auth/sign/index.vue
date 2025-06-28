@@ -5,7 +5,7 @@
 
     <UModal v-model="modal">
       <UCard class="bg-card">
-        <UiFlex class="mb-6 gap-6">
+        <UiFlex class="mb-6 gap-20">
           <UiText weight="bold" class="text-md md:text-xl">
             Chào mừng đến với <span class="text-primary">{{ configStore.config.name }}</span>, tham gia ngay cùng chúng tôi
           </UiText>

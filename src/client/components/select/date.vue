@@ -53,7 +53,7 @@ const isDark = computed(() => colorMode.value == 'dark')
 const mode = computed(() => !!props.time ? 'dateTime' : 'date')
 
 const date = computed({
-  get: () => props.modelValue,
+  get: () => props.modelValue || '',
   set: (value) => emit('update:modelValue', value)
 })
 

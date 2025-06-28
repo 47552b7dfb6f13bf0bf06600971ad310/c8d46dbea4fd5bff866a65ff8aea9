@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
     await DB.Giftcode.deleteOne({ _id: _id })
     
     logAdmin(event, `Xóa Giftcode <b>${giftcode.code}</b>`)
-    return resp(event, { message: 'Xóa mã thành công' })
+    return resp(event, { message: 'Xóa thành công' })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

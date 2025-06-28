@@ -4,9 +4,10 @@
       class="WheelBox" 
       :class="{ 'WheelBox--NoSpinning' : !!free }"
       :style="{ '--wheel-deg': `${deg.now - 36}deg` }"
+      v-if="list.length == 10"
     >
       <div 
-        v-for="(item, i) in list" :key="i" 
+        v-for="(wheel, i) in list" :key="i" 
         class="
           WheelItem 
           shadow-md
@@ -18,7 +19,7 @@
         }"
         :style="{ '--wheel-item-index' : i + 1 }"
       >
-        <DataItem class="mx-auto" :item="item" :amount="item.type != 'wheel_lose' ? item.amount : 0" size="80"  />
+        <DataItem class="mx-auto" :item="wheel.item" :amount="wheel.item.type != 'wheel_lose' ? wheel.amount : 0" size="80"  />
       </div>
     </div>
 
@@ -46,17 +47,25 @@ const deg = ref({
 const index = ref(null)
 
 const list = computed(() => {
-  const items = props.items
-  const itemCount = items.length
+  const formatList = JSON.parse(JSON.stringify(props.items)) 
+  const itemCount = formatList.length
   const missingCount = 10 - itemCount
 
-  if(missingCount == 0) return items
-
+  if(missingCount == 0) return formatList
   for (let i = 0; i < missingCount; i++) {
-    items.push({ _id: null, name: 'Không có phần thưởng', type: 'empty-gift' })
+    formatList.push({ 
+      _id: null, 
+      item: {
+        item_id: null,
+        item_name: 'Không có phần thưởng', 
+        item_image: null,
+        type: 'empty-gift' 
+      },
+      amount: 0
+    })
   }
 
-  return items
+  return formatList
 })
 
 watch(() => props.spin, () => startAnim())

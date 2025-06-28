@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     await DB.Event.deleteOne({ _id: _id })
 
     logAdmin(event, `Xóa mốc <b>${eventData.need}</b> của sự kiện <b>${eventConfig.name}</b>`)
-    return resp(event, { message: 'Xóa mốc thưởng thành công' })
+    return resp(event, { message: 'Xóa thành công' })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

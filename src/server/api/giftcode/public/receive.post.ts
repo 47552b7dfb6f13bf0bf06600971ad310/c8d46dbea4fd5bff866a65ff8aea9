@@ -58,8 +58,8 @@ export default defineEventHandler(async (event) => {
 
     // Check Use
     if(!giftcodeData.justone){
-      const countReceiveAuth = await DB.GiftcodeHistory.count({ user: auth._id, giftcode: giftcodeData._id, server: server })
-      if(countReceiveAuth > 0) throw 'Bạn đã nhận mã này rồi'
+      const countReceiveAuth = await DB.GiftcodeHistory.count({ user: auth._id, giftcode: giftcodeData._id, server: server, role: role })
+      if(countReceiveAuth > 0) throw 'Bạn đã nhận mã này cho nhân vật ở máy chủ này rồi'
     }
     else {
       const countReceiveAuth = await DB.GiftcodeHistory.count({ user: auth._id, giftcode: giftcodeData._id })

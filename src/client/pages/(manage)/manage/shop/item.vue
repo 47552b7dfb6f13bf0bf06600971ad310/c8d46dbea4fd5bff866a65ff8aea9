@@ -159,10 +159,6 @@ const columns = [
     label: 'Tên',
     sortable: true
   },{
-    key: 'type',
-    label: 'Loại',
-    sortable: true
-  },{
     key: 'item_amount',
     label: 'Số lượng',
     sortable: true

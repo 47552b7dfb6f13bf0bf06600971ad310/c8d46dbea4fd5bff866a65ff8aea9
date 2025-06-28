@@ -31,7 +31,7 @@ const emit = defineEmits(['update:modelValue', 'update:serverData', 'update:load
 const loading = ref(true)
 
 const server = computed({
-  get: () => props.modelValue,
+  get: () => props.modelValue || '',
   set: (value) => emit('update:modelValue', value)
 }) 
 

@@ -12,11 +12,7 @@ export default defineEventHandler(async (event) => {
     const pack = await DB.ShopPack.findOne({ _id: _id }).select('name gift')
     if(!pack) throw 'Mã không tồn tại'
 
-    const giftFormat = gift.map((i : any) => ({
-      item: i._id,
-      amount: i.amount
-    }))
-
+    const giftFormat = gift.map((i : any) => ({ item: i.item._id, amount: i.amount}))
     await DB.ShopPack.updateOne({ _id: _id }, { gift: giftFormat })
 
     logAdmin(event, `Sửa vật phẩm trong gói <b>${pack.name}</b> ở cửa hàng`)

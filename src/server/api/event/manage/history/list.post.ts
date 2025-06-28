@@ -21,9 +21,7 @@ export default defineEventHandler(async (event) => {
         username : { $regex : user.toLowerCase(), $options : 'i' }
       }).select('_id')
 
-      match['user._id'] = {
-        $in: users.map(i => i._id)
-      }
+      match['user._id'] = { $in: users.map(i => i._id)}
     }
     if(!!range && !!range['start'] && !!range['end']){
       match['createdAt'] = { $gte: new Date(range['start']), $lte: new Date(range['end']) }

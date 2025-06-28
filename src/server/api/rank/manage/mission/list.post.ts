@@ -15,49 +15,14 @@ export default defineEventHandler(async (event) => {
     const match : any = { server: server, type: type }
 
     const list = await DB.GameMission
-    .aggregate([
-      { $match: match },
-      {
-        $lookup: {
-          from: "Item",
-          localField: "gift.item",
-          foreignField: "_id",
-          pipeline: [{
-            $project: { item_name: 1, item_image: 1, type: 1 },
-          }],
-          as: "giftdata"
-        }
-      },
-      {
-        $addFields: {
-          gift: {
-            $map: {
-              input: '$giftdata',
-              in: {
-                _id: '$$this._id',
-                name: '$$this.item_name',
-                image: '$$this.item_image',
-                type: '$$this.type',
-                amount: { 
-                  $getField: {
-                    field: 'amount',
-                    input: {
-                      $arrayElemAt: [ '$gift', { $indexOfArray: ['$gift.item', '$$this._id']} ]
-                    }
-                  }
-                },
-              }
-            }
-          }
-        }
-      },
-      { $project: { giftdata: 0 }},
-      { $sort: sorting },
-      { $skip: (current - 1) * size },
-      { $limit: size }
-    ])
+    .find(match)
+    .populate({ path: 'gift.item', select: 'item_id item_name item_image type'})
+    .sort(sorting)
+    .skip((current - 1) * size)
+    .limit(size)
 
     const total = await DB.GameMission.count(match)
+    
     return resp(event, { result: { list, total } })
   } 
   catch (e:any) {

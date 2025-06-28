@@ -1,5 +1,5 @@
 <template>
-  <div class="
+  <div v-if="item" class="
     relative inline-block
     cursor-pointer
     rounded-2xl
@@ -7,7 +7,7 @@
     <DataItemImage 
       class="p-1"
       :size="size"
-      :src="item.image" 
+      :src="item.image || item.item_image" 
       :type="item.type"
       @click="modal = true" 
     />
@@ -31,11 +31,11 @@
 
     <UModal v-model="modal" :ui="{ width: 'max-w-[220px] sm:max-w-[220px]' }">
       <UCard class="bg-card" :ui="{ body: { padding: 'p-4 sm:p-4' } }">
-        <DataItemImage :src="item.image" :type="item.type" :size="120" class="mx-auto" />
+        <DataItemImage :src="item.image || item.item_image" :type="item.type" :size="120" class="mx-auto" />
 
         <UiFlex type="col" class="mt-4">
           <UiText weight="semibold" align="center" class="text-sm md:text-lg mt-2 mb-0.5 max-w-[90%]">
-            {{ item.name }}
+            {{ item.name || item.item_name }}
           </UiText>
           <UiText size="xs" weight="semibold" class="line-clamp-1 mb-4" color="gray">Vật Phẩm</UiText>
           <UButton color="gray" class="px-4 md:px-6 max-w-full"  v-if="!!amount && amount > 0">x {{ toMoney(amount) }}</UButton>

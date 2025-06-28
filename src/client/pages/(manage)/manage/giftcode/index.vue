@@ -58,10 +58,6 @@
         <template #display-data="{ row }">
           <UBadge :color="row.display == 1 ? 'green' : 'gray'" variant="soft">{{ row.display == 1 ? 'Hiện' : 'Ẩn' }}</UBadge>
         </template>
-        
-        <template #updatedAt-data="{ row }">
-          {{ useDayJs().displayFull(row.updatedAt) }}
-        </template>
 
         <template #actions-data="{ row }">
           <UDropdown :items="actions(row)">
@@ -221,10 +217,6 @@ const columns = [
   },{
     key: 'display',
     label: 'Hiển thị',
-    sortable: true
-  },{
-    key: 'updatedAt',
-    label: 'Cập nhật',
     sortable: true
   },{
     key: 'actions',

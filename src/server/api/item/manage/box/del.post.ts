@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
     await DB.ItemBox.deleteOne({ _id: itembox._id })
     
     logAdmin(event, `Xóa gói vật phẩm <b>${itembox.name}</b>`)
-    return resp(event, { message: 'Xóa gói thành công' })
+    return resp(event, { message: 'Xóa thành công' })
   }
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

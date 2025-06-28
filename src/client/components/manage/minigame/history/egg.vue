@@ -37,7 +37,7 @@
         </template>
 
         <template #amount-data="{ row }">
-          <DataItem :item="{
+          <DataItem v-if="row.item" :item="{
             name: row.item.item_name,
             image: row.item.item_image,
             type: row.item.type

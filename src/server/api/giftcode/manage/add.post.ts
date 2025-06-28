@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
     await DB.Giftcode.create(body)
 
     logAdmin(event, `Thêm mã Giftcode <b>${upCode}</b>`)
-    return resp(event, { message: 'Thêm mã thành công' })
+    return resp(event, { message: 'Thêm thành công' })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

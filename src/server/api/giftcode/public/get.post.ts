@@ -26,16 +26,7 @@ export default defineEventHandler(async (event) => {
       if(countReceive >= giftcodeData.limit) throw 'Mã này đã hết lượt sử dụng'
     }
 
-    // Result
-    const result : any = JSON.parse(JSON.stringify(giftcodeData))
-    result.gift = giftcodeData.gift.map(gift => ({
-      name: (gift.item as IDBItem).item_name,
-      image: (gift.item as IDBItem).item_image,
-      type: (gift.item as IDBItem).type,
-      amount: gift.amount
-    }))
-    
-    return resp(event, { result: result })
+    return resp(event, { result: giftcodeData })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

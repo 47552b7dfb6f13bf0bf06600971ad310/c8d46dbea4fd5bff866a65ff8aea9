@@ -12,15 +12,12 @@ export default defineEventHandler(async (event) => {
     const giftcode = await DB.Giftcode.findOne({ _id: _id }).select('code gift')
     if(!giftcode) throw 'Mã không tồn tại'
 
-    const giftFormat = gift.map((i : any) => ({
-      item: i._id,
-      amount: i.amount
-    }))
+    const giftFormat = gift.map((i : any) => ({ item: i.item._id, amount: i.amount }))
 
     await DB.Giftcode.updateOne({ _id: _id }, { gift: giftFormat })
 
     logAdmin(event, `Sửa phần thưởng Giftcode <b>${giftcode.code}</b>`)
-    return resp(event, { message: 'Sửa mã thành công' })
+    return resp(event, { message: 'Sửa thành công' })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

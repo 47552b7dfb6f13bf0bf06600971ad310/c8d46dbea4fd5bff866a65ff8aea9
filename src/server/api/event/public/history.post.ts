@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     const sorting : any = { }
     sorting[sort.column] = sort.direction == 'desc' ? -1 : 1
 
-    const match : any = { user: new Types.ObjectId(userCheck) }
+    const match : any = { }
     if(!!type) match['type'] = type
     if(!!range && !!range['start'] && !!range['end']){
       match['createdAt'] = { $gte: new Date(range['start']), $lte: new Date(range['end']) }
@@ -21,6 +21,7 @@ export default defineEventHandler(async (event) => {
 
     const histories = await DB.EventHistory
     .aggregate([
+      { $match: { user: new Types.ObjectId(userCheck) }},
       {
         $lookup: {
           from: "Event",

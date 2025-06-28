@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     await DB.Shop.create(body)
 
     logAdmin(event, `Thêm vật phẩm <b>${itemData.item_name}</b> vào cửa hàng`)
-    return resp(event, { message: 'Thêm vật phẩm thành công' })
+    return resp(event, { message: 'Thêm thành công' })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

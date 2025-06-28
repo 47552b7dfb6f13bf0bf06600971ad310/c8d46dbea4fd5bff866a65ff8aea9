@@ -21,7 +21,7 @@ const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])
 
 const block = computed({
-  get: () => props.modelValue,
+  get: () => props.modelValue || '',
   set: (value) => emit('update:modelValue', value)
 }) 
 </script>

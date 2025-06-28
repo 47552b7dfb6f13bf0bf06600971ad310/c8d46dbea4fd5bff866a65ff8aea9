@@ -18,15 +18,13 @@ export default defineEventHandler(async (event) => {
     }
 
     delete body['_id']
-    const giftFormat = gift.map((i : any) => ({
-      item: i._id,
-      amount: i.amount
-    }))
+    const giftFormat = gift.map((i : any) => ({ item: i.item._id, amount: i.amount }))
     body.gift = giftFormat
+    
     await DB.ItemBox.updateOne({ _id: _id }, body)
 
     logAdmin(event, `Sửa gói vật phẩm <b>${itembox.name}</b>`)
-    return resp(event, { message: 'Sửa gói thành công' })
+    return resp(event, { message: 'Sửa thành công' })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

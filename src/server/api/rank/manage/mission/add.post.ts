@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     const getByNeed = await DB.GameMission.findOne({ server: server, type: type, need: need }).select('_id') as IDBGameMission
     if(!!getByNeed) throw 'Mốc thưởng nhiệm vụ đã tồn tại'
 
-    const giftFormat = gift.map((i : any) => ({ item: i._id, amount: i.amount}))
+    const giftFormat = gift.map((i : any) => ({ item: i.item._id, amount: i.amount}))
     body.gift = giftFormat
 
     await DB.GameMission.create(body)

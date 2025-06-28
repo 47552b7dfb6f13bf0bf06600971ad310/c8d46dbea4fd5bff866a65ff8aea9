@@ -16,8 +16,9 @@ package-lock.json
 dist/server
 
 .env
-image-*
-excel-*
-json-*
+dist/pwa/*.png
+dist/upload/image-*
+dist/excel/excel-*
+dist/upload/json-*
 
 

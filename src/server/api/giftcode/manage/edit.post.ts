@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
     await DB.Giftcode.updateOne({ _id: _id }, body)
 
     logAdmin(event, `Sửa thông tin Giftcode <b>${giftcode.code}</b>`)
-    return resp(event, { message: 'Sửa mã thành công' })
+    return resp(event, { message: 'Sửa thành công' })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

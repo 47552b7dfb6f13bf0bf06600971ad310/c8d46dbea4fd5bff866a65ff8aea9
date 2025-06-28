@@ -40,7 +40,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue', 'update:userData'])
-const userSelect = ref(props.modelValue)
+const userSelect = ref(props.modelValue || (!!props.multiple ? [] : ''))
 const select = ref(undefined)
 
 watch(userSelect, val => {

@@ -8,11 +8,11 @@
     class="grow"
   >
     <template #label>
-      {{ !!select ? select.name : 'Tìm kiếm vật phẩm' }}
+      {{ !!select ? select.item_name : 'Tìm kiếm vật phẩm' }}
     </template>
 
     <template #option="{ option: item }">
-      {{ item.name }}
+      {{ item.item_name }}
     </template>
   </USelectMenu>
 </template>
@@ -26,7 +26,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'update:itemData'])
 
-const itemSelect = ref(props.modelValue)
+const itemSelect = ref(props.modelValue || '')
 
 const select = ref()
 
@@ -47,8 +47,8 @@ const searchItem = async (key) => {
   return items.map(i => ({ 
     _id: i._id, 
     item_id: i.item_id,
-    name: i.item_name,
-    image: i.item_image,
+    item_name: i.item_name,
+    item_image: i.item_image,
     type: i.type
   })).filter(Boolean)
 }

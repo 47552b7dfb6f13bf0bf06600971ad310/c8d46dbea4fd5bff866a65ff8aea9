@@ -63,8 +63,8 @@ export default defineEventHandler(async (event) => {
 
     // Check Limit Buy
     if(shopData.limit > 0){
-      const countBuy = await DB.ShopHistory.count({ user: auth._id, item: itemData._id, server: server })
-      if(countBuy >= shopData.limit) throw `Bạn đã đạt giới hạn mua lại vật phẩm này`
+      const countBuy = await DB.ShopHistory.count({ user: auth._id, item: itemData._id, server: server, role: role })
+      if(countBuy >= shopData.limit) throw `Bạn đã đạt giới hạn mua vật phẩm này cho nhân vật của máy chủ này`
     }
 
     // Send Item To Game

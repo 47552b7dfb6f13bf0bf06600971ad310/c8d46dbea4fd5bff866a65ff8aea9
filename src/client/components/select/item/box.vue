@@ -18,7 +18,7 @@ const emit = defineEmits(['change'])
 
 const options = ref([])
 
-const item = ref(null)
+const item = ref()
 
 const select = computed(() => options.value.find(i => i._id === item.value))
 

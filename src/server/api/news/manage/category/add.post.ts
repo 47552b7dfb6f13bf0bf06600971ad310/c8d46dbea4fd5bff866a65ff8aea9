@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
     await DB.NewsCategory.create(body)
     logAdmin(event, `Thêm danh mục tin tức <b>${name}</b>`)
     
-    return resp(event, { message: 'Thêm danh mục thành công' })
+    return resp(event, { message: 'Thêm thành công' })
   } 
   catch (e:any) {
     return resp(event, { code: 400, message: e.toString() })

@@ -154,7 +154,7 @@ const columns = [
     sortable: true
   },{
     key: 'limit',
-    label: 'Giới hạn',
+    label: 'Giới hạn mua trong ngày',
     sortable: true
   },{
     key: 'pin',

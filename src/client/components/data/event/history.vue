@@ -29,11 +29,11 @@
           <UBadge color="gray" variant="soft">{{ row.server ? `${row.server}` : '...' }}</UBadge>
         </template>
 
-        <template #[`event.type-data`]="{ row }">{{ typeFormat[row.event.type] }}</template>
-
         <template #[`event.need-data`]="{ row }">
-          <UBadge variant="soft">{{ useMoney().toMoney(row.event.need) }}</UBadge>
+          <UBadge variant="soft">{{ (row.event && row.event.need) ? useMoney().toMoney(row.event.need) : '...' }}</UBadge>
         </template>
+
+        <template #[`event.type-data`]="{ row }">{{ (row.event && row.event.type) ? typeFormat[row.event.type] : '...' }}</template>
 
         <template #createdAt-data="{ row }">
           {{ useDayJs().displayFull(row.createdAt) }}

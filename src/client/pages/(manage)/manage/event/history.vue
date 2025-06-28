@@ -41,10 +41,10 @@
           <UBadge variant="soft" color="gray">{{ row.role ? `${row.role}` : '...' }}</UBadge>
         </template>
 
-        <template #[`event.type-data`]="{ row }">{{ typeFormat[row.event.type] }}</template>
+        <template #[`event.type-data`]="{ row }">{{ (row.event && row.event.type) ? typeFormat[row.event.type] : '...' }}</template>
 
         <template #[`event.need-data`]="{ row }">
-          <UiText weight="semibold">{{ useMoney().toMoney(row.event.need) }}</UiText>
+          <UiText weight="semibold">{{ (row.event && row.event.need) ? useMoney().toMoney(row.event.need) : '...' }}</UiText>
         </template>
 
         <template #createdAt-data="{ row }">

@@ -50,14 +50,15 @@
         </template>
 
         <template #[`verify.person-data`]="{ row }">
-          <span v-if="!row.verify.person">...</span>
-          <UBadge v-else variant="soft" color="gray" class="cursor-pointer" @click="viewUser(row.verify.person._id)">
+          <UBadge v-if="!!row.verify && !!row.verify?.person" variant="soft" color="gray" class="cursor-pointer" @click="viewUser(row.verify.person._id)">
             {{ row.verify.person.username }}
           </UBadge>
+
+          <span v-else>...</span>
         </template>
 
         <template #[`verify.time-data`]="{ row }">
-          {{ row.verify.time ? useDayJs().displayFull(row.verify.time) : '...' }}
+          {{ !!row.verify && row.verify?.time ? useDayJs().displayFull(row.verify.time) : '...' }}
         </template>
 
         <template #createdAt-data="{ row }">

@@ -3,13 +3,29 @@
     class="relative select-none UiImg"
     :style="`aspect-ratio: ${w} / ${h}`"
   >
-    <img
+    <NuxtImg 
+      :src="img(src)" 
+      class="object-cover w-full h-full select-none"
+      :sizes="props.imgSize"
+      :width="props.imgW"
+      :height="props.imgH"
+      quality="100"
+      format="webp"
+      :fit="fit"
+      :loading="!!preload ? 'eager' : 'lazy'"
+      :preload="preload"
+      placeholder="/images/placeholder.png"
+      :alt="props.alt" 
+      @load="onLoad"
+    />
+
+    <!-- <img
       v-if="!loading"
       :src="useMakeLink().img(imgSrc)"
       class="object-cover w-full h-full select-none"
       placeholder="/images/placeholder.png"
       :alt="props.alt" 
-    />
+    /> -->
 
     <USkeleton 
       class="absolute top-0 left-0 rounded-none w-full h-full" 
@@ -22,6 +38,7 @@
 </template>
 
 <script setup>
+const { img } = useMakeLink()
 const props = defineProps({
   src: String,
   imgSize: [ String, Number ],
@@ -34,21 +51,10 @@ const props = defineProps({
   preload: { type: Boolean, default: false },
 })
 
-const imgSrc = ref(undefined)
 const loading = ref(true)
-
-onMounted(() => {
-  if(!props.src){
-    imgSrc.value = null
-  }
-  else {
-    const ctx = new Image
-    ctx.onload = () => imgSrc.value = props.src
-    ctx.onerror = () => imgSrc.value = null
-    ctx.src = props.src
-  }
-  loading.value = false
-})
+const onLoad = (event) => {
+  if(event) loading.value = false
+}
 </script>
 
 <style lang="sass">

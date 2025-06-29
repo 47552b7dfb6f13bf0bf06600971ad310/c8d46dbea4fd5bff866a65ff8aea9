@@ -5,6 +5,7 @@
     :img-w="Number(size) * 2"
     :img-h="Number(size) * 2"
     w="1" h="1" 
+    img-size="200px"
     class="
       transition-all 
       rounded-2xl 
@@ -19,6 +20,7 @@
       maxWidth: size ? `${size}px` : null,
       maxHeight: size ? `${size}px` : null,
     }"
+    :key="key"
   ></UiImg>
 </template>
 
@@ -48,5 +50,10 @@ const imgSrc = computed(() => {
     if(!!props.type) return `/images/icon/${typeFormat[props.type]}.png`
     return null
   }
+})
+
+const key = computed(() => {
+  const now = new Date()
+  return imgSrc.value + '-' + now.getTime() + '-' + (Math.floor(Math.random() * (99 - 10)) + 10)
 })
 </script>

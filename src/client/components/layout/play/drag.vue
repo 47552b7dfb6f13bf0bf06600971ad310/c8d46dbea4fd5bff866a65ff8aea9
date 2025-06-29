@@ -7,7 +7,7 @@
         strategy: 'absolute',
         scroll: 'true'
       }">
-        <UiImg v-if="!!configStore.config.logo_image" :src="configStore.config.logo_image" w="1" h="1" img-w="100" img-h="100" class="w-full h-full overflow-hidden rounded-full" />
+        <UiImg v-if="!!configStore.config.logo_image" :src="configStore.config.logo_image" w="1" h="1" img-w="100" img-h="100" img-size="200px" class="w-full h-full overflow-hidden rounded-full" />
         <UiIcon v-else name="i-bxs-grid-alt" class="text-white" size="8" />
       </UDropdown>
     </div>

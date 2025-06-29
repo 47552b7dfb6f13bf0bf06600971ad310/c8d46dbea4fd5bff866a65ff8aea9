@@ -22,7 +22,7 @@
         </template>
 
         <template #gift-data="{ row }">
-          <DataItemList :items="row.gift" empty="Không có vật phẩm" class="min-w-[400px] max-w-[400px]" />
+          <DataItemList :items="row.gift" empty="Không có vật phẩm"  />
         </template>
 
         <template #price-data="{ row }">

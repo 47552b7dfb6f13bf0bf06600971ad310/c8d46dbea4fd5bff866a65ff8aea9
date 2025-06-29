@@ -12,6 +12,7 @@
           :src="`/images/social/facebook.png`"
           w="1" h="1"
           imgW="90" imgH="90"
+          img-size="200px"
           alt="facebook"
           @click="open(configStore.config.social.facebook)"
         ></UiImg>
@@ -21,6 +22,7 @@
           :src="`/images/social/messenger.png`"
           w="1" h="1"
           imgW="90" imgH="90"
+          img-size="200px"
           alt="messenger"
           @click="open(configStore.config.social.messenger)"
         ></UiImg>
@@ -30,6 +32,7 @@
           :src="`/images/social/zalo.png`"
           w="1" h="1"
           imgW="90" imgH="90"
+          img-size="200px"
           alt="zalo"
           @click="open(configStore.config.social.zalo)"
         ></UiImg>

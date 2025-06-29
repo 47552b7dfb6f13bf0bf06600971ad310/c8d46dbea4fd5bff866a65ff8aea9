@@ -1,6 +1,6 @@
 <template>
   <UiFlex class="select-none">
-    <img :src="configStore.config.logo_long_image" :style="{ height: `${imgSize}px` }" v-if="!!configStore.config.logo_long_image" />
+    <UiImg sizes="200px" :src="configStore.config.logo_long_image" :style="{ height: `${imgSize}px` }" v-if="!!configStore.config.logo_long_image" />
     
     <UiText weight="bold" size="2xl" color="primary" class="italic" v-else>
       {{nameArr.fristWord}}<span class="text-white text-base">{{nameArr.ensWord}}</span>

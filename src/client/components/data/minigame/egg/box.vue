@@ -8,8 +8,8 @@
 
       <UiFlex class="grow" justify="center">
         <UiFlex justify="center" v-for="(egg, i) in row" :key="i">
-          <UiImg src="/images/icon/egg.png" w="1" h="1" class="Egg max-w-[60px] md:max-w-[70px] lg:max-w-[80px] cursor-pointer" v-if="!egg.history" @click="select(key, egg.index)" />
-          <UiImg src="/images/icon/egg-open.png" w="1" h="1" class="max-w-[60px] md:max-w-[70px] lg:max-w-[80px]" v-if="!!egg.history" />
+          <UiImg src="/images/icon/egg.png" w="1" h="1" img-size="200px" class="Egg max-w-[60px] md:max-w-[70px] lg:max-w-[80px] cursor-pointer" v-if="!egg.history" @click="select(key, egg.index)" />
+          <UiImg src="/images/icon/egg-open.png" w="1" h="1" img-size="200px" class="max-w-[60px] md:max-w-[70px] lg:max-w-[80px]" v-if="!!egg.history" />
         </UiFlex>
       </UiFlex>
     </UiFlex>

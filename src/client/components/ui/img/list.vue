@@ -10,7 +10,7 @@
       "
       @click="onViewFile(item, index)"
     >
-      <UiImg :src="item" w="1" h="1" class="w-16 h-16"/>
+      <UiImg :src="item" w="1" h="1" img-size="200px" class="w-16 h-16" :key="`${item}-${index}`" />
     </UiFlex>
   </UiFlex>
 

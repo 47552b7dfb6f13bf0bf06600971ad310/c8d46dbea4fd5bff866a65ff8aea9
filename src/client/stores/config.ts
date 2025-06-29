@@ -97,10 +97,17 @@ export const useConfigStore = defineStore('config', () => {
     }
   })
 
+  const installPrompt : Ref<any> = ref()
+
+  const setInstallPrompt = (data : any) => installPrompt.value = data
+
   const bootConfig = async () => {
     const cfg : IDBConfigStore = await useAPI('config/public/get')
     Object.assign(config, cfg)
   }
 
-  return { config, bootConfig }
+  return { 
+    config, bootConfig,
+    installPrompt, setInstallPrompt
+  }
 })

@@ -63,6 +63,21 @@
         </UiFlex>
       </UiContent>
     </UModal>
+
+    <UModal v-model="modal.gift" :ui="{ width: 'max-w-[220px] sm:max-w-[220px]' }">
+      <UiContent title="Phần Thưởng" class="bg-card rounded-2xl p-4" no-dot v-if="!!gift">
+        <UiFlex type="col" v-if="!!gift.item">
+          <DataItemImage :src="gift.item.item_image" :type="gift.item.type" size="120" />
+
+          <UiFlex type="col" class="w-full mt-3">
+            <UiText weight="bold" align="center" size="lg" class="max-w-[90%] leading-[1.5rem] mb-2">
+              {{ gift.item.name || gift.item.item_name }}
+            </UiText>
+            <UBadge size="md" class="bg-gray px-4 md:px-6 max-w-full" v-if="!!gift.amount && gift.amount > 0">x {{ useMoney().toMoney(gift.amount) }}</UBadge>
+          </UiFlex>
+        </UiFlex>
+      </UiContent>
+    </UModal>
   </div>
 </template>
 
@@ -75,7 +90,8 @@ const props = defineProps({
 
 const modal = ref({
   dam: false,
-  reset: false
+  reset: false,
+  gift: false
 })
 
 const state = ref({
@@ -95,6 +111,7 @@ const loading = ref(true)
 const damming = ref(false)
 const reseting = ref(false)
 const reload = ref(0)
+const gift = ref()
 
 const validate = (state) => {
   const errors = []
@@ -133,10 +150,14 @@ const dam = async () => {
     damming.value = true
     const data = await useAPI('minigame/egg/public/damming', JSON.parse(JSON.stringify(state.value)))
 
+    gift.value = data
     damming.value = false
     modal.value.dam = false
     reload.value++
     getEgg()
+
+    await nextTick()
+    modal.value.gift = true
   }
   catch {
     damming.value = false

@@ -36,7 +36,7 @@
         </template>
 
         <template #gift-data="{ row }">
-          <DataItemList :items="row.gift" class="min-w-[400px] max-w-[400px]" />
+          <DataItemList :items="row.gift"  />
         </template>
 
         <template #display-data="{ row }">

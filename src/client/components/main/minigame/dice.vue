@@ -46,6 +46,24 @@
       <UiTitle name="Lịch Sử Chơi" icon="i-material-symbols-history" class="mb-4" />
       <DataMinigameDiceHistory :reload="reload" />
     </div>
+
+    <UModal v-model="modal.gift" :ui="{ width: 'max-w-[220px] sm:max-w-[220px]' }">
+      <UiContent title="Kết Quả" class="bg-card rounded-2xl p-4" no-dot>
+        <UiFlex type="col">
+          <DataItemImage type="coin" size="120" class="mb-3" />
+
+          <UiText weight="bold" align="center" size="lg" class="max-w-[90%] leading-[1.5rem] mb-1 ">
+            {{ receive < 0 ? 'Thua' : 'Thắng' }}
+          </UiText>
+          <UiText align="center" weight="semibold" color="rose" size="sm" v-if="receive < 0">
+            {{ toMoney(receive*-1) }} Xu
+          </UiText>
+          <UiText align="center" weight="semibold" color="green" size="sm" v-else>
+            {{ toMoney(receive) }} Xu
+          </UiText>
+        </UiFlex>
+      </UiContent>
+    </UModal>
   </div>
 </template>
 
@@ -60,7 +78,8 @@ const props = defineProps({
 })
 
 const modal = ref({
-  limit: false
+  limit: false,
+  gift: false
 })
 
 const loading = ref(false)
@@ -69,6 +88,7 @@ const rolling = ref(false)
 const fastCoin = ref(10000)
 const dices = ref([0,0,0])
 const jar = ref(0)
+const receive = ref()
 
 const state = ref({
   dice1: null,
@@ -99,14 +119,18 @@ const plusFast = (i) => {
 const onRolling = (data) => {
   rolling.value = true
 
-  setTimeout(() => {
+  setTimeout(async () => {
     rolling.value = false
-    setTimeout(() => {
+    setTimeout(async () => {
       dices.value = data.dices
       jar.value = data.jar
-      setTimeout(() => {
+      receive.value = data.receive
+      setTimeout(async () => {
         reload.value++
         loading.value = false
+
+        await nextTick()
+        modal.value.gift = true
       }, 1050)
     }, 50)
   }, 2000)

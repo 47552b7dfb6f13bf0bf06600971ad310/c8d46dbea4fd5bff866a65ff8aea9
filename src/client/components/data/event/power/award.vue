@@ -16,7 +16,8 @@
         </template>
 
         <template #gift-data="{ row }">
-          <DataItemList :items="row.gift" class="min-w-[400px] max-w-[400px]" />
+          <DataItemListMini :items="row.gift" :max="3" class="md:hidden"/>
+          <DataItemList :items="row.gift" class="max-md:hidden" />
         </template>
       </UTable>
     </UCard>

@@ -238,7 +238,8 @@ export default defineEventHandler(async (event) => {
     const newConfig = await DB.Dice.findOne().select('jar.now')
     return resp(event, { result: {
       dices: dices,
-      jar: newConfig.jar.now
+      jar: newConfig.jar.now,
+      receive: coinReceive
     }})
   } 
   catch (e:any) {

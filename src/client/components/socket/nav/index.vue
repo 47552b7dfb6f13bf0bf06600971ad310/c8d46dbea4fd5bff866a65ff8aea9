@@ -10,7 +10,7 @@
           :class="{ 'color-blue-light bg-anim-light': socketStore.tab == item.key }"
           @click="select(item)"
         >
-          <span v-if="socketStore.tab == item.key">{{ item.title }}</span>
+          <span>{{ item.title }}</span>
         </UButton>
       </UChip>
 
@@ -23,16 +23,18 @@
           :class="{ 'color-blue-light bg-anim-light': socketStore.tab == item.key }"
           @click="select(item)"
         >
-          <span v-if="socketStore.tab == item.key">{{ item.title }}</span>
+          <span>{{ item.title }}</span>
         </UButton>
       </UChip>
 
       <UButton icon="i-bx-x" class="ml-auto" square color="gray" v-if="!!props.hasClose" @click="emit('close')" />
     </UiFlex>
 
-    <SocketChat class="w-full grow" v-if="socketStore.tab == 'chat-global'" />
-    <LazySocketNotify class="w-full grow" v-else-if="socketStore.tab == 'notify-single'" />
-    <DataEmpty v-else class="w-full grow" text="Vui lòng chọn 1 mục để xem" />
+    <Transition name="page" mode="out-in">
+      <SocketChat class="w-full grow" v-if="socketStore.tab == 'chat-global'" />
+      <LazySocketNotify class="w-full grow" v-else-if="socketStore.tab == 'notify-single'" />
+      <DataEmpty v-else class="w-full grow" text="Vui lòng chọn 1 mục để xem" />
+    </Transition>
   </UiFlex>
 </template>
 

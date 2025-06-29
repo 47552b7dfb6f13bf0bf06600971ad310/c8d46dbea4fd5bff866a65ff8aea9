@@ -2,7 +2,7 @@
   <UiFlex type="col" justify="center" class="MiniBanner rounded-2xl py-8 mb-4">
     <UiFlex class="gap-4 w-full">
       <UiImg 
-        :src="!!type ? `/images/banner/${type}.png` : img" 
+        :src="!!type ? `/images/banner/${type}-min.png` : img" 
         class="
           bounce-anim 
           md:w-[80px] md:min-w-[80px] md:max-w-[80px]

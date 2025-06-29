@@ -18,27 +18,27 @@
         absolute
         bottom-0 right-0
         rounded-2xl
-        px-[7px] py-[1px]
-        bg-gray-700
+        px-[6px] py-[1px]
+        bg-primary-800
         cursor-pointer
       "
       @click="modal = true" 
     >
-      <UiText align="center" weight="bold" style="color:#fff; font-size: 10px;" >
+      <UiText align="center" weight="bold" style="color:#fff; font-size: 11px;" >
         {{ miniMoney(amount) }}
       </UiText>
     </UiFlex>
 
     <UModal v-model="modal" :ui="{ width: 'max-w-[220px] sm:max-w-[220px]' }">
       <UCard class="bg-card" :ui="{ body: { padding: 'p-4 sm:p-4' } }">
-        <DataItemImage :src="item.image || item.item_image" :type="item.type" :size="120" class="mx-auto" />
+        <DataItemImage :src="item.image || item.item_image" :type="item.type" :size="120" class="mx-auto mb-2" />
 
         <UiFlex type="col" class="mt-4">
-          <UiText weight="semibold" align="center" class="text-sm md:text-lg mt-2 mb-0.5 max-w-[90%]">
+          <UiText weight="bold" align="center" size="lg" class="max-w-[90%] leading-[1.5rem] mb-2">
             {{ item.name || item.item_name }}
           </UiText>
-          <UiText size="xs" weight="semibold" class="line-clamp-1 mb-4" color="gray">Vật Phẩm</UiText>
-          <UButton color="gray" class="px-4 md:px-6 max-w-full"  v-if="!!amount && amount > 0">x {{ toMoney(amount) }}</UButton>
+          <UiText size="xs" weight="semibold" class="line-clamp-1" color="gray">Vật Phẩm</UiText>
+          <UBadge size="md" class="bg-gray px-4 md:px-6 max-w-full mt-3" v-if="!!amount && amount > 0">x {{ toMoney(amount) }}</UBadge>
         </UiFlex>
       </UCard>
     </UModal>

@@ -5,7 +5,7 @@
         {{ pack.name }}
       </UiText>
 
-      <DataItemListMini justify="center" :items="pack.gift" :max="max" />
+      <DataItemListMini justify="center" :items="pack.gift" :max="max" :no-view="true" />
 
       <UiText 
         size="xs" 

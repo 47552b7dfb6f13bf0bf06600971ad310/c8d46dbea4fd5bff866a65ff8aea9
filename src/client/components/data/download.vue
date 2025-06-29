@@ -13,7 +13,7 @@
       </UiFlex>
     </div>
 
-    <UModal v-model="iosPWA" preventClose :ui="{ width: 'sm:max-w-[400px]' }">
+    <UModal v-model="iosPWA" :ui="{ width: 'sm:max-w-[400px]' }">
       <UiContent title="IPhone và IPad" sub="Hướng dẫn cài đặt trò chơi toàn màn hình" class="bg-card rounded-2xl p-4">
          <template #more>
           <UButton icon="i-bx-x" color="gray" class="ml-auto" size="2xs" square @click="iosPWA = false"></UButton>

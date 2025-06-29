@@ -61,6 +61,7 @@
 </template>
 
 <script setup>
+const props = defineProps(['custom'])
 const runtimeConfig = useRuntimeConfig()
 const configStore = useConfigStore()
 const authStore = useAuthStore()

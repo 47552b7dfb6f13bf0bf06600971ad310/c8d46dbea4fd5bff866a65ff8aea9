@@ -78,6 +78,7 @@ const download = async (url, type) => {
   if(type == 'android' && !configStore.config.game.mobile && !!configStore.installPrompt && !url){
     await configStore.installPrompt.prompt()
     configStore.setInstallPrompt(null)
+    return
   }
 
   if(!url) return useNotify().error('Chúng tôi đang cập nhật link tải, vui lòng quay lại sau')

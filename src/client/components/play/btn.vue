@@ -71,7 +71,11 @@ const modal = ref(false)
 const iosPWA = ref(false)
 
 const open = () => {
-  modal.value = true
+  if(!!configStore.config.game.mobile) return modal.value = true
+
+  const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true
+  if(!isPWA) return modal.value = true
+  else return playWeb()
 }
 
 const download = async (url, type) => {

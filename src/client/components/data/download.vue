@@ -8,8 +8,8 @@
       <UiText class="text-xs md:text-base mb-1">Chơi Nhanh</UiText>
       <UiFlex class="gap-2">
         <UiIcon name="i-bx-world" class="cursor-pointer w-6 h-6 md:w-8 md:h-8" v-if="!configStore.config.game.mobile" @click="playWeb()"/>
-        <UiIcon name="i-bxl-android" class="cursor-pointer w-6 h-6 md:w-8 md:h-8" @click="download(configStore.config.download.apk, 'android')"/>
-        <UiIcon name="i-bxl-apple" class="cursor-pointer w-6 h-6 md:w-8 md:h-8" @click="download(configStore.config.download.ios, 'ios')" />
+        <UiIcon name="i-bxl-android" class="cursor-pointer w-6 h-6 md:w-8 md:h-8" v-if="!isPWA" @click="download(configStore.config.download.apk, 'android')"/>
+        <UiIcon name="i-bxl-apple" class="cursor-pointer w-6 h-6 md:w-8 md:h-8" v-if="!isPWA" @click="download(configStore.config.download.ios, 'ios')" />
       </UiFlex>
     </div>
 
@@ -41,6 +41,7 @@ const configStore = useConfigStore()
 const authStore = useAuthStore()
 
 const loading = ref(false)
+const isPWA = ref(false)
 const iosPWA = ref(false)
 
 const download = async (url, type) => {
@@ -48,6 +49,7 @@ const download = async (url, type) => {
   if(type == 'android' && !configStore.config.game.mobile && !!configStore.installPrompt && !url){
     await configStore.installPrompt.prompt()
     configStore.setInstallPrompt(null)
+    return
   }
 
   if(!url) return useNotify().error('Chúng tôi đang cập nhật link tải, vui lòng quay lại sau')
@@ -73,4 +75,10 @@ const playWeb = async () => {
     loading.value = false
   }
 }
+
+onMounted(() => {
+  if(!configStore.config.game.mobile){ // Là Game H5
+    isPWA.value = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true
+  }
+})
 </script>

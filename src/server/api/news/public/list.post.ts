@@ -15,9 +15,9 @@ export default defineEventHandler(async (event) => {
 
     const list = await DB.News
     .find(filter)
-    .select('category title description og_image pin updatedAt')
+    .select('category title description og_image pin createdAt')
     .populate({ path: 'category', select: 'name color' })
-    .sort({ pin: -1, updatedAt: -1 })
+    .sort({ pin: -1, createdAt: -1 })
     .limit(size)
     .skip((current - 1) * size)
 

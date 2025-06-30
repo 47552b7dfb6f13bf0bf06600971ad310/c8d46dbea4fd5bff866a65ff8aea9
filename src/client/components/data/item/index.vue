@@ -19,12 +19,12 @@
         bottom-0 right-0
         rounded-2xl
         px-[6px] py-[1px]
-        bg-primary-800
+        bg-primary-800 font-medium text-xs text-white
         cursor-pointer
       "
       @click="modal = true" 
     >
-      <UiText align="center" weight="bold" style="color:#fff; font-size: 11px;" >
+      <UiText align="center" weight="bold" >
         {{ miniMoney(amount) }}
       </UiText>
     </UiFlex>

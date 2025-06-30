@@ -7,12 +7,15 @@
         v-for="(data, index) in items" :key="index"
         :src="imgSrc(data.item?.item_image, data.item?.type)"
         :alt="data.item?.item_name"
-        :chip-text="'x'+useMoney().miniMoney(data.amount)"
+        :chip-text="useMoney().miniMoney(data.amount)"
         :chip-color="amountColor"
         chip-position="bottom-right"
         :ui="{
           chip: {
-            base: 'bg-gray-600 dark:bg-gray-700 text-white dark:text-white ring-0 font-bold p-1.5 py-2'
+            base: '!bg-primary-800 !text-white rounded-2xl !ring-0 break-words font-bold',
+            size: {
+              lg: '!px-[6px] py-[1px] text-xs h-auto',
+            }
           }
         }"
       />

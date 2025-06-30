@@ -12,6 +12,7 @@ export default defineEventHandler(async (event) => {
     .find({ type: type, display: 1 })
     .populate({ path: 'gift.item', select: 'item_id item_name item_image type'})
     .select('need type gift')
+    .sort({ need: 1 })
 
     const format = JSON.parse(JSON.stringify(list))
     

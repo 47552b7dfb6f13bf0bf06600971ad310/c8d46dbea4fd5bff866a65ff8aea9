@@ -120,7 +120,17 @@ export default defineEventHandler(async (event) => {
     })
 
     // Update User
-    await DB.User.updateOne({ _id: auth._id }, { $inc: { 'currency.coin': parseInt(price) * -1 }})
+    await DB.User.updateOne({ _id: auth._id },{
+      $inc: {
+        'currency.coin': parseInt(price) * -1,
+        'spend.total.coin': price,
+        'spend.day.coin': price,
+        'spend.month.coin': price,
+        'spend.total.count': 1,
+        'spend.day.count': 1,
+        'spend.month.count': 1,
+      }
+    })
 
     // Update Egg User
     if(rowNumber == 1 && index == 1) await DB.EggUser.updateOne({ user: auth._id }, { one: [], two: [], three: [], four: [], five: [], six: [] })

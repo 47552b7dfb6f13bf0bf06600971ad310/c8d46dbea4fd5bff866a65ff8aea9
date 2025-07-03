@@ -39,7 +39,7 @@ export default async (server? : string) => {
           if(role.rank > 10) throw `Xếp hạng [${role.rank}] không hợp lệ`
           if(role[`${processEvent.type}`] < 1) throw `Chỉ số xếp hạng [${role[`${processEvent.type}`]}] không hợp lệ`
 
-          const rankAward : any = processEvent.award.find(award => award.rank === role.rank)
+          const rankAward : any = processEvent.award.find(award => award.rank == role.rank)
           if(!rankAward || (!!rankAward && rankAward.gift.length == 0)) throw `Phần quà cho hạng ${role.rank} chưa được thiết lập`
 
           const user = userMap.get(role.account) as IDBUser

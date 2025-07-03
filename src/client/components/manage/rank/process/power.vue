@@ -341,6 +341,5 @@ const sendAction = async (_id) => {
   }
 }
 
-
 getList()
 </script>

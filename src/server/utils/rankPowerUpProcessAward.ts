@@ -107,8 +107,8 @@ export default async (server? : string) => {
             account: user.username,
             server_id: processEvent.server,
             role_id: role.role_id,
-            title: 'Web Power Up Event',
-            content: 'Vật phẩm nhận từ sự kiện tăng tiến lực chiến',
+            title: `TOP ${role.rank} - Web Power Up Event`,
+            content: 'Vật phẩm nhận từ sự kiện tăng tiến lực chiến trên website',
             items: giftItem
           })
           if(Object.keys(giftCurrency).length) await DB.User.updateOne({ _id: user._id },{ $inc: giftCurrency })

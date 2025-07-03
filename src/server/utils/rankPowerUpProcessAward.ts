@@ -84,7 +84,8 @@ export default async (server? : string) => {
         try {
           if(role.power < 1) throw `Chỉ số xếp hạng [${role.power}] không hợp lệ`
 
-          const rankAward : any = processEvent.award.find(award => award.rank == role.rank)
+          const awardFormat = JSON.parse(JSON.stringify(processEvent.award))
+          const rankAward : any = awardFormat.find((award : any) => award.rank == role.rank)
           if(!rankAward || (!!rankAward && rankAward.gift.length == 0)) throw `Phần quà cho hạng ${role.rank} chưa được thiết lập`
 
           const user = userMap.get(role.account) as IDBUser

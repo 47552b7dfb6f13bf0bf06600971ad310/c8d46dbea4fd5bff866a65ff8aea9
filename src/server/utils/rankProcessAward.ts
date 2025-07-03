@@ -20,6 +20,7 @@ export default async (server? : string) => {
     .select('server type award end') 
     .populate({ path: 'award.gift.item', select: 'item_id type'}) as Array<IDBGameRankProcess>
 
+
     await Promise.all(listProcess.map(async (processEvent) => {
       const typeInfo = {
         power: { text: 'lực chiến', title: 'Web TOP Power' },
@@ -39,7 +40,8 @@ export default async (server? : string) => {
           if(role.rank > 10) throw `Xếp hạng [${role.rank}] không hợp lệ`
           if(role[`${processEvent.type}`] < 1) throw `Chỉ số xếp hạng [${role[`${processEvent.type}`]}] không hợp lệ`
 
-          const rankAward : any = processEvent.award.find(award => award.rank == role.rank)
+          const awardFormat = JSON.parse(JSON.stringify(processEvent.award))
+          const rankAward : any = awardFormat.find((award : any) => award.rank.toString() == role.rank.toString())
           if(!rankAward || (!!rankAward && rankAward.gift.length == 0)) throw `Phần quà cho hạng ${role.rank} chưa được thiết lập`
 
           const user = userMap.get(role.account) as IDBUser

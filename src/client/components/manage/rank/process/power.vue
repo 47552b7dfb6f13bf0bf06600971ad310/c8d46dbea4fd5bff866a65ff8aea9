@@ -32,7 +32,7 @@
 
         <template #actions-data="{ row }">
           <UDropdown :items="actions(row)">
-            <UButton color="gray" icon="i-bx-dots-horizontal-rounded" :disabled="loading.del"/>
+            <UButton color="gray" icon="i-bx-dots-horizontal-rounded" :disabled="!!loading.del || !!loading.send"/>
           </UDropdown>
         </template>
       </UTable>
@@ -212,7 +212,8 @@ const loading = ref({
   add: false,
   edit: false,
   award: false,
-  del: false
+  del: false,
+  send: false
 })
 
 // Actions
@@ -231,6 +232,10 @@ const actions = (row) => [
       stateView.value._id = row._id
       modal.value.log = true
     }
+  }],[{
+    label: 'Trả thưởng sớm',
+    icon: 'i-bx-mail-send',
+    click: () => sendAction(row._id)
   }],[{
     label: 'Sửa thông tin',
     icon: 'i-bx-pencil',
@@ -322,6 +327,20 @@ const delAction = async (_id) => {
     loading.value.del = false
   }
 }
+
+const sendAction = async (_id) => {
+  try {
+    loading.value.send = true
+    await useAPI('rank/manage/process/send', { _id })
+
+    loading.value.send = false
+    getList()
+  }
+  catch (e) {
+    loading.value.send = false
+  }
+}
+
 
 getList()
 </script>

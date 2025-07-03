@@ -8,8 +8,9 @@ export default defineEventHandler(async (event) => {
     const { _id } = await readBody(event)
     if(!_id) throw 'Dữ liệu đầu vào không hợp lệ'
 
-    const processEvent = await DB.GameRankProcess.findOne({ _id: _id }).select('server type') as IDBGameRankProcess
+    const processEvent = await DB.GameRankProcess.findOne({ _id: _id }).select('server type send') as IDBGameRankProcess
     if(!processEvent) throw 'Tiến trình không tồn tại'
+    if(!!processEvent.send) throw 'Phần quà đã được trao'
 
     await rankProcessAward(processEvent.server) 
 

@@ -41,6 +41,9 @@ const columns = [
     key: 'rank',
     label: 'Hạng'
   },{
+    key: 'server',
+    label: 'Máy chủ',
+  },{
     key: 'role_name',
     label: 'Nhân vật',
   },{

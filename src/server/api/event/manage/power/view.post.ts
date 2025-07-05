@@ -23,24 +23,29 @@ export default defineEventHandler(async (event) => {
     }
     
     const data = await DB.GameRankPowerUp.aggregate([
+      { $match: {  process: new Types.ObjectId(processEvent._id) }},
       {
         $lookup: {
           from: "GameRankPowerUpProcess",
-          localField: "process",
-          foreignField: "_id",
+          let: { processId: "$process", createdAt: "$createdAt" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$_id", "$$processId"] },
+                    { $lte: ["$start", "$$createdAt"] },
+                    { $gte: ["$end", "$$createdAt"] }
+                  ]
+                }
+              }
+            },
+            { $project: { _id: 1 } }
+          ],
           as: "processData"
         }
       },
-      { $unwind: "$processData" },
-      { $match: { 
-        process: new Types.ObjectId(processEvent._id),
-        $expr: {
-          $and: [
-            { $gte: ["$createdAt", "$processData.start"] },
-            { $lte: ["$createdAt", "$processData.end"] }
-          ]
-        }
-      }},
+      { $match: { processData: { $ne: [] } } },
       {
         $group: {
           _id: {
@@ -69,9 +74,7 @@ export default defineEventHandler(async (event) => {
           }
         }
       },
-      { $project: {
-          _id: 0, maxPower: 0, minPower: 0
-      }},
+      { $project: {  _id: 0, maxPower: 0, minPower: 0 }},
       { $match: match },
       { $sort: { rank: 1 } },
       {

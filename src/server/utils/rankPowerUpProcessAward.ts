@@ -28,24 +28,29 @@ export default async (processEventID? : Types.ObjectId) => {
 
       // Get Ranks
       const ranks = await DB.GameRankPowerUp.aggregate([
+        { $match: {  process: new Types.ObjectId(processEvent._id) }},
         {
           $lookup: {
             from: "GameRankPowerUpProcess",
-            localField: "process",
-            foreignField: "_id",
+            let: { processId: "$process", createdAt: "$createdAt" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ["$_id", "$$processId"] },
+                      { $lte: ["$start", "$$createdAt"] },
+                      { $gte: ["$end", "$$createdAt"] }
+                    ]
+                  }
+                }
+              },
+              { $project: { _id: 1 } }
+            ],
             as: "processData"
           }
         },
-        { $unwind: "$processData" },
-        { $match: { 
-          process: new Types.ObjectId(processEvent._id),
-          $expr: {
-            $and: [
-              { $gte: ["$createdAt", "$processData.start"] },
-              { $lte: ["$createdAt", "$processData.end"] }
-            ]
-          }
-        }},
+        { $match: { processData: { $ne: [] } } },
         {
           $group: {
             _id: {
@@ -66,6 +71,8 @@ export default async (processEventID? : Types.ObjectId) => {
             power: { $subtract: ["$maxPower", "$minPower"] }
           }
         },
+        { $sort: { power: -1 } },
+        { $limit: maxRank },
         {
           $setWindowFields: {
             sortBy: { power: -1 },
@@ -74,8 +81,7 @@ export default async (processEventID? : Types.ObjectId) => {
             }
           }
         },
-        { $project: { _id: 0, maxPower: 0, minPower: 0 }},
-        { $match: { rank: { $lte: maxRank }} }
+        { $project: { _id: 0, maxPower: 0, minPower: 0 }}
       ])
 
       const usernames = ranks.map((role : any) => role.account)

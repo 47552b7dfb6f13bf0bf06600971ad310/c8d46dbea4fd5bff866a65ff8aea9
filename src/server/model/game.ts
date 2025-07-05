@@ -48,6 +48,7 @@ export const DBGameRankPowerUp = (mongoose : Mongoose) => {
     timestamps: true
   })
 
+  schema.index({ createdAt: 1 })
   const model = mongoose.model('GameRankPowerUp', schema, 'GameRankPowerUp')
   return model 
 }

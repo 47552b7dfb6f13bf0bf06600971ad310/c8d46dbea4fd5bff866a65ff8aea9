@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     if(!size || !current) throw 'Dữ liệu phân trang sai'
     if(!fetchID) throw 'Không tìm thấy ID tiến trình'
 
-    const processEvent = await DB.GameRankPowerUpProcess.findOne({ _id: fetchID }).select('server') as IDBGameRankPowerUpProcess
+    const processEvent = await DB.GameRankPowerUpProcess.findOne({ _id: fetchID }).select('_id') as IDBGameRankPowerUpProcess
     if(!processEvent) throw 'Tiến trình không tồn tại'
 
     const match : any = {}
@@ -21,28 +21,34 @@ export default defineEventHandler(async (event) => {
     }
     
     const data = await DB.GameRankPowerUp.aggregate([
+      { $match: {  process: new Types.ObjectId(processEvent._id) }},
       {
         $lookup: {
           from: "GameRankPowerUpProcess",
-          localField: "process",
-          foreignField: "_id",
+          let: { processId: "$process", createdAt: "$createdAt" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$_id", "$$processId"] },
+                    { $lte: ["$start", "$$createdAt"] },
+                    { $gte: ["$end", "$$createdAt"] }
+                  ]
+                }
+              }
+            },
+            { $project: { _id: 1 } }
+          ],
           as: "processData"
         }
       },
-      { $unwind: "$processData" },
-      { $match: { 
-        process: new Types.ObjectId(processEvent._id),
-        $expr: {
-          $and: [
-            { $gte: ["$createdAt", "$processData.start"] },
-            { $lte: ["$createdAt", "$processData.end"] }
-          ]
-        }
-      }},
+      { $match: { processData: { $ne: [] } } },
       {
         $group: {
           _id: {
             account: "$account",
+            server: "$server",
             role_id: "$role_id"
           },
           maxPower: { $max: "$power" },
@@ -53,6 +59,7 @@ export default defineEventHandler(async (event) => {
       {
         $addFields: {
           account: "$_id.account",
+          server: "$_id.server",
           role_id: "$_id.role_id",
           power: { $subtract: ["$maxPower", "$minPower"] }
         }
@@ -65,14 +72,12 @@ export default defineEventHandler(async (event) => {
           }
         }
       },
-      { $project: {
-          _id: 0, maxPower: 0, minPower: 0
-      }},
+      { $project: {  _id: 0, maxPower: 0, minPower: 0 }},
       { $match: match },
+      { $sort: { rank: 1 } },
       {
         $facet: {
           list: [
-            { $sort: { rank: 1 } },
             { $skip: (current - 1) * size },
             { $limit: size },
           ],

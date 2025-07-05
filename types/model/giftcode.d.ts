@@ -7,7 +7,7 @@ export interface IDBGiftcode {
   updatedAt: Date
   code: string
   limit: number
-  servers: Array<Types.ObjectId>
+  servers: Array<string>
   users: Array<Types.ObjectId>
   public: boolean
   justone: boolean

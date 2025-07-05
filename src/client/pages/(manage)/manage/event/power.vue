@@ -14,8 +14,11 @@
         :columns="selectedColumns"
         :rows="list"
       >
-        <template #server-data="{ row }">
-          <UBadge color="gray" variant="soft">{{ row.server }}</UBadge>
+        <template #servers-data="{ row }">
+          <UiText weight="semibold" v-if="!row.servers || row.servers.length == 0">...</UiText>
+          <UiFlex v-else wrap class="gap-0.5">
+            <UBadge variant="soft" color="gray" v-for="i in row.servers" :key="i">{{ i }}</UBadge>
+          </UiFlex>
         </template>
         
         <template #start-data="{ row }">
@@ -36,7 +39,7 @@
 
         <template #actions-data="{ row }">
           <UDropdown :items="actions(row)">
-            <UButton color="gray" icon="i-bx-dots-horizontal-rounded" :disabled="loading.del"/>
+            <UButton color="gray" icon="i-bx-dots-horizontal-rounded" :disabled="!!loading.del || !!loading.send"/>
           </UDropdown>
         </template>
       </UTable>
@@ -55,8 +58,8 @@
           <UInput v-model="stateAdd.name" />
         </UFormGroup>
 
-        <UFormGroup label="Máy chủ">
-          <SelectGameServer v-model="stateAdd.server" />
+        <UFormGroup label="Máy chủ">
+          <SelectGameServers v-model="stateAdd.servers" />
         </UFormGroup>
 
         <UFormGroup label="Bắt đầu">
@@ -81,8 +84,8 @@
           <UInput v-model="stateEdit.name" />
         </UFormGroup>
 
-        <UFormGroup label="Máy chủ">
-          <SelectGameServer v-model="stateEdit.server" />
+        <UFormGroup label="Máy chủ">
+          <SelectGameServers v-model="stateEdit.servers" />
         </UFormGroup>
 
         <UFormGroup label="Bắt đầu">
@@ -155,7 +158,7 @@ const columns = [
     key: 'name',
     label: 'Tiêu đề',
   },{
-    key: 'server',
+    key: 'servers',
     label: 'Máy chủ',
   },{
     key: 'start',
@@ -198,7 +201,7 @@ watch(() => page.value.sort.direction, () => getList())
 // State
 const stateAdd = ref({
   name: null,
-  server: null,
+  servers: [],
   start: null,
   end: null,
   award: []
@@ -206,7 +209,7 @@ const stateAdd = ref({
 const stateEdit = ref({
   _id: null,
   name: null,
-  server: null,
+  servers: null,
   start: null,
   end: null,
   active: null,
@@ -229,7 +232,8 @@ const modal = ref({
 })
 
 watch(() => modal.value.add, (val) => !val && (stateAdd.value = {
-  server: null,
+  name: null,
+  servers: [],
   start: null,
   end: null,
   award: []
@@ -241,7 +245,8 @@ const loading = ref({
   add: false,
   edit: false,
   award: false,
-  del: false
+  del: false,
+  send: false
 })
 
 // Actions
@@ -260,6 +265,10 @@ const actions = (row) => [
       stateView.value._id = row._id
       modal.value.log = true
     }
+  }],[{
+    label: 'Trả thưởng sớm',
+    icon: 'i-bx-mail-send',
+    click: () => sendAction(row._id)
   }],[{
     label: 'Sửa thông tin',
     icon: 'i-bx-pencil',
@@ -349,6 +358,19 @@ const delAction = async (_id) => {
   }
   catch (e) {
     loading.value.del = false
+  }
+}
+
+const sendAction = async (_id) => {
+  try {
+    loading.value.send = true
+    await useAPI('event/manage/power/send', { _id })
+
+    loading.value.send = false
+    getList()
+  }
+  catch (e) {
+    loading.value.send = false
   }
 }
 

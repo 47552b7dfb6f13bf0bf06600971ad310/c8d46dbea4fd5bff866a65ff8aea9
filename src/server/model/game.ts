@@ -3,7 +3,7 @@ import type { IDBGameRankPowerUpProcess, IDBGameRankPowerUpProcessLog, IDBGameRa
 
 export const DBGameRankPowerUpProcess = (mongoose : Mongoose) => {
   const schema = new mongoose.Schema<IDBGameRankPowerUpProcess>({ 
-    server: { type: String, index: true },
+    servers: [{ type: String }],
     name: { type: String },
     start: { type: Date, index: true },
     end: { type: Date, index: true },

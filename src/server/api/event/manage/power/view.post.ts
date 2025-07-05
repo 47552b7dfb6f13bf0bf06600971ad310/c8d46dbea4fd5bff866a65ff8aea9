@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     if(!size || !current || !search) throw 'Dữ liệu phân trang sai'
     if(!fetchID) throw 'Không tìm thấy ID tiến trình'
 
-    const processEvent = await DB.GameRankPowerUpProcess.findOne({ _id: fetchID }).select('server') as IDBGameRankPowerUpProcess
+    const processEvent = await DB.GameRankPowerUpProcess.findOne({ _id: fetchID }).select('_id') as IDBGameRankPowerUpProcess
     if(!processEvent) throw 'Tiến trình không tồn tại'
 
     const match : any = {}
@@ -45,6 +45,7 @@ export default defineEventHandler(async (event) => {
         $group: {
           _id: {
             account: "$account",
+            server: "$server",
             role_id: "$role_id"
           },
           maxPower: { $max: "$power" },
@@ -55,6 +56,7 @@ export default defineEventHandler(async (event) => {
       {
         $addFields: {
           account: "$_id.account",
+          server: "$_id.server",
           role_id: "$_id.role_id",
           power: { $subtract: ["$maxPower", "$minPower"] }
         }
@@ -71,10 +73,10 @@ export default defineEventHandler(async (event) => {
           _id: 0, maxPower: 0, minPower: 0
       }},
       { $match: match },
+      { $sort: { rank: 1 } },
       {
         $facet: {
           list: [
-            { $sort: { rank: 1 } },
             { $skip: (current - 1) * size },
             { $limit: size },
           ],

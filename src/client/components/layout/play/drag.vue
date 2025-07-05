@@ -115,7 +115,7 @@ const menu = computed(() => {
     const action = [{
       label: 'Quản Trị Viên',
       icon: 'i-bxs-shield',
-      click: () => useTo().navigateToSSL('/admin')
+      click: () => useTo().navigateToSSL('/manage')
     }]
 
     if(!!props.admin && !!playCookie.value.user){

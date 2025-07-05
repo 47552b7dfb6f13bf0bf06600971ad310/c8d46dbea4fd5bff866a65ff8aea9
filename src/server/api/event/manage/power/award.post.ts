@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     const { _id, award } = body
     if(!_id || !award) throw 'Dữ liệu đầu vào không hợp lệ'
 
-    const processEvent = await DB.GameRankPowerUpProcess.findOne({ _id: _id }).select('server') as IDBGameRankPowerUpProcess
+    const processEvent = await DB.GameRankPowerUpProcess.findOne({ _id: _id }).select('servers') as IDBGameRankPowerUpProcess
     if(!processEvent) throw 'Tiến trình không tồn tại'
 
     const formatAward = award.map((i : any) => ({
@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
 
     await DB.GameRankPowerUpProcess.updateOne({ _id: processEvent._id }, { award: formatAward })
 
-    logAdmin(event, `Sửa phần thưởng sự kiện tăng lực chiến của máy chủ <b>${processEvent.server}</b>`)
+    logAdmin(event, `Sửa phần thưởng sự kiện tăng lực chiến của máy chủ <b>${processEvent.servers.join(',')}</b>`)
     return resp(event, { message: 'Sửa thành công' })
   }
   catch (e:any) {

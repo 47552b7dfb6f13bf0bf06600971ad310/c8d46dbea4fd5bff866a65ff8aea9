@@ -135,7 +135,7 @@ const startCopy = (text) => {
 
 const goToAdmin = (type) => {
   if(type < 1) return
-  window.location.href = `${runtimeConfig.public.clientURL}/admin`
+  window.location.href = `${runtimeConfig.public.clientURL}/manage`
 }
 
 const getUserBox = async () => {

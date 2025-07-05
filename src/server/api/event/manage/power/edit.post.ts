@@ -6,20 +6,15 @@ export default defineEventHandler(async (event) => {
     await checkPermission(event, 'event.edit')
 
     const body = await readBody(event)
-    const { _id, server, name, start, end, active } = body
-    if(!_id || !server || !name || !start || !end) throw 'Dữ liệu đầu vào không hợp lệ'
+    const { _id, servers, name, start, end, active } = body
+    if(!_id || !servers || !name || !start || !end) throw 'Dữ liệu đầu vào không hợp lệ'
 
     const startDate = formatDate(start)
     const endDate = formatDate(end)
     if(startDate.timestamp > endDate.timestamp) throw 'Thời gian bắt đầu không thể lớn hơn thời gian kết thúc'
 
-    const processEvent = await DB.GameRankPowerUpProcess.findOne({ _id: _id }).select('server active send end') as IDBGameRankPowerUpProcess
+    const processEvent = await DB.GameRankPowerUpProcess.findOne({ _id: _id }).select('servers active send end') as IDBGameRankPowerUpProcess
     if(!processEvent) throw 'Tiến trình không tồn tại'
-
-    if(processEvent.server != server){
-      const getByServer = await DB.GameRankPowerUpProcess.findOne({ server: server }).select('_id') as IDBGameRankPowerUpProcess
-      if(!!getByServer) throw 'Tiến trình cho máy chủ này đã tồn tại'
-    }
 
     if(!!active) {
       if(!!processEvent.send) throw 'Không thể kích hoạt khi hệ thống đã trả thưởng'
@@ -35,9 +30,9 @@ export default defineEventHandler(async (event) => {
       end: endDate.dayjs.endOf('date')['$d'],
     })
 
-    if(!!active) await rankPowerUpProcessWrite(server)
+    if(!!active) await rankPowerUpProcessWrite(processEvent._id)
 
-    logAdmin(event, `Sửa tiến trình sự kiện tăng lực chiến của máy chủ <b>${processEvent.server}</b>`)
+    logAdmin(event, `Sửa tiến trình sự kiện tăng lực chiến của máy chủ <b>${processEvent.servers.join(',')}</b>`)
     return resp(event, { message: 'Sửa thành công' })
   }
   catch (e:any) {

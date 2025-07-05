@@ -53,6 +53,9 @@ const columns = [
     key: 'rank',
     label: 'Hạng'
   },{
+    key: 'server',
+    label: 'Máy chủ'
+  },{
     key: 'account',
     label: 'Tài khoản',
   },{

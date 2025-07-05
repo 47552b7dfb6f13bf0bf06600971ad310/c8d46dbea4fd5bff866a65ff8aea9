@@ -5,7 +5,7 @@ export interface IDBGameRankPowerUpProcess {
   createdAt: Date
   updatedAt: Date
 
-  server: string
+  servers: Array<string>
   name: string
   start: date
   end: date

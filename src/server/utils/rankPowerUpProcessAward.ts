@@ -1,7 +1,7 @@
 import type { IDBGameRankPowerUpProcess, IDBItem, IDBUser } from '~~/types'
 import { Types } from 'mongoose'
 
-export default async (server? : string) => {
+export default async (processEventID? : Types.ObjectId) => {
   try {
     const endOfToday = formatDate(new Date()).dayjs.endOf('date')
 
@@ -11,14 +11,14 @@ export default async (server? : string) => {
       end: { $eq : endOfToday['$d'] },              // Kết thúc == Cuối ngày hiện tại
       award: { $exists: true, $not: { $size: 0 } }  // Đã cài đặt quà tặng
     }
-    if(!!server) {
-      match['server'] = server
+    if(!!processEventID) {
+      match['_id'] = { $in: [ processEventID ]}
       delete match['end']
     }
 
     const listProcess = await DB.GameRankPowerUpProcess
     .find(match)
-    .select('server start end award') 
+    .select('servers start end award') 
     .populate({ path: 'award.gift.item', select: 'item_id type'}) as Array<IDBGameRankPowerUpProcess>
 
     await Promise.all(listProcess.map(async (processEvent) => {
@@ -50,6 +50,7 @@ export default async (server? : string) => {
           $group: {
             _id: {
               account: "$account",
+              server: "$server",
               role_id: "$role_id"
             },
             maxPower: { $max: "$power" },
@@ -60,6 +61,7 @@ export default async (server? : string) => {
         {
           $addFields: {
             account: "$_id.account",
+            server: "$_id.server",
             role_id: "$_id.role_id",
             power: { $subtract: ["$maxPower", "$minPower"] }
           }
@@ -105,23 +107,22 @@ export default async (server? : string) => {
           // Send Gift
           if(giftItem.length > 0) await gameSendMail(null, {
             account: user.username,
-            server_id: processEvent.server,
+            server_id: role.server,
             role_id: role.role_id,
             title: `TOP ${role.rank} - Web Power Up Event`,
             content: 'Vật phẩm nhận từ sự kiện tăng tiến lực chiến trên website',
             items: giftItem
           })
           if(Object.keys(giftCurrency).length) await DB.User.updateOne({ _id: user._id },{ $inc: giftCurrency })
-          
 
           // Log Process
           await DB.GameRankPowerUpProcessLog.create({
             process: processEvent._id,
-            content: `✅ Trả thưởng <b>TOP ${role.rank}</b> cho tài khoản <b>${user.username}</b> với nhân vật <b>[${role.role_id}] ${role.role_name}</b>`
+            content: `✅ Trả thưởng <b>TOP ${role.rank}</b> cho tài khoản <b>${user.username}</b> với nhân vật <b>[${role.role_id}] ${role.role_name}</b> tại máy chủ <b>${role.server}</b>`
           })
 
           // Log Receive
-          logUser(null, user._id, `Nhận quà sự kiện tăng lực chiến <b>TOP ${role.rank}</b> tại máy chủ <b>${processEvent.server}</b>`)
+          logUser(null, user._id, `Nhận quà sự kiện tăng lực chiến <b>TOP ${role.rank}</b> tại máy chủ <b>${role.server}</b>`)
           IO.to(user._id.toString()).emit('auth-update')
         }
         catch(err : any){

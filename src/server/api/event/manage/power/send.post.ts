@@ -1,4 +1,4 @@
-import type { IAuth, IDBGameRankProcess } from "~~/types"
+import type { IAuth, IDBGameRankPowerUpProcess } from "~~/types"
 
 export default defineEventHandler(async (event) => {
   try {
@@ -8,13 +8,13 @@ export default defineEventHandler(async (event) => {
     const { _id } = await readBody(event)
     if(!_id) throw 'Dữ liệu đầu vào không hợp lệ'
 
-    const processEvent = await DB.GameRankProcess.findOne({ _id: _id }).select('server type send') as IDBGameRankProcess
+    const processEvent = await DB.GameRankPowerUpProcess.findOne({ _id: _id }).select('servers send') as IDBGameRankPowerUpProcess
     if(!processEvent) throw 'Tiến trình không tồn tại'
     if(!!processEvent.send) throw 'Phần quà đã được trao'
 
-    await rankProcessAward(processEvent.server) 
+    await rankPowerUpProcessAward(processEvent._id) 
 
-    logAdmin(event, `Trả quà đua <b>TOP ${processEvent.type == 'power' ? 'lực chiến' : 'cấp độ'}</b> sớm cho máy chủ <b>${processEvent.server}</b>`)
+    logAdmin(event, `Trả quà sự kiện tăng lực chiến sớm cho máy chủ <b>${processEvent.servers.join(',')}</b>`)
     return resp(event, { message: 'Thao tác thành công' })
   } 
   catch (e:any) {

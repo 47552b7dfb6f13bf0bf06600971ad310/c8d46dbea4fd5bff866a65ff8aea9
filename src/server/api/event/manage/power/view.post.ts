@@ -27,20 +27,25 @@ export default defineEventHandler(async (event) => {
       {
         $lookup: {
           from: "GameRankPowerUpProcess",
-          localField: "process",
-          foreignField: "_id",
+          let: { processId: "$process", createdAt: "$createdAt" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$_id", "$$processId"] },
+                    { $lte: ["$start", "$$createdAt"] },
+                    { $gte: ["$end", "$$createdAt"] }
+                  ]
+                }
+              }
+            },
+            { $project: { _id: 1 } }
+          ],
           as: "processData"
         }
       },
-      { $unwind: "$processData" },
-      { $match: { 
-        $expr: {
-          $and: [
-            { $gte: ["$createdAt", "$processData.start"] },
-            { $lte: ["$createdAt", "$processData.end"] }
-          ]
-        }
-      }},
+      { $match: { processData: { $ne: [] } } },
       {
         $group: {
           _id: {

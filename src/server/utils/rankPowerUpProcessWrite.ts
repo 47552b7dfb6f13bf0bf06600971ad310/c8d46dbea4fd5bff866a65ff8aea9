@@ -64,7 +64,7 @@ export default async (processEventID? : Types.ObjectId) => {
             account: item.account,
             role_name: item.role_name,
             role_id: item.role_id,
-            power: item.power
+            power: parseInt(item.power)
           }))
 
           if (dataToInsert.length > 0) {

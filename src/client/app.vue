@@ -16,7 +16,6 @@ const runtimeConfig = useRuntimeConfig()
 const configStore = useConfigStore()
 const mode = useColorMode()
 const appConfig = useAppConfig()
-const colorMode = useColorMode()
 
 // Meta Seo
 useSeoMeta({

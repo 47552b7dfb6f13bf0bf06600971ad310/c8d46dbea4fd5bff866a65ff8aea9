@@ -69,7 +69,6 @@ const validate = (state) => {
   return errors
 }
 
-
 const submit = async () => {
   try {
     loading.value = true

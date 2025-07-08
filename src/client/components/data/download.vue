@@ -43,6 +43,7 @@ const authStore = useAuthStore()
 const loading = ref(false)
 const isPWA = ref(false)
 const iosPWA = ref(false)
+const isClickOpenButNotAuth = ref(false)
 
 const download = async (url, type) => {
   if(type == 'ios' && !configStore.config.game.mobile) return iosPWA.value = true
@@ -62,7 +63,7 @@ const download = async (url, type) => {
 
 const playWeb = async () => {
   try {
-    if(!authStore.isLogin) return authStore.setModal(true)
+    if(!authStore.isLogin) return isClickOpenButNotAuth.value = true, authStore.setModal(true)
 
     loading.value = true
     await useAPI('game/public/start')
@@ -75,6 +76,8 @@ const playWeb = async () => {
     loading.value = false
   }
 }
+
+watch(() => authStore.isLogin, (val) => !!val && !!isClickOpenButNotAuth.value && playWeb())
 
 onMounted(() => {
   if(!configStore.config.game.mobile){ // Là Game H5

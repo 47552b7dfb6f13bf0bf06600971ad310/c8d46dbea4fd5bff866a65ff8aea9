@@ -69,8 +69,10 @@ const authStore = useAuthStore()
 const loading = ref(false)
 const modal = ref(false)
 const iosPWA = ref(false)
+const isClickOpenButNotAuth = ref(false)
 
 const open = () => {
+  if(!authStore.isLogin) return isClickOpenButNotAuth.value = true, authStore.setModal(true)
   if(!!configStore.config.game.mobile) return modal.value = true
 
   const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true
@@ -96,8 +98,6 @@ const download = async (url, type) => {
 
 const playWeb = async () => {
   try {
-    if(!authStore.isLogin) return authStore.setModal(true)
-
     loading.value = true
     await useAPI('game/public/start')
 
@@ -109,4 +109,6 @@ const playWeb = async () => {
     loading.value = false
   }
 }
+
+watch(() => authStore.isLogin, (val) => !!val && !!isClickOpenButNotAuth.value && open())
 </script>

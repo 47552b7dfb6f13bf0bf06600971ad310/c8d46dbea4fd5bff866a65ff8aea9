@@ -16,8 +16,6 @@
 </template>
 
 <script setup>
-const { $socket } = useNuxtApp()
-const authStore = useAuthStore()
 const emit = defineEmits(['done', 'up'])
 
 const loading = ref(false)

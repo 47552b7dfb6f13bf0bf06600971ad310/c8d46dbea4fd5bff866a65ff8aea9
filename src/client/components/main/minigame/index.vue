@@ -25,9 +25,11 @@
         </swiper-container >
       </ClientOnly>
 
-      <MainMinigameWheel v-if="tab === 'wheel'" />
-      <MainMinigameDice v-if="tab === 'dice'" />
-      <MainMinigameEgg v-if="tab === 'egg'" />
+      <Transition name="page" mode="out-in">
+        <MainMinigameWheel v-if="tab === 'wheel'" />
+        <MainMinigameDice v-else-if="tab === 'dice'" />
+        <MainMinigameEgg v-else-if="tab === 'egg'" />
+      </Transition>
     </div>
   </div>
 </template>

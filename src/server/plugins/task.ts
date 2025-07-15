@@ -13,9 +13,9 @@ export default defineNitroPlugin(() => {
     timezone: 'Asia/Ho_Chi_Minh'
   })
 
-  cron.schedule('59 23 * * *', async () => {
-    await rankPowerUpProcessAward()
-  }, {
-    timezone: 'Asia/Ho_Chi_Minh'
-  })
+  // cron.schedule('59 23 * * *', async () => {
+  //   await rankPowerUpProcessAward()
+  // }, {
+  //   timezone: 'Asia/Ho_Chi_Minh'
+  // })
 })

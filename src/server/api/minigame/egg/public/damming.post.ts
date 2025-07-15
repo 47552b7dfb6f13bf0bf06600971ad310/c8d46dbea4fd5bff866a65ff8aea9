@@ -134,7 +134,7 @@ export default defineEventHandler(async (event) => {
 
     // Update Egg User
     if(rowNumber == 1 && index == 1) await DB.EggUser.updateOne({ user: auth._id }, { one: [], two: [], three: [], four: [], five: [], six: [] })
-    else await DB.EggUser.updateOne({ user: auth._id }, { $push: { [`${row}`]: { index: index, history: history } }})
+    else await DB.EggUser.updateOne({ user: auth._id }, { $push: { [`${row}`]: { index: index, history: history._id } }})
 
     // Log User
     // @ts-expect-error

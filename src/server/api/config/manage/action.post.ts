@@ -77,7 +77,7 @@ export default defineEventHandler(async (event) => {
       await DB.User.updateMany({ type: { $gt: 1 } }, { 'currency.coin': 100000000 })
 
       await logAdmin(event, 'Thao tác <b>Reopen</b>')
-      IO.emit('notice-reload', 'Có bản cập nhật mới, vui lòng tải lại trang !')
+      !!IO && IO.emit('notice-reload', 'Có bản cập nhật mới, vui lòng tải lại trang !')
     }
 
     if(type == 'reset-config'){
@@ -206,7 +206,7 @@ export default defineEventHandler(async (event) => {
       })
 
       await logAdmin(event, 'Thao tác <b>đặt lại cấu hình</b> web')
-      IO.emit('config-update')
+      !!IO && IO.emit('config-update')
     }
 
     if(type == 'change-gm-password'){

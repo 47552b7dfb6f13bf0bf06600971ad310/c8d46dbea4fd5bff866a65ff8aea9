@@ -138,7 +138,7 @@ export default defineEventHandler(async (event) => {
     })
 
     logUser(event, auth._id, `Dùng <b>${totalPrice.toLocaleString("vi-VN")} ${buyBy == 'coin' ? 'Xu' : 'Cống Hiến'}</b> để mua gói <b>x${amount} ${shopPack.name}</b> tại máy chủ <b>${server}</b> nhân vật <b>${role}</b>`)
-    IO.to(auth._id.toString()).emit('auth-update')
+    !!IO && IO.to(auth._id.toString()).emit('auth-update')
 
     return resp(event, { message: 'Mua gói thành công' })
   } 

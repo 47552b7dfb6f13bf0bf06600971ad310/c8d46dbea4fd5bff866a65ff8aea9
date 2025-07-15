@@ -140,7 +140,7 @@ export default defineEventHandler(async (event) => {
     // @ts-expect-error
     logUser(event, auth._id, `Dùng <b>${price.toLocaleString('vi-VN')}</b> xu để đập trứng <b>Hàng ${rowFormatNumber[row]} - ${index}</b>`)
 
-    IO.to(auth._id.toString()).emit('auth-update')
+    !!IO && IO.to(auth._id.toString()).emit('auth-update')
     return resp(event, { result: resultGift })
   } 
   catch (e:any) {

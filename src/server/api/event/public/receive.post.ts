@@ -112,7 +112,7 @@ export default defineEventHandler(async (event) => {
 
     // Log User
     logUser(event, auth._id, `Nhận thưởng mốc <b>${eventData.need.toLocaleString('vi-VN')}</b> của sự kiện <b>${typeName[eventData.type]}</b> tại máy chủ <b>${server}</b> nhân vật <b>${role}</b>`)
-    IO.to(auth._id.toString()).emit('auth-update')
+    !!IO && IO.to(auth._id.toString()).emit('auth-update')
     
     return resp(event, { message: 'Nhận thưởng thành công' })
   } 

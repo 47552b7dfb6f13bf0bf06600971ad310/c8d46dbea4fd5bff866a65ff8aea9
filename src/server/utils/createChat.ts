@@ -21,7 +21,7 @@ export default async (event: H3Event, user : Types.ObjectId | string, text: stri
       type: !!notify ? 'notify' : 'message'
     })
 
-    IO.emit('chat-push', {
+    !!IO && IO.emit('chat-push', {
       _id: chat._id,
       user: userdata,
       text: text,

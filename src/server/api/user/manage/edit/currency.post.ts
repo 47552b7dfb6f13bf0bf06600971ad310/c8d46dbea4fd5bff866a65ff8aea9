@@ -89,7 +89,7 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    IO.to(user._id.toString()).emit('auth-update')
+    !!IO && IO.to(user._id.toString()).emit('auth-update')
     return resp(event, { message: 'Sửa tiền tệ thành công' })
   } 
   catch (e:any) {

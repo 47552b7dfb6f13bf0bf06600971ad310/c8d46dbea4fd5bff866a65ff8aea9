@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
     // Referral
     if(change == 'enable'){
       if(!enable.referral) data.menu.event.referral = false
-      if(!enable.play) IO.emit('notice-reload', 'Trò chơi sắp bảo trì, vui lòng quay lại sau !')
+      if(!enable.play) !!IO && IO.emit('notice-reload', 'Trò chơi sắp bảo trì, vui lòng quay lại sau !')
     }
 
     // Update
@@ -59,7 +59,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    IO.emit('config-update')
+    !!IO && IO.emit('config-update')
     return resp(event, { message: 'Cập nhật thành công' })
   } 
   catch (e:any) {

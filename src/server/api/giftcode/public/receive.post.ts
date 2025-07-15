@@ -111,7 +111,7 @@ export default defineEventHandler(async (event) => {
 
     // Log User
     logUser(event, auth._id, `Sử dụng giftcode <b>${giftcodeData.code}</b> tại máy chủ <b>${server}</b> nhân vật <b>${role}</b>`)
-    IO.to(auth._id.toString()).emit('auth-update')
+    !!IO && IO.to(auth._id.toString()).emit('auth-update')
     
     return resp(event, { message: 'Nhận thưởng thành công' })
   } 

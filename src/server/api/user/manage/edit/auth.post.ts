@@ -54,7 +54,7 @@ export default defineEventHandler(async (event) => {
       logAdmin(event, `Sửa <b>${change.join(', ')}</b> của tài khoản <b>${user.username}</b>`)
     }
     
-    IO.to(user._id.toString()).emit('auth-update')
+    !!IO && IO.to(user._id.toString()).emit('auth-update')
     return resp(event, { message: 'Sửa thông tin thành công' })
   } 
   catch (e:any) {

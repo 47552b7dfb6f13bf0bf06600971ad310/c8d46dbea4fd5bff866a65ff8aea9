@@ -112,7 +112,7 @@ export default defineEventHandler(async (event) => {
     })
 
     logUser(event, auth._id, `Dùng <b>${totalPrice.toLocaleString("vi-VN")} ${buyBy == 'coin' ? 'Xu' : 'Cống Hiến'}</b> để mua <b>x${amount} ${itemData.item_name}</b> tại máy chủ <b>${server}</b> nhân vật <b>${role}</b>`)
-    IO.to(auth._id.toString()).emit('auth-update')
+    !!IO && IO.to(auth._id.toString()).emit('auth-update')
 
     return resp(event, { message: 'Mua vật phẩm thành công' })
   } 

@@ -86,7 +86,7 @@ export default defineEventHandler(async (event) => {
 
     // Log User
     logUser(event, auth._id, `Nhận thưởng nhiệm vụ đạt ${mission.type == 'level' ? 'cấp độ' : 'lực chiến'} ${mission.need.toLocaleString("vi-VN")} tại máy chủ <b>${server}</b> với nhân vật <b>${role}</b>`)
-    IO.to(auth._id.toString()).emit('auth-update')
+    !!IO && IO.to(auth._id.toString()).emit('auth-update')
     
     return resp(event, { message: 'Nhận thưởng thành công' })
   } 

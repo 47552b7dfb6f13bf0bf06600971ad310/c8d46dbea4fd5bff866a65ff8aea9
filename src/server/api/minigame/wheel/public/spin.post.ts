@@ -129,7 +129,7 @@ export default defineEventHandler(async (event) => {
       }
     })
 
-    IO.to(auth._id.toString()).emit('auth-update')
+    !!IO && IO.to(auth._id.toString()).emit('auth-update')
     return resp(event, { result: resultListGift[resultListGift.length - 1]._id })
   } 
   catch (e:any) {

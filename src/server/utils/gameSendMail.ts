@@ -27,7 +27,7 @@ export default async (event: H3Event | null, data : ISendData, throwError: boole
     const res = send.data
     if(res.error) throw res.error
 
-    IO.emit('mail-done', data)
+    !!IO && IO.emit('mail-done', data)
     return Promise.resolve(true)
   }
   catch (e:any) {

@@ -177,7 +177,7 @@ export default async (
     if(bonusCoin > 0) logUser(event, user._id, `Tặng thêm <b>${bonusCoin.toLocaleString('vi-VN')} Xu</b> từ kênh nạp và phúc lợi cấp độ`)
     if(fristCoin > 0) logUser(event, user._id, `Tặng thêm <b>${fristCoin.toLocaleString('vi-VN')} Xu</b> vì nạp lần đầu`)
     if(secondCoin > 0) logUser(event, user._id, `Tặng thêm <b>${secondCoin.toLocaleString('vi-VN')} Xu</b> vì nạp lần 2`)
-    IO.to(user._id.toString()).emit('auth-update')
+    !!IO && IO.to(user._id.toString()).emit('auth-update')
   
     // Log Admin
     if(!!verifier) logAdmin(event, `Chấp nhận giao dịch nạp tiền <b>${payment.code}</b> với số tiền <b>${realMoney.toLocaleString('vi-VN')}</b>`, verifier)

@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
 
     await DB.SocketChat.deleteMany({})
     await createChat(event, 'bot', 'Để lại lời nhắn, cùng nhau trò chuyện với mọi người nhé...')
-    IO.emit('chat-reload')
+    !!IO && IO.emit('chat-reload')
     return resp(event, { message: 'Xóa thành công' })
   } 
   catch (e:any) {

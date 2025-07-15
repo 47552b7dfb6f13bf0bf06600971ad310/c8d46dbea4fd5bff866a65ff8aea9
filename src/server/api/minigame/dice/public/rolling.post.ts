@@ -224,7 +224,7 @@ export default defineEventHandler(async (event) => {
     logUser(event, auth._id, `Dùng <b>${coinPlay.toLocaleString('vi-VN')}</b> xu để chơi <b>xúc xắc may mắn</b>`)
     const coinReal = (coinPlay + coinReceive)
     if(coinReal > 0) logUser(event, auth._id, `Nhận <b>${coinReal.toLocaleString('vi-VN')}</b> xu từ <b>xúc xắc may mắn</b>`)
-    IO.to(auth._id.toString()).emit('auth-update')
+    !!IO && IO.to(auth._id.toString()).emit('auth-update')
 
     // Lucky User
     if(coinReceive > 500000){

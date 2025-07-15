@@ -23,7 +23,7 @@ export default async (event: H3Event, data : ISendData) : Promise<void> => {
     const res = send.data
     if(res.error) throw res.error
 
-    IO.emit('recharge-done', data)
+    !!IO && IO.emit('recharge-done', data)
   }
   catch (e:any) {
     throw e.toString()

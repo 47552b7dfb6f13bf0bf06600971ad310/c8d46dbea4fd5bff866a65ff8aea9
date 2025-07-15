@@ -77,7 +77,6 @@ export default async (server? : string) => {
 
           // Log Receive
           logUser(null, user._id, `Nhận quà <b>TOP ${role.rank} ${typeInfo?.text}</b> tại máy chủ <b>${processEvent.server}</b>`)
-          IO.to(user._id.toString()).emit('auth-update')
         }
         catch (err : any) {
           await DB.GameRankProcessLog.create({ 

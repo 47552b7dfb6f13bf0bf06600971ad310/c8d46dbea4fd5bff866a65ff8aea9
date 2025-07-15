@@ -129,7 +129,6 @@ export default async (processEventID? : Types.ObjectId) => {
 
           // Log Receive
           logUser(null, user._id, `Nhận quà sự kiện tăng lực chiến <b>TOP ${role.rank}</b> tại máy chủ <b>${role.server}</b>`)
-          IO.to(user._id.toString()).emit('auth-update')
         }
         catch(err : any){
           await DB.GameRankPowerUpProcessLog.create({ 

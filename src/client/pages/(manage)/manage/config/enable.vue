@@ -70,7 +70,7 @@ const state = ref({
   },
 
   homepage: {
-    landing: ''
+    landing: null
   },
 
   thankyou: {

@@ -44,6 +44,7 @@ export default defineEventHandler(async (event) => {
     if(change == 'enable'){
       if(!enable.referral) data.menu.event.referral = false
       if(!enable.play) !!IO && IO.emit('notice-reload', 'Trò chơi sắp bảo trì, vui lòng quay lại sau !')
+      data.homepage.landing = !!data.homepage.landing || null
     }
 
     // Update

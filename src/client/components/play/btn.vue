@@ -71,17 +71,29 @@ const modal = ref(false)
 const iosPWA = ref(false)
 const isClickOpenButNotAuth = ref(false)
 
+const isInAppBrowser = () => {
+  const ua = navigator.userAgent || navigator.vendor || window.opera
+  if (ua.includes('FBAN') || ua.includes('FBAV')) return true
+  if (ua.includes('Instagram')) return true
+  if (ua.includes('Messenger')) return true
+  if (ua.includes('Zalo')) return true
+  return false
+}
+
+const isPWAInstall = () => {
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true
+}
+
 const open = () => {
   if(!authStore.isLogin) return isClickOpenButNotAuth.value = true, authStore.setModal(true)
-  if(!!configStore.config.game.mobile) return modal.value = true
-
-  const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true
-  if(!isPWA) return modal.value = true
-  else return playWeb()
+  if(!!configStore.config.game.mobile) return modal.value = true // Is Mobile Game (Open Modal)
+  if(!!isInAppBrowser()) return playWeb() // Is H5 Game (If web open In-App => Play now)
+  if(!!isPWAInstall()) return playWeb() // Is PWA Install (If had PWA Install => Play now)
+  return modal.value = true
 }
 
 const download = async (url, type) => {
-  if(type == 'ios' && !configStore.config.game.mobile) return iosPWA.value = true
+  if(type == 'ios' && !configStore.config.game.mobile) return modal.value = false, iosPWA.value = true
   if(type == 'android' && !configStore.config.game.mobile && !!configStore.installPrompt && !url){
     await configStore.installPrompt.prompt()
     configStore.setInstallPrompt(null)

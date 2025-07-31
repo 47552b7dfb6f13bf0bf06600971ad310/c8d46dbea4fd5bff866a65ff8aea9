@@ -107,7 +107,7 @@ export default defineNuxtConfig({
   },
 
   image: {
-    provider: 'ipx',
+    provider: process.env.IPX_ON ? 'ipx' : 'static',
     domains: [
       process.env.DOMAIN as string
     ]

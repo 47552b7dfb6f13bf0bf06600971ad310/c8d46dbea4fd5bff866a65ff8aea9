@@ -23,9 +23,9 @@ export default defineEventHandler(async (event) => {
 
     // Check Pass
     if(md5(password) != user.password) {
-      if(user.login.wrong_password >= 4){
+      if(user.login.wrong_password >= 5){
         await DB.User.updateOne({ _id: user._id }, { block: 1 })
-        throw 'Tài khoản của bạn bị khóa do nhập sai mật khẩu quá nhiều lần'
+        throw 'Tài khoản của bạn bị khóa do nhập sai mật khẩu quá nhiều lần, vui lòng liên hệ quản trị viên để được cấp lại'
       }
       else {
         await DB.User.updateOne({ _id: user._id }, { $inc: { 'login.wrong_password': 1 } })

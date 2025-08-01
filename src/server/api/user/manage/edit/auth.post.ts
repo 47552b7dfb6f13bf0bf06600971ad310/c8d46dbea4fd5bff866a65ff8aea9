@@ -1,5 +1,6 @@
 import md5 from 'md5'
 import type { IAuth, IDBUser } from '~~/types'
+import jwt from 'jsonwebtoken'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -34,7 +35,13 @@ export default defineEventHandler(async (event) => {
       change.push('Số điện thoại')
     }
     if(!!password){
+      const runtimeConfig = useRuntimeConfig()
+      const token = jwt.sign({
+        _id : user._id
+      }, runtimeConfig.apiSecret, { expiresIn: '360d' })
+
       update['password'] = md5(password)
+      update['token'] = token
       change.push('Mật khẩu')
     }
     if(user.type != type){
@@ -46,6 +53,7 @@ export default defineEventHandler(async (event) => {
     }
     if(user.block != block){
       update['block'] = block
+      if(block == 0) update['login.wrong_password'] = 0
       change.push('Trạng thái khóa')
     }
 

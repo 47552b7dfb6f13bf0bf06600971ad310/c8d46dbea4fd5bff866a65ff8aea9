@@ -90,6 +90,7 @@ export interface IDBUser {
     total: number
     update: Date
     last_ip: string
+    wrong_password: number
   }
   action: {
     giftcode: boolean

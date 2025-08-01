@@ -1,9 +1,10 @@
 import md5 from 'md5'
 import jwt from 'jsonwebtoken'
-import { IDBConfig, IDBUser } from '~~/types'
+import { IDBAdminIP, IDBConfig, IDBUser } from '~~/types'
 
 export default defineEventHandler(async (event) => {
   try {
+    const IP = getRequestIP(event, { xForwardedFor: true })
     const runtimeConfig = useRuntimeConfig()
     const { username, password } = await readBody(event)
     if(!username || !password) throw 'Vui lòng nhập đầy đủ thông tin'
@@ -11,11 +12,28 @@ export default defineEventHandler(async (event) => {
     // Get User
     const user = await DB.User
     .findOne({ username: username.toLowerCase() })
-    .select('username password block type token') as IDBUser
+    .select('username password block login type token') as IDBUser
     
     // Check User
     if(!user) throw 'Tài khoản không tồn tại'
-    if(md5(password) != user.password) throw 'Mật khẩu không chính xác'
+
+    // Check White List
+    const adminIP = await DB.AdminIP.findOne({ ip: IP }) as IDBAdminIP
+    if(!!adminIP) await DB.User.updateOne({ _id: user._id }, { block: 0, 'login.wrong_password': 0 })
+
+    // Check Pass
+    if(md5(password) != user.password) {
+      if(user.login.wrong_password >= 4){
+        await DB.User.updateOne({ _id: user._id }, { block: 1 })
+        throw 'Tài khoản của bạn bị khóa do nhập sai mật khẩu quá nhiều lần'
+      }
+      else {
+        await DB.User.updateOne({ _id: user._id }, { $inc: { 'login.wrong_password': 1 } })
+        throw 'Mật khẩu không chính xác'
+      }
+    }
+
+    // Check Block
     if(user.block == 1) throw 'Tài khoản của bạn đang bị khóa'
 
     // Check Config Enable
@@ -41,7 +59,6 @@ export default defineEventHandler(async (event) => {
     await user.save()
 
     // Save IP
-    const IP = getRequestIP(event, { xForwardedFor: true })
     const logIP = await DB.LogUserIP.findOne({ user: user._id, ip: IP })
     if(!logIP) await DB.LogUserIP.create({ user: user._id, ip: IP })
 

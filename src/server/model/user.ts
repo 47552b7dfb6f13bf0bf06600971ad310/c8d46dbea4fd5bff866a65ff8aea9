@@ -87,7 +87,8 @@ export const DBUser = (mongoose : Mongoose) => {
       month: { type: Number, default: 1, index: true },
       total: { type: Number, default: 1, index: true },
       update: { type: Date },
-      last_ip: { type: String }
+      last_ip: { type: String },
+      wrong_password: { type: Number, default: 0, index: true },
     },
     action: {
       giftcode: { type: Boolean, default: false },

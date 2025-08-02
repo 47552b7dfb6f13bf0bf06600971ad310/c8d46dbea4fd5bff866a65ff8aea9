@@ -21,6 +21,7 @@ export default defineNuxtConfig({
       dev: process.env.NODE_ENV === 'production' ? false : true,
       clientURL: process.env.CLIENT_URL,
       domain: process.env.DOMAIN,
+      ipx: process.env.IPX_ON == 'false' ? false : true,
       cookieConfig: {
         path: '/',
         maxAge: 7 * 24 * 60 * 60 * 1000,

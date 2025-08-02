@@ -1,9 +1,7 @@
 <template>
-  <div 
-    class="relative select-none UiImg"
-    :style="`aspect-ratio: ${w} / ${h}`"
-  >
+  <div class="relative select-none UiImg" :style="`aspect-ratio: ${w} / ${h}`">
     <NuxtImg 
+      v-if="!!ipx"
       :src="img(src)" 
       class="object-cover w-full h-full select-none"
       :sizes="props.imgSize"
@@ -19,25 +17,20 @@
       @load="onLoad"
     />
 
-    <!-- <img
-      v-if="!loading"
-      :src="useMakeLink().img(imgSrc)"
+    <img
+      v-if="!ipx && !loading"
+      :src="img(imgSrc)"
       class="object-cover w-full h-full select-none"
       placeholder="/images/placeholder.png"
       :alt="props.alt" 
-    /> -->
+    />
 
-    <USkeleton 
-      class="absolute top-0 left-0 rounded-none w-full h-full" 
-      :style="{
-        borderRadius: 'inherit'
-      }"
-      v-if="!!loading"
-    ></USkeleton>
+    <USkeleton class="absolute top-0 left-0 rounded-none w-full h-full" :style="{ borderRadius: 'inherit'  }" v-if="!!loading"></USkeleton>
   </div>
 </template>
 
 <script setup>
+const runtimeConfig = useRuntimeConfig()
 const { img } = useMakeLink()
 const props = defineProps({
   src: String,
@@ -51,10 +44,29 @@ const props = defineProps({
   preload: { type: Boolean, default: false },
 })
 
+const imgSrc = ref(undefined)
 const loading = ref(true)
+const ipx = computed(() => runtimeConfig.public.ipx)
+
 const onLoad = (event) => {
   if(event) loading.value = false
 }
+
+onMounted(() => {
+  if(!!ipx.value) return
+
+  const url = props.src || '/images/null.webp'
+  const ctx = new Image
+  ctx.onload = () => {
+    imgSrc.value = props.src
+    loading.value = false
+  }
+  ctx.onerror = () => {
+    imgSrc.value = '/images/null.webp'
+    loading.value = false
+  }
+  ctx.src = url
+})
 </script>
 
 <style lang="sass">

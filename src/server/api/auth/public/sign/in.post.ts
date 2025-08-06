@@ -1,6 +1,6 @@
 import md5 from 'md5'
 import jwt from 'jsonwebtoken'
-import { IDBAdminIP, IDBConfig, IDBUser } from '~~/types'
+import { IDBConfig, IDBUser } from '~~/types'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -16,24 +16,7 @@ export default defineEventHandler(async (event) => {
     
     // Check User
     if(!user) throw 'Tài khoản không tồn tại'
-
-    // Check White List
-    const adminIP = await DB.AdminIP.findOne({ ip: IP }) as IDBAdminIP
-    if(!!adminIP) await DB.User.updateOne({ _id: user._id }, { block: 0, 'login.wrong_password': 0 })
-
-    // Check Pass
-    if(md5(password) != user.password) {
-      if(user.login.wrong_password >= 5){
-        await DB.User.updateOne({ _id: user._id }, { block: 1 })
-        throw 'Tài khoản của bạn bị khóa do nhập sai mật khẩu quá nhiều lần, vui lòng liên hệ quản trị viên để được cấp lại'
-      }
-      else {
-        await DB.User.updateOne({ _id: user._id }, { $inc: { 'login.wrong_password': 1 } })
-        throw 'Mật khẩu không chính xác'
-      }
-    }
-
-    // Check Block
+    if(md5(password) != user.password) throw 'Mật khẩu không chính xác'
     if(user.block == 1) throw 'Tài khoản của bạn đang bị khóa'
 
     // Check Config Enable

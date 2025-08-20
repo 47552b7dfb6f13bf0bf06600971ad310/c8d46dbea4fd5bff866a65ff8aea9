@@ -87,6 +87,7 @@ const onDoneCode = async () => {
 // On Recharge Fast
 const onFast = (e) => {
   const detail = e.data
+  console.log(e, detail)
   if(!detail) return
   
   if(detail.code) return onFastGiftcode(detail)

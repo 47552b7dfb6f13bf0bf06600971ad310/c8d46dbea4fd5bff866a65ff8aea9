@@ -17,8 +17,27 @@ export default defineEventHandler(async (event) => {
       match['createdAt'] = { $gte: new Date(start['$d']), $lte: new Date(end['$d']) }
     }
 
-    const data = await DB.ShopHistory.aggregate([
+    const data = await DB.EggHistory.aggregate([
       { $match: match },
+      { $project: { user: 1, price: 1 } },
+      {
+        $unionWith: {
+          coll: "ShopHistory",
+          pipeline: [
+            { $match: match },
+            { $project: { user: 1, price: 1 } }
+          ]
+        }
+      },
+      {
+        $unionWith: {
+          coll: "ShopPackHistory",
+          pipeline: [
+            { $match: match },
+            { $project: { user: 1, price: 1 } }
+          ]
+        }
+      },
       {
         $group: {
           _id: "$user",
@@ -26,35 +45,13 @@ export default defineEventHandler(async (event) => {
         }
       },
       {
-        $unionWith: {
-          coll: "shop_box_histories",
-          pipeline: [
-            {
-              $match: match
-            },
-            {
-              $group: {
-                _id: "$user",
-                value: { $sum: "$price" }
-              }
-            }
-          ]
-        }
-      },
-      {
-        $group: {
-          _id: "$_id",
-          value: { $sum: "$value" }
-        }
-      },
-      {
         $lookup: {
           from: "User",
           localField: "_id",
           foreignField: "_id",
-          pipeline: [{
-            $project: { username: 1 }
-          }],
+          pipeline: [
+            { $project: { username: 1 }}
+          ],
           as: "user"
         }
       },

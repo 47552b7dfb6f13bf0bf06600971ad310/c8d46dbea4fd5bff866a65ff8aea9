@@ -102,6 +102,7 @@ export interface IDBEggHistory {
   row: string
   index: number
   item: Types.ObjectId
+  price: number
   amount: number
   percent: number
   server: string

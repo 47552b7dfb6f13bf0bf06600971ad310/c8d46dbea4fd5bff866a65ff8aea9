@@ -113,6 +113,7 @@ export default defineEventHandler(async (event) => {
       row: row,
       index: index,
       item: item._id,
+      price: price,
       amount: resultGift.amount,
       percent: resultGift.percent,
       server: server,

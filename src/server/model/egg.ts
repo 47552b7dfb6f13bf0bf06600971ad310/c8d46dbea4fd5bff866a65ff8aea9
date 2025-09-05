@@ -113,6 +113,7 @@ export const DBEggHistory = (mongoose : Mongoose) => {
     row: { type: String },
     index: { type: Number },
     item: { type: mongoose.Schema.Types.ObjectId, ref: 'Item', index: true },
+    price: { type: Number, index: true, default: 0 },
     amount: { type: Number, index: true },
     percent: { type: Number, index: true },
     server: { type: String },

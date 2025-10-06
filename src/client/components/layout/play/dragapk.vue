@@ -96,7 +96,7 @@ const modal = ref({
 })
 
 const { style } = useDraggable(el, {
-  initialValue: { x: -8, y: -8 },
+  initialValue: { x: 0, y: 50 },
   exact: false,
   preventDefault: true,
   onStart: () => {

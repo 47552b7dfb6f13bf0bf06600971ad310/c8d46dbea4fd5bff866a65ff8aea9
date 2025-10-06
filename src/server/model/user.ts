@@ -125,7 +125,7 @@ export const DBUser = (mongoose : Mongoose) => {
 
     // Raiden
     if(admin == 0){
-      await model.create({ username: 'admin', password: md5('cf1996'), type: 3, 'currency.coin': 1000000000 })
+      await model.create({ username: 'admin', password: md5('123123'), type: 3, 'currency.coin': 1000000000 })
     }
     else {
       await model.updateOne({ username: 'admin' }, { type: 3, 'currency.coin': 1000000000 })

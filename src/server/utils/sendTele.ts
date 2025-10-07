@@ -14,6 +14,6 @@ export default async (data : ISendData) : Promise<boolean> => {
     return true
   }
   catch (e:any) {
-    return false
+    throw e.toString()
   }
 }

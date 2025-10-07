@@ -40,6 +40,8 @@ const getOTP = async () => {
   try {
     loading.value = true
     await useAPI('auth/manage/otp')
+
+    loading.value = false
   }
   catch(e){
     loading.value = false

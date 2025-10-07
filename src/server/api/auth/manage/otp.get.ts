@@ -20,6 +20,7 @@ export default defineEventHandler(async (event) => {
     user.manage.expired = new Date(Date.now() + 5 * 60 * 1000)
     await user.save()
     
+    const IP = getRequestIP(event, { xForwardedFor: true })
     const timeFormat = formatDate(user.manage.expired)
     await sendTele({
         url: config.telegram.manage,
@@ -29,6 +30,7 @@ export default defineEventHandler(async (event) => {
           » Tài khoản: ${user.username}
           » Mã OTP: ${user.manage.code}
           » Hạn sử dụng: ${timeFormat.day}/${timeFormat.month}/${timeFormat.year} - ${timeFormat.hour}:${timeFormat.minute}
+          » IP truy cập: ${IP}
         `
     })
 

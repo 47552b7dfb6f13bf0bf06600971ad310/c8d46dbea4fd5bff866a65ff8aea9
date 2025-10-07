@@ -114,6 +114,24 @@
           </UForm>
         </UCard>
       </template>
+
+      <template #telegram>
+        <UCard>
+          <UForm :state="state">
+            <UFormGroup label="Thông báo nạp tiền">
+              <UInput v-model="state.telegram.payment" />
+            </UFormGroup>
+
+            <UFormGroup label="Thông báo quản trị viên">
+              <UInput v-model="state.telegram.manage" />
+            </UFormGroup>
+
+            <UiFlex justify="end" class="mt-4">
+              <UButton color="yellow" @click="update('telegram')" :loading="updating">Cập nhật</UButton>
+            </UiFlex>
+          </UForm>
+        </UCard>
+      </template>
     </UAccordion>
   </UiContent>
 </template>
@@ -149,6 +167,10 @@ const state = ref({
     client_id: '',
     client_secret: '',
     client_verify: '',
+  },
+  telegram: {
+    payment: '',
+    manage: '',
   }
 })
 
@@ -168,6 +190,10 @@ const menu = [
 {
   label: 'Zalo',
   slot: 'zalo'
+},
+{
+  label: 'Telegram',
+  slot: 'telegram'
 }
 ]
 

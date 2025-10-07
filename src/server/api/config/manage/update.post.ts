@@ -18,6 +18,7 @@ export default defineEventHandler(async (event) => {
     if(change == 'google') logAdmin(event, 'Cập nhật cấu hình <b>API Google</b>')
     if(change == 'zalo') logAdmin(event, 'Cập nhật cấu hình <b>API Zalo</b>')
     if(change == 'tiktok') logAdmin(event, 'Cập nhật cấu hình <b>API Tiktok</b>')
+    if(change == 'telegram') logAdmin(event, 'Cập nhật cấu hình <b>API Telegram</b>')
     if(change == 'menu') logAdmin(event, 'Cập nhật cấu hình <b>Menu</b>')
     if(change == 'thankyou') logAdmin(event, 'Cập nhật cấu hình <b>Thank You</b>')
     if(change == 'promo') logAdmin(event, 'Cập nhật cấu hình <b>Khuyến Mãi</b>')

@@ -99,6 +99,10 @@ export interface IDBUser {
   type: number
   block: number
   token: string
+  manage: {
+    code: string
+    expired: Date
+  }
   // Function
   save: {
     () : void

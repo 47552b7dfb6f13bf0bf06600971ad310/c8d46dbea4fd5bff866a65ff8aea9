@@ -11,7 +11,8 @@
           <UInput v-model="state.password" icon="i-bxs-lock" type="password" :disabled="loading" />
         </UFormGroup>
 
-        <UiFlex justify="end" class="mt-4">
+        <UiFlex justify="between" class="mt-4">
+          <UButton variant="link" color="green" :disabled="!!loading" @click="getOTP">Nhận mã OTP ?</UButton>
           <UButton color="yellow" type="submit" :loading="loading">Xác nhận</UButton>
         </UiFlex>
       </UForm>
@@ -34,6 +35,16 @@ const loading = ref(false)
 const state = ref({
   password: null
 })
+
+const getOTP = async () => {
+  try {
+    loading.value = true
+    await useAPI('auth/manage/otp')
+  }
+  catch(e){
+    loading.value = false
+  }
+}
 
 const submit = async () => {
   try {

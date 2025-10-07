@@ -97,6 +97,10 @@ export const DBUser = (mongoose : Mongoose) => {
     type: { type: Number, default: 0, index: true }, // 0 - Member, 1 - Smod, 2 - Dev, 3 - Admin, 99 - Robot
     block: { type: Number, default: 0, index: true }, // 0 - False, 1 - True
     token: { type: String },
+    manage: {
+      code: { type: String },
+      expired: { type: Date }
+    }
   }, {
     timestamps: true
   })

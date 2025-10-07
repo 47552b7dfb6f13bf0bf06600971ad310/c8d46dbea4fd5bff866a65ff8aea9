@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware(async () => {
     if(authStore.profile.type < 1) throw 'Bạn không có quyền truy cập'
 
     const runtimeConfig = useRuntimeConfig()
-    const token = useCookie('token-admin', runtimeConfig.public.cookieConfig)
+    const token = useCookie('verify-admin', runtimeConfig.public.cookieConfig)
     if(!token.value) return useTo().navigateToSSL('/admin')
   }
   catch (e:any) {

@@ -189,6 +189,10 @@ export const DBConfig = (mongoose : Mongoose) => {
       client_id: { type: String, default: '' },
       client_secret: { type: String, default: '' },
       client_verify: { type: String, default: '' },
+    },
+    telegram: {
+      payment: { type: String, default: '' },
+      manage: { type: String, default: '' },
     }
   }, {
     timestamps: true

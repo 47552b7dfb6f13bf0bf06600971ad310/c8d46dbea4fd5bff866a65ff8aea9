@@ -192,6 +192,10 @@ export interface IDBConfig {
     client_secret: string
     client_verify: string
   }
+  telegram: {
+    payment: string
+    manage: string
+  }
 }
 
 export interface IDBConfigStore {

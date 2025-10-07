@@ -8,7 +8,7 @@ interface ISendData {
 
 export default async (data : ISendData) : Promise<boolean> => {
   try {
-    if(!data.url || !data.message || !data.secret) throw true
+    if(!data.url || !data.message) throw 'Thiếu URL hoặc tin nhắn'
 
     await axios.post(data.url, data)
     return true

@@ -1,6 +1,8 @@
 import { IDBConfig, IAuth, IDBUser } from "~~/types"
 
 export default defineEventHandler(async (event) => {
+  const runtimeConfig = useRuntimeConfig()
+
   try {
     const auth = await getAuth(event) as IAuth
     if(auth.type < 1) throw 'Bạn không phải quản trị viên'
@@ -30,9 +32,11 @@ export default defineEventHandler(async (event) => {
         `
     })
 
+    deleteCookie(event, 'verify-admin', runtimeConfig.public.cookieConfig)
     return resp(event, { message: 'Gửi mã OTP thành công' })
   } 
   catch (e:any) {
+    deleteCookie(event, 'verify-admin', runtimeConfig.public.cookieConfig)
     return resp(event, { code: 400, message: e.toString() })
   }
 })

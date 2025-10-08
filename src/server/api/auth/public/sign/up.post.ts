@@ -105,7 +105,7 @@ export default defineEventHandler(async (event) => {
     // Send Notify and Save Log
     logUser(event, user._id, 'Đăng ký tài khoản')
     if(config.promo.register.coin > 0) logUser(event, user._id, `Nhận <b>${config.promo.register.coin.toLocaleString('vi-VN')}</b> từ khuyến mãi đăng ký tài khoản mới`)
-    await createChat(event, 'bot', `Chào mừng thành viên mới <b>${user.username}</b>`)
+    await createChat(event, 'bot', `Chào mừng thành viên mới <b>${formatHideString(user.username)}</b>`)
     
     return resp(event, { message: 'Đăng ký thành công' })
   } 

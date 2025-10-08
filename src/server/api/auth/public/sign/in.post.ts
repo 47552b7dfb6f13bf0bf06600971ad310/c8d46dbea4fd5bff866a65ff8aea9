@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
 
     // Send Notify and Save Log
     logUser(event, user._id, `Đăng nhập với IP <b>${IP}</b>`)
-    await createChat(event, 'bot', `<b>${user.username}</b> vừa truy cập`, true)
+    await createChat(event, 'bot', `<b>${formatHideString(user.username)}</b> vừa truy cập`, true)
 
     return resp(event, { message: 'Đăng nhập thành công' })
   } 

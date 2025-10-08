@@ -25,7 +25,7 @@
           
           <div class="text-left">
             <UiFlex class="mb-1 gap-1">
-              <UBadge size="xs" variant="soft" :color="typeFormat[chat.user.type].color" class="capitalize">{{ chat.user.username }}</UBadge>
+              <UBadge size="xs" variant="soft" :color="typeFormat[chat.user.type].color" class="capitalize">{{ hideName(chat.user.username) }}</UBadge>
             </UiFlex>
 
             <div class="inline-block bg-gray p-2 px-3 rounded-r-2xl rounded-bl-2xl text-left mb-2" :style="{ wordBreak: 'break-word' }">
@@ -117,6 +117,12 @@ const listFormat = computed(() => {
     return new Date(a.createdAt) - new Date(b.createdAt);
   })
 })
+
+const hideName = (str) => {
+  if (str == 'bot') return 'BOT'
+  if (str.length <= 3) return '*'.repeat(str.length);
+  return str.slice(0, 3 * -1) + '***';
+}
 
 const toFocus = async () => {
   await nextTick()

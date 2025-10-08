@@ -53,7 +53,7 @@ export default defineEventHandler(async (event) => {
     }
 
     logUser(event, user._id, `Đăng nhập bằng Landing <b>${landingData.code}</b> với IP <b>${IP}</b>`)
-    await createChat(event, 'bot', `<b>${user.username}</b> vừa truy cập`, true)
+    await createChat(event, 'bot', `<b>${formatHideString(user.username)}</b> vừa truy cập`, true)
 
     return resp(event, { message: 'Đăng nhập thành công' })
   } 

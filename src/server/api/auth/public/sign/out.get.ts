@@ -2,6 +2,7 @@ export default defineEventHandler(async (event) => {
   try {
     const runtimeConfig = useRuntimeConfig(event)
     deleteCookie(event, 'token-auth', runtimeConfig.public.cookieConfig)
+    deleteCookie(event, 'verify-manage', runtimeConfig.public.cookieManageConfig)
     return resp(event, { message: 'Đăng xuất thành công' })
   } 
   catch (e:any) {

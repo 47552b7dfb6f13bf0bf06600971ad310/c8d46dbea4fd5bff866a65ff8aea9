@@ -34,11 +34,11 @@ export default defineEventHandler(async (event) => {
         `
     })
 
-    deleteCookie(event, 'verify-admin', runtimeConfig.public.cookieConfig)
+    deleteCookie(event, 'verify-manage', runtimeConfig.public.cookieManageConfig)
     return resp(event, { message: 'Gửi mã OTP thành công' })
   } 
   catch (e:any) {
-    deleteCookie(event, 'verify-admin', runtimeConfig.public.cookieConfig)
+    deleteCookie(event, 'verify-manage', runtimeConfig.public.cookieManageConfig)
     return resp(event, { code: 400, message: e.toString() })
   }
 })

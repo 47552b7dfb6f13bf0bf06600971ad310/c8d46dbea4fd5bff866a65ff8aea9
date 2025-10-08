@@ -27,6 +27,11 @@ export default defineNuxtConfig({
         maxAge: 7 * 24 * 60 * 60 * 1000,
         domain: process.env.NODE_ENV === 'production' ? `.${process.env.DOMAIN}` : undefined
       },
+      cookieManageConfig: {
+        path: '/',
+        maxAge: 1 * 24 * 60 * 60 * 1000,
+        domain: process.env.NODE_ENV === 'production' ? `.${process.env.DOMAIN}` : undefined
+      },
       version: process.env.VERSION
     }
   },

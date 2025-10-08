@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
     if(!check) throw `IP ${IP} chưa có trong White List, vui lòng nhập mật khẩu ủy quyển.`
 
     const runtimeConfig = useRuntimeConfig()
-    setCookie(event, 'verify-admin', 'true', runtimeConfig.public.cookieConfig)
+    setCookie(event, 'verify-manage', 'true', runtimeConfig.public.cookieManageConfig)
     return resp(event, { result: 'Success' })
   } 
   catch (e:any) {

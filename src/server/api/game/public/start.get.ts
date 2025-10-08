@@ -9,8 +9,6 @@ export default defineEventHandler(async (event) => {
     if(!config) throw 'Không tìm thấy cấu hình trò chơi'
     if(!config.game.api.start) throw 'Trò chơi đang bảo trì'
     if(auth.type < 1 && !config.enable.play) throw 'Trò chơi đang bảo trì'
-
-    console.log(auth)
     const url = await gameStart(event, auth.username)
     
     setCookie(event, 'play-url', url, runtimeConfig.public.cookieConfig)

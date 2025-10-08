@@ -3,6 +3,9 @@ import type { IAuth, IDBConfig } from '~~/types'
 
 export default async (event: H3Event, type : string) : Promise<void> => {
   try {
+    const token = getCookie(event, 'verify-manage')
+    if(!token) throw 'Chưa xác thực truy cập quản trị' 
+
     const auth = event.context.auth as IAuth
     
     const config = await DB.Config.findOne().select('permission') as IDBConfig

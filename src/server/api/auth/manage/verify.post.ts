@@ -32,11 +32,11 @@ export default defineEventHandler(async (event) => {
       if(password != config.gm_password) throw 'Mã ủy quyền không hợp lệ'
     }
 
-    setCookie(event, 'verify-admin', 'true', runtimeConfig.public.cookieConfig)
+    setCookie(event, 'verify-manage', 'true', runtimeConfig.public.cookieManageConfig)
     return resp(event, { message: 'Xác thực quản trị viên thành công', result: '/manage' })
   } 
   catch (e:any) {
-    deleteCookie(event, 'verify-admin', runtimeConfig.public.cookieConfig)
+    deleteCookie(event, 'verify-manage', runtimeConfig.public.cookieManageConfig)
     return resp(event, { code: 400, message: e.toString() })
   }
 })
